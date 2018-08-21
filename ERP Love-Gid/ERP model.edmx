@@ -1,0 +1,538 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ERP_x0020_model.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="ERP_x0020_modelStoreContainer">
+    <EntitySet Name="EmployeeSet" EntityType="ERP_x0020_model.Store.EmployeeSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="EventSet" EntityType="ERP_x0020_model.Store.EventSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="ContractSet" EntityType="ERP_x0020_model.Store.ContractSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="ClientSet" EntityType="ERP_x0020_model.Store.ClientSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="AccountSet" EntityType="ERP_x0020_model.Store.AccountSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="PaymentsSet" EntityType="ERP_x0020_model.Store.PaymentsSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="PaymentToPeersSet" EntityType="ERP_x0020_model.Store.PaymentToPeersSet" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="ContractEmployee" Association="ERP_x0020_model.Store.ContractEmployee">
+      <End Role="Contract" EntitySet="ContractSet" />
+      <End Role="Employee" EntitySet="EmployeeSet" />
+    </AssociationSet>
+    <AssociationSet Name="ContractEvent" Association="ERP_x0020_model.Store.ContractEvent">
+      <End Role="Contract" EntitySet="ContractSet" />
+      <End Role="Event" EntitySet="EventSet" />
+    </AssociationSet>
+    <AssociationSet Name="ClientContract" Association="ERP_x0020_model.Store.ClientContract">
+      <End Role="Client" EntitySet="ClientSet" />
+      <End Role="Contract" EntitySet="ContractSet" />
+    </AssociationSet>
+    <AssociationSet Name="PaymentsAccount" Association="ERP_x0020_model.Store.PaymentsAccount">
+      <End Role="Payments" EntitySet="PaymentsSet" />
+      <End Role="Account" EntitySet="AccountSet" />
+    </AssociationSet>
+    <AssociationSet Name="PaymentToPeersEvent" Association="ERP_x0020_model.Store.PaymentToPeersEvent">
+      <End Role="PaymentToPeers" EntitySet="PaymentToPeersSet" />
+      <End Role="Event" EntitySet="EventSet" />
+    </AssociationSet>
+    <AssociationSet Name="PaymentsContract" Association="ERP_x0020_model.Store.PaymentsContract">
+      <End Role="Payments" EntitySet="PaymentsSet" />
+      <End Role="Contract" EntitySet="ContractSet" />
+    </AssociationSet>
+    <AssociationSet Name="PaymentsEmployee" Association="ERP_x0020_model.Store.PaymentsEmployee">
+      <End Role="Payments" EntitySet="PaymentsSet" />
+      <End Role="Employee" EntitySet="EmployeeSet" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="EmployeeSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FIO" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="IsAdmin" Type="bit" Nullable="false" />
+    <Property Name="Salary" Type="int" Nullable="false" />
+    <Property Name="Notes" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="EventSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Type" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="PercentToEmpl" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ContractSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Sum_only_contract" Type="int" Nullable="false" />
+    <Property Name="Sum_plus" Type="int" Nullable="false" />
+    <Property Name="Received" Type="int" Nullable="false" />
+    <Property Name="Date_of_event" Type="datetime" Nullable="false" />
+    <Property Name="Date_of_sign" Type="datetime" Nullable="false" />
+    <Property Name="Payment1" Type="datetime" Nullable="false" />
+    <Property Name="Payment2" Type="datetime" Nullable="false" />
+    <Property Name="Payment3" Type="datetime" Nullable="false" />
+    <Property Name="Comment" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="IdEvent" Type="int" Nullable="false" />
+    <Property Name="IdEmployee" Type="int" Nullable="false" />
+    <Property Name="Employee_Id" Type="int" Nullable="false" />
+    <Property Name="Event_Id" Type="int" Nullable="false" />
+    <Property Name="Client_Id" Type="int" Nullable="false" />
+    <Property Name="Payments_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ClientSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FIO" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="AccountSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Type" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Sum" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PaymentsSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Receipt" Type="int" Nullable="false" />
+    <Property Name="IdToEmployee" Type="int" Nullable="false" />
+    <Property Name="Comment" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Date" Type="datetime" Nullable="false" />
+    <Property Name="Sum" Type="int" Nullable="false" />
+    <Property Name="IdAccount" Type="int" Nullable="false" />
+    <Property Name="IdContract" Type="int" Nullable="false" />
+    <Property Name="Account_Id" Type="int" Nullable="false" />
+    <Property Name="Employee_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PaymentToPeersSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Sum" Type="int" Nullable="false" />
+    <Property Name="IdToEmployee" Type="int" Nullable="false" />
+    <Property Name="IdContract" Type="int" Nullable="false" />
+    <Property Name="IdEvent" Type="int" Nullable="false" />
+    <Property Name="Month" Type="datetime" Nullable="false" />
+    <Property Name="Comment" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Event_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="ContractEmployee">
+    <End Role="Contract" Type="ERP_x0020_model.Store.ContractSet" Multiplicity="*" />
+    <End Role="Employee" Type="ERP_x0020_model.Store.EmployeeSet" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Employee">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Contract">
+        <PropertyRef Name="Employee_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ContractEvent">
+    <End Role="Contract" Type="ERP_x0020_model.Store.ContractSet" Multiplicity="*" />
+    <End Role="Event" Type="ERP_x0020_model.Store.EventSet" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Event">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Contract">
+        <PropertyRef Name="Event_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ClientContract">
+    <End Role="Client" Type="ERP_x0020_model.Store.ClientSet" Multiplicity="1" />
+    <End Role="Contract" Type="ERP_x0020_model.Store.ContractSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Client">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Contract">
+        <PropertyRef Name="Client_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="PaymentsAccount">
+    <End Role="Payments" Type="ERP_x0020_model.Store.PaymentsSet" Multiplicity="*" />
+    <End Role="Account" Type="ERP_x0020_model.Store.AccountSet" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Account">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Payments">
+        <PropertyRef Name="Account_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="PaymentToPeersEvent">
+    <End Role="PaymentToPeers" Type="ERP_x0020_model.Store.PaymentToPeersSet" Multiplicity="*" />
+    <End Role="Event" Type="ERP_x0020_model.Store.EventSet" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Event">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PaymentToPeers">
+        <PropertyRef Name="Event_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="PaymentsContract">
+    <End Role="Payments" Type="ERP_x0020_model.Store.PaymentsSet" Multiplicity="1" />
+    <End Role="Contract" Type="ERP_x0020_model.Store.ContractSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Payments">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Contract">
+        <PropertyRef Name="Payments_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="PaymentsEmployee">
+    <End Role="Payments" Type="ERP_x0020_model.Store.PaymentsSet" Multiplicity="*" />
+    <End Role="Employee" Type="ERP_x0020_model.Store.EmployeeSet" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Employee">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Payments">
+        <PropertyRef Name="Employee_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="ERP_x0020_model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="ERP_x0020_modelContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="EmployeeSet" EntityType="ERP_x0020_model.Employee" />
+          <EntitySet Name="EventSet" EntityType="ERP_x0020_model.Event" />
+          <EntitySet Name="ContractSet" EntityType="ERP_x0020_model.Contract" />
+          <AssociationSet Name="ContractEmployee" Association="ERP_x0020_model.ContractEmployee">
+            <End Role="Contract" EntitySet="ContractSet" />
+            <End Role="Employee" EntitySet="EmployeeSet" />
+          </AssociationSet>
+          <AssociationSet Name="ContractEvent" Association="ERP_x0020_model.ContractEvent">
+            <End Role="Contract" EntitySet="ContractSet" />
+            <End Role="Event" EntitySet="EventSet" />
+          </AssociationSet>
+          <EntitySet Name="ClientSet" EntityType="ERP_x0020_model.Client" />
+          <AssociationSet Name="ClientContract" Association="ERP_x0020_model.ClientContract">
+            <End Role="Client" EntitySet="ClientSet" />
+            <End Role="Contract" EntitySet="ContractSet" />
+          </AssociationSet>
+          <EntitySet Name="AccountSet" EntityType="ERP_x0020_model.Account" />
+          <EntitySet Name="PaymentsSet" EntityType="ERP_x0020_model.Payments" />
+          <AssociationSet Name="PaymentsAccount" Association="ERP_x0020_model.PaymentsAccount">
+            <End Role="Payments" EntitySet="PaymentsSet" />
+            <End Role="Account" EntitySet="AccountSet" />
+          </AssociationSet>
+          <EntitySet Name="PaymentToPeersSet" EntityType="ERP_x0020_model.PaymentToPeers" />
+          <AssociationSet Name="PaymentToPeersEvent" Association="ERP_x0020_model.PaymentToPeersEvent">
+            <End Role="PaymentToPeers" EntitySet="PaymentToPeersSet" />
+            <End Role="Event" EntitySet="EventSet" />
+          </AssociationSet>
+          <AssociationSet Name="PaymentsContract" Association="ERP_x0020_model.PaymentsContract">
+            <End Role="Payments" EntitySet="PaymentsSet" />
+            <End Role="Contract" EntitySet="ContractSet" />
+          </AssociationSet>
+          <AssociationSet Name="PaymentsEmployee" Association="ERP_x0020_model.PaymentsEmployee">
+            <End Role="Payments" EntitySet="PaymentsSet" />
+            <End Role="Employee" EntitySet="EmployeeSet" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FIO" Type="String" Nullable="false" />
+          <Property Name="IsAdmin" Type="Boolean" Nullable="false" />
+          <Property Name="Salary" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Contract" Relationship="ERP_x0020_model.ContractEmployee" FromRole="Employee" ToRole="Contract" />
+          <Property Name="Notes" Type="String" Nullable="false" />
+          <NavigationProperty Name="Payments" Relationship="ERP_x0020_model.PaymentsEmployee" FromRole="Employee" ToRole="Payments" />
+        </EntityType>
+        <EntityType Name="Event">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Type" Type="String" Nullable="false" />
+          <NavigationProperty Name="Contract" Relationship="ERP_x0020_model.ContractEvent" FromRole="Event" ToRole="Contract" />
+          <Property Name="PercentToEmpl" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="PaymentToPeers" Relationship="ERP_x0020_model.PaymentToPeersEvent" FromRole="Event" ToRole="PaymentToPeers" />
+        </EntityType>
+        <EntityType Name="Contract">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <Property Name="Sum_only_contract" Type="Int32" Nullable="false" />
+          <Property Name="Sum_plus" Type="Int32" Nullable="false" />
+          <Property Name="Received" Type="Int32" Nullable="false" />
+          <Property Name="Date_of_event" Type="DateTime" Nullable="false" />
+          <Property Name="Date_of_sign" Type="DateTime" Nullable="false" />
+          <NavigationProperty Name="Employee" Relationship="ERP_x0020_model.ContractEmployee" FromRole="Contract" ToRole="Employee" />
+          <NavigationProperty Name="Event" Relationship="ERP_x0020_model.ContractEvent" FromRole="Contract" ToRole="Event" />
+          <NavigationProperty Name="Client" Relationship="ERP_x0020_model.ClientContract" FromRole="Contract" ToRole="Client" />
+          <Property Name="Payment1" Type="DateTime" Nullable="false" />
+          <Property Name="Payment2" Type="DateTime" Nullable="false" />
+          <Property Name="Payment3" Type="DateTime" Nullable="false" />
+          <Property Name="Comment" Type="String" Nullable="false" />
+          <Property Name="IdEvent" Type="Int32" Nullable="false" />
+          <Property Name="IdEmployee" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Payments" Relationship="ERP_x0020_model.PaymentsContract" FromRole="Contract" ToRole="Payments" />
+        </EntityType>
+        <Association Name="ContractEmployee">
+          <End Type="ERP_x0020_model.Contract" Role="Contract" Multiplicity="*" />
+          <End Type="ERP_x0020_model.Employee" Role="Employee" Multiplicity="1" />
+        </Association>
+        <Association Name="ContractEvent">
+          <End Type="ERP_x0020_model.Contract" Role="Contract" Multiplicity="*" />
+          <End Type="ERP_x0020_model.Event" Role="Event" Multiplicity="1" />
+        </Association>
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FIO" Type="String" Nullable="false" />
+          <NavigationProperty Name="Contract" Relationship="ERP_x0020_model.ClientContract" FromRole="Client" ToRole="Contract" />
+        </EntityType>
+        <Association Name="ClientContract">
+          <End Type="ERP_x0020_model.Client" Role="Client" Multiplicity="1" />
+          <End Type="ERP_x0020_model.Contract" Role="Contract" Multiplicity="*" />
+        </Association>
+        <EntityType Name="Account">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Type" Type="String" Nullable="false" />
+          <Property Name="Sum" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Payments" Relationship="ERP_x0020_model.PaymentsAccount" FromRole="Account" ToRole="Payments" />
+        </EntityType>
+        <EntityType Name="Payments">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Receipt" Type="Int32" Nullable="false" />
+          <Property Name="IdToEmployee" Type="Int32" Nullable="false" />
+          <Property Name="Comment" Type="String" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" />
+          <Property Name="Sum" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Account" Relationship="ERP_x0020_model.PaymentsAccount" FromRole="Payments" ToRole="Account" />
+          <Property Name="IdAccount" Type="Int32" Nullable="false" />
+          <Property Name="IdContract" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Contract" Relationship="ERP_x0020_model.PaymentsContract" FromRole="Payments" ToRole="Contract" />
+          <NavigationProperty Name="Employee" Relationship="ERP_x0020_model.PaymentsEmployee" FromRole="Payments" ToRole="Employee" />
+        </EntityType>
+        <Association Name="PaymentsAccount">
+          <End Type="ERP_x0020_model.Payments" Role="Payments" Multiplicity="*" />
+          <End Type="ERP_x0020_model.Account" Role="Account" Multiplicity="1" />
+        </Association>
+        <EntityType Name="PaymentToPeers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Sum" Type="Int32" Nullable="false" />
+          <Property Name="IdToEmployee" Type="Int32" Nullable="false" />
+          <Property Name="IdContract" Type="Int32" Nullable="false" />
+          <Property Name="IdEvent" Type="Int32" Nullable="false" />
+          <Property Name="Month" Type="DateTime" Nullable="false" />
+          <Property Name="Comment" Type="String" Nullable="false" />
+          <NavigationProperty Name="Event" Relationship="ERP_x0020_model.PaymentToPeersEvent" FromRole="PaymentToPeers" ToRole="Event" />
+        </EntityType>
+        <Association Name="PaymentToPeersEvent">
+          <End Type="ERP_x0020_model.PaymentToPeers" Role="PaymentToPeers" Multiplicity="*" />
+          <End Type="ERP_x0020_model.Event" Role="Event" Multiplicity="1" />
+        </Association>
+        <Association Name="PaymentsContract">
+          <End Type="ERP_x0020_model.Payments" Role="Payments" Multiplicity="1" />
+          <End Type="ERP_x0020_model.Contract" Role="Contract" Multiplicity="*" />
+        </Association>
+        <Association Name="PaymentsEmployee">
+          <End Type="ERP_x0020_model.Payments" Role="Payments" Multiplicity="1" />
+          <End Type="ERP_x0020_model.Employee" Role="Employee" Multiplicity="1" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ERP_x0020_modelStoreContainer" CdmEntityContainer="ERP_x0020_modelContainer">
+    <EntitySetMapping Name="EmployeeSet">
+      <EntityTypeMapping TypeName="IsTypeOf(ERP_x0020_model.Employee)">
+        <MappingFragment StoreEntitySet="EmployeeSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="FIO" ColumnName="FIO" />
+          <ScalarProperty Name="IsAdmin" ColumnName="IsAdmin" />
+          <ScalarProperty Name="Salary" ColumnName="Salary" />
+          <ScalarProperty Name="Notes" ColumnName="Notes" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="EventSet">
+      <EntityTypeMapping TypeName="IsTypeOf(ERP_x0020_model.Event)">
+        <MappingFragment StoreEntitySet="EventSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="PercentToEmpl" ColumnName="PercentToEmpl" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ContractSet">
+      <EntityTypeMapping TypeName="IsTypeOf(ERP_x0020_model.Contract)">
+        <MappingFragment StoreEntitySet="ContractSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Sum_only_contract" ColumnName="Sum_only_contract" />
+          <ScalarProperty Name="Sum_plus" ColumnName="Sum_plus" />
+          <ScalarProperty Name="Received" ColumnName="Received" />
+          <ScalarProperty Name="Date_of_event" ColumnName="Date_of_event" />
+          <ScalarProperty Name="Date_of_sign" ColumnName="Date_of_sign" />
+          <ScalarProperty Name="Payment1" ColumnName="Payment1" />
+          <ScalarProperty Name="Payment2" ColumnName="Payment2" />
+          <ScalarProperty Name="Payment3" ColumnName="Payment3" />
+          <ScalarProperty Name="Comment" ColumnName="Comment" />
+          <ScalarProperty Name="IdEvent" ColumnName="IdEvent" />
+          <ScalarProperty Name="IdEmployee" ColumnName="IdEmployee" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ClientSet">
+      <EntityTypeMapping TypeName="IsTypeOf(ERP_x0020_model.Client)">
+        <MappingFragment StoreEntitySet="ClientSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="FIO" ColumnName="FIO" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AccountSet">
+      <EntityTypeMapping TypeName="IsTypeOf(ERP_x0020_model.Account)">
+        <MappingFragment StoreEntitySet="AccountSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="Sum" ColumnName="Sum" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PaymentsSet">
+      <EntityTypeMapping TypeName="IsTypeOf(ERP_x0020_model.Payments)">
+        <MappingFragment StoreEntitySet="PaymentsSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Receipt" ColumnName="Receipt" />
+          <ScalarProperty Name="IdToEmployee" ColumnName="IdToEmployee" />
+          <ScalarProperty Name="Comment" ColumnName="Comment" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+          <ScalarProperty Name="Sum" ColumnName="Sum" />
+          <ScalarProperty Name="IdAccount" ColumnName="IdAccount" />
+          <ScalarProperty Name="IdContract" ColumnName="IdContract" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PaymentToPeersSet">
+      <EntityTypeMapping TypeName="IsTypeOf(ERP_x0020_model.PaymentToPeers)">
+        <MappingFragment StoreEntitySet="PaymentToPeersSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Sum" ColumnName="Sum" />
+          <ScalarProperty Name="IdToEmployee" ColumnName="IdToEmployee" />
+          <ScalarProperty Name="IdContract" ColumnName="IdContract" />
+          <ScalarProperty Name="IdEvent" ColumnName="IdEvent" />
+          <ScalarProperty Name="Month" ColumnName="Month" />
+          <ScalarProperty Name="Comment" ColumnName="Comment" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="ContractEmployee" TypeName="ERP_x0020_model.ContractEmployee" StoreEntitySet="ContractSet">
+      <EndProperty Name="Employee">
+        <ScalarProperty Name="Id" ColumnName="Employee_Id" />
+      </EndProperty>
+      <EndProperty Name="Contract">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="ContractEvent" TypeName="ERP_x0020_model.ContractEvent" StoreEntitySet="ContractSet">
+      <EndProperty Name="Event">
+        <ScalarProperty Name="Id" ColumnName="Event_Id" />
+      </EndProperty>
+      <EndProperty Name="Contract">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="ClientContract" TypeName="ERP_x0020_model.ClientContract" StoreEntitySet="ContractSet">
+      <EndProperty Name="Client">
+        <ScalarProperty Name="Id" ColumnName="Client_Id" />
+      </EndProperty>
+      <EndProperty Name="Contract">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="PaymentsAccount" TypeName="ERP_x0020_model.PaymentsAccount" StoreEntitySet="PaymentsSet">
+      <EndProperty Name="Account">
+        <ScalarProperty Name="Id" ColumnName="Account_Id" />
+      </EndProperty>
+      <EndProperty Name="Payments">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="PaymentToPeersEvent" TypeName="ERP_x0020_model.PaymentToPeersEvent" StoreEntitySet="PaymentToPeersSet">
+      <EndProperty Name="Event">
+        <ScalarProperty Name="Id" ColumnName="Event_Id" />
+      </EndProperty>
+      <EndProperty Name="PaymentToPeers">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="PaymentsContract" TypeName="ERP_x0020_model.PaymentsContract" StoreEntitySet="ContractSet">
+      <EndProperty Name="Payments">
+        <ScalarProperty Name="Id" ColumnName="Payments_Id" />
+      </EndProperty>
+      <EndProperty Name="Contract">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="PaymentsEmployee" TypeName="ERP_x0020_model.PaymentsEmployee" StoreEntitySet="PaymentsSet">
+      <EndProperty Name="Employee">
+        <ScalarProperty Name="Id" ColumnName="Employee_Id" />
+      </EndProperty>
+      <EndProperty Name="Payments">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
