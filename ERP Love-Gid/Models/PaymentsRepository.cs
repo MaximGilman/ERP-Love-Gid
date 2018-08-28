@@ -26,6 +26,11 @@ namespace ERP_Love_Gid.Models
 
             return cont.PaymentsSet.Where(x=>x.Contract.EmployeeSet.Id==id).OrderBy(cw => cw.Id);
         }
+        public int GetEmplPaysSum(int id)
+        {
+
+            return cont.PaymentsSet.Where(x => x.Contract.EmployeeSet.Id == id).Select(y=>y.Receipt).Sum();
+        }
         public Payments GetElem(int id)
         {
             return cont.PaymentsSet.Find(id);
