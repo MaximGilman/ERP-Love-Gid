@@ -7,10 +7,10 @@ namespace ERP_Love_Gid.Models
 {
     public class EventRepository
     {
-        private ERP_x0020_modelContainer cont;
+        private ERPModelContainer cont;
 
 
-        public EventRepository(ERP_x0020_modelContainer _cont)
+        public EventRepository(ERPModelContainer _cont)
         {
             cont = _cont;
         }
@@ -18,14 +18,17 @@ namespace ERP_Love_Gid.Models
         public IEnumerable<Event> GetCollection()
         {
 
-            return cont.EventSet.OrderBy(cw => cw.Id);
+            return cont.EventSet.OrderBy(cw => cw.Id).Select(x=>x);
         }
 
         public Event GetElem(int id)
         {
             return cont.EventSet.Find(id);
         }
-
+        public Event GetElem(string name)
+        {
+            return cont.EventSet.Where(x=>x.Type==name).FirstOrDefault();
+        }
         public Event Add(Event M)
         {
 

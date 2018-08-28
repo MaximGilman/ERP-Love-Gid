@@ -14,6 +14,13 @@ namespace ERP_Love_Gid
     
     public partial class Contract
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Contract()
+        {
+            this.PaymentToPeersSet = new HashSet<PaymentToPeers>();
+            this.Payments = new HashSet<Payments>();
+        }
+    
         public int Id { get; set; }
         public string Name { get; set; }
         public int Sum_only_contract { get; set; }
@@ -21,16 +28,21 @@ namespace ERP_Love_Gid
         public int Received { get; set; }
         public System.DateTime Date_of_event { get; set; }
         public System.DateTime Date_of_sign { get; set; }
-        public System.DateTime Payment1 { get; set; }
-        public System.DateTime Payment2 { get; set; }
-        public System.DateTime Payment3 { get; set; }
+        public System.DateTime Payment1Date { get; set; }
+        public System.DateTime Payment2Date { get; set; }
+        public System.DateTime Payment3Date { get; set; }
         public string Comment { get; set; }
-        public int IdEvent { get; set; }
-        public int IdEmployee { get; set; }
+        public string Status { get; set; }
+        public int Payment1Sum { get; set; }
+        public int Payment2Sum { get; set; }
+        public int Payment3Sum { get; set; }
     
-        public virtual Employee Employee { get; set; }
-        public virtual Event Event { get; set; }
-        public virtual Client Client { get; set; }
-        public virtual Payments Payments { get; set; }
+        public virtual Client ClientSet { get; set; }
+        public virtual Employee EmployeeSet { get; set; }
+        public virtual Event EventSet { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PaymentToPeers> PaymentToPeersSet { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Payments> Payments { get; set; }
     }
 }

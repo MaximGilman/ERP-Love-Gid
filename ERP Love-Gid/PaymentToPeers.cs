@@ -18,10 +18,10 @@ namespace ERP_Love_Gid
         public int Sum { get; set; }
         public int IdToEmployee { get; set; }
         public int IdContract { get; set; }
-        public int IdEvent { get; set; }
         public System.DateTime Month { get; set; }
         public string Comment { get; set; }
     
-        public virtual Event Event { get; set; }
+        public virtual Event EventSet { get; set; }
+        public virtual Contract ContractSet { get; set; }
     }
 }

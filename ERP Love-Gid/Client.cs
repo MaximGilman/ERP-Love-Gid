@@ -17,13 +17,13 @@ namespace ERP_Love_Gid
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Client()
         {
-            this.Contract = new HashSet<Contract>();
+            this.ContractSet = new HashSet<Contract>();
         }
     
         public int Id { get; set; }
         public string FIO { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Contract> Contract { get; set; }
+        public virtual ICollection<Contract> ContractSet { get; set; }
     }
 }

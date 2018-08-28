@@ -1,0 +1,78 @@
+﻿
+@{
+    ViewBag.Title = "Мои финансы";
+}
+
+<h1>Мои финансы</h1>
+<h3>Детализация моих платежей</h3>
+
+@using (Html.BeginForm("MyFinanses", "Home", FormMethod.Post))
+{
+     <table>
+        <tr>
+            <td>Приход</td>
+            <td>Счет</td>
+            <td>Проект</td>
+            <td>Тип</td>
+            <td>Кому деньги</td>
+            <td>Коммент</td>
+            <td>Дата</td>
+ 
+        </tr>
+        @foreach (Payments cw in (IEnumerable<Payments>)ViewBag.Payments)
+        {
+
+            <tr>
+                <td>@cw.Receipt</td>
+                <td>@cw.Account.Type</td>
+                <td>@cw.Contract.Name</td>
+                <td>@cw.Contract.EventSet.Type</td>
+                <td>@cw.Employee.FIO</td>
+                <td>@cw.Comment</td>
+                <td>@cw.Date</td>
+
+            </tr>
+        }
+    </table>
+    <p>Итого</p>
+    <p><input type="submit" value="Добавить" name="Pays" class ="form-control-added" /></p>
+
+    <h3>Сдала деньги</h3>
+
+    <table>
+        <tr>
+            <td> <b>Сумма</b></td>
+            <td><b>Счет</b></td>
+            <td><b>Дата</b></td>
+            <td><b>Проверка</b></td>
+ 
+
+        </tr>
+        @*@foreach (Contract cw in (IEnumerable<Contract>)ViewData["Contracts"])
+        {
+
+            <tr></tr>
+        }*@
+    </table>
+    <h3>Ожидаю оплату от клиентов</h3>
+    <table>
+        <tr>
+            <td> <b>Сумма</b></td>
+            <td><b>Проект</b></td>
+            <td><b>Тип</b></td>
+            <td><b>Дата</b></td>
+            <td><b>Статус</b></td>
+
+
+        </tr>
+        @*@foreach (Contract cw in (IEnumerable<Contract>)ViewData["Contracts"])
+        {
+
+            <tr></tr>
+        }*@
+    </table>
+    <p>Ожидаю</p>
+    @*<div contenteditable="true" style="width:100%!important ; box-sizing:border-box!important; position:absolute!important; ;">  @Html.TextArea("Notes")</div>*@
+
+}
+

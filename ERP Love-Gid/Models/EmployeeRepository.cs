@@ -7,10 +7,10 @@ namespace ERP_Love_Gid.Models
 {
     public class EmployeeRepository
     {
-        private ERP_x0020_modelContainer cont;
+        private ERPModelContainer cont;
 
         
-        public EmployeeRepository(ERP_x0020_modelContainer _cont)
+        public EmployeeRepository(ERPModelContainer _cont)
         {
             cont = _cont;
         }
@@ -25,7 +25,14 @@ namespace ERP_Love_Gid.Models
         {
             return cont.EmployeeSet.Find(id);
         }
-
+        public bool Contains(string login)
+        {
+            return cont.EmployeeSet.Where(x => x.Login== login).Count()>0 ? true: false;
+        }
+        public int Getid(string login)
+        {
+            return cont.EmployeeSet.Where(x => x.Login == login).Select(y=>y.Id).FirstOrDefault();
+        }
         public Employee Add(Employee M)
         {
 

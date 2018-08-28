@@ -1,0 +1,122 @@
+﻿
+@{
+    ViewBag.Title = "Добавление контракта";
+}
+
+<h2>Добавление контракта</h2>
+
+<div class="container">
+    <header>
+
+
+        <nav class="secondary_header" id="menu">
+            <section>
+
+
+                @using (Html.BeginForm("AddContract", "Home", FormMethod.Post))
+                {
+
+
+                    <p>@Html.ActionLink("Обратно к списку", "Index")</p>
+                    <table>
+
+
+
+
+                        <tr>
+                            <td>
+                                <p>
+                                    Сумма договора:
+                                </p>
+                            </td>
+
+                            <td><p> @Html.TextBox("Cost", null, new { @class = "form-control", type = "number", @min = "0" })</p></td>
+                        </tr>
+                        <tr>
+                            <td><p>Тип работы:</p></td>
+
+                            <td><p> @Html.DropDownList("Event", (IEnumerable<SelectListItem>)ViewData["Events"], null, new { style = "width : 200px", @class = "form-control" }) @Html.ValidationMessage("Events")</p></td>
+                        </tr>
+
+
+                        <tr>
+                            <td><p>Фио Клиента или название организации: </p></td>
+                            <td><p> @Html.TextBox("Client", null, new { @class = "form-control" })</p></td>
+                        </tr>
+                        <tr>
+                            <td><p>Дата заключения договора: </p></td>
+                            <td>
+                                <p>
+                                    <input type="date" name="calendarContract" class="form-control">
+                                </p>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td><p>Дата мероприятия: </p></td>
+                            <td>
+                                <p>
+                                    <input type="date" name="calendarEvent" class="form-control">
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+
+                            <td><p>1 платеж: </p><p>Дата / сумма</p></td>
+                            <td>
+                                <p>
+                                    <input type="date" name="1pay" class="form-control">
+                                </p>
+                                <p> @Html.TextBox("1paySum", null, new { @class = "form-control", type = "number", @min = "0" })</p>
+                            </td>
+                        </tr>
+                        <tr>
+
+                            <td><p>2 платеж: </p><p>Дата / сумма</p></td>
+                            <td>
+                                <p>
+                                    <input type="date" name="2pay" class="form-control">
+                                </p>
+                                <p> @Html.TextBox("2paySum", null, new { @class = "form-control", type = "number", @min = "0" })</p>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><p>3 платеж: </p><p>Дата / сумма</p></td>
+                            <td>
+                                <p>
+                                    <input type="date" name="3pay" class="form-control">
+                                </p>
+                                <p> @Html.TextBox("3paySum", null, new { @class = "form-control", type = "number", @min = "0" })</p>
+
+                            </td>
+                        </tr>
+                       
+                        <tr>
+                            <td>
+                                <p>
+                                    Комментарий:
+                                </p>
+                            </td>
+
+                            <td><p> @Html.TextBox("Comment", null, new { @class = "form-control" })</p></td>
+                        </tr>
+                    </table>
+                    <p></p>
+                    <p><input type="submit" value="Сохранить" /></p>
+                }
+
+
+
+
+
+
+
+
+            </section>
+        </nav>
+    </header>
+
+
+</div>
+

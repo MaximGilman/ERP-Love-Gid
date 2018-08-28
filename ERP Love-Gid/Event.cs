@@ -17,8 +17,8 @@ namespace ERP_Love_Gid
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Event()
         {
-            this.Contract = new HashSet<Contract>();
-            this.PaymentToPeers = new HashSet<PaymentToPeers>();
+            this.ContractSet = new HashSet<Contract>();
+            this.PaymentToPeersSet = new HashSet<PaymentToPeers>();
         }
     
         public int Id { get; set; }
@@ -26,8 +26,8 @@ namespace ERP_Love_Gid
         public int PercentToEmpl { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Contract> Contract { get; set; }
+        public virtual ICollection<Contract> ContractSet { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PaymentToPeers> PaymentToPeers { get; set; }
+        public virtual ICollection<PaymentToPeers> PaymentToPeersSet { get; set; }
     }
 }

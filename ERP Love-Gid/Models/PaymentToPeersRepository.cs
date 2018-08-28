@@ -7,10 +7,10 @@ namespace ERP_Love_Gid.Models
 {
     public class PaymentToPeersRepository
     {
-        private ERP_x0020_modelContainer cont;
+        private ERPModelContainer cont;
 
 
-        public PaymentToPeersRepository(ERP_x0020_modelContainer _cont)
+        public PaymentToPeersRepository(ERPModelContainer _cont)
         {
             cont = _cont;
         }

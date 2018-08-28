@@ -17,7 +17,8 @@ namespace ERP_Love_Gid
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Employee()
         {
-            this.Contract = new HashSet<Contract>();
+            this.ContractSet = new HashSet<Contract>();
+            this.Payments = new HashSet<Payments>();
         }
     
         public int Id { get; set; }
@@ -25,9 +26,12 @@ namespace ERP_Love_Gid
         public bool IsAdmin { get; set; }
         public int Salary { get; set; }
         public string Notes { get; set; }
+        public string Login { get; set; }
+        public string Password { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Contract> Contract { get; set; }
-        public virtual Payments Payments { get; set; }
+        public virtual ICollection<Contract> ContractSet { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Payments> Payments { get; set; }
     }
 }

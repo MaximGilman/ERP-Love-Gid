@@ -153,13 +153,16 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Areas\StatusEnum\StatusEnumAreaRegistration.cs" />
     <Compile Include="Client.cs">
       <DependentUpon>ERPModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Contract.cs">
       <DependentUpon>ERPModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Controllers\ControllerFactory.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Employee.cs">
       <DependentUpon>ERPModel.tt</DependentUpon>
     </Compile>
@@ -173,15 +176,22 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ERPModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="ERPModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ERPModel.edmx</DependentUpon>
+    </Compile>
     <Compile Include="Event.cs">
       <DependentUpon>ERPModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Hasher.cs" />
     <Compile Include="Models\AccountRepository.cs" />
     <Compile Include="Models\ClientRepository.cs" />
     <Compile Include="Models\ContractRepository.cs" />
+    <Compile Include="Models\DataManager.cs" />
     <Compile Include="Models\EmployeeRepository.cs" />
     <Compile Include="Models\EventRepository.cs" />
     <Compile Include="Models\PaymentsRepository.cs" />
@@ -197,16 +207,17 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="ERP model.edmx.sql" />
+    <Content Include="Content\Images\LoveGuide.png" />
     <Content Include="ERPModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>ERPModel.Context.cs</LastGenOutput>
-      <DependentUpon>ERP model.edmx</DependentUpon>
+      <DependentUpon>ERPModel.edmx</DependentUpon>
     </Content>
+    <Content Include="ERPModel.edmx.sql" />
     <Content Include="ERPModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>ERPModel.cs</LastGenOutput>
-      <DependentUpon>ERP model.edmx</DependentUpon>
+      <DependentUpon>ERPModel.edmx</DependentUpon>
     </Content>
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -217,10 +228,15 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <EntityDeploy Include="ERP model.edmx">
+    <Content Include="Areas\StatusEnum\Views\web.config" />
+    <EntityDeploy Include="ERPModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>ERP model.Designer.cs</LastGenOutput>
+      <LastGenOutput>ERPModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
+    <Content Include="ERPModel.edmx.diagram">
+      <DependentUpon>ERPModel.edmx</DependentUpon>
+    </Content>
+    <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -243,12 +259,16 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\AddContract.cshtml" />
+    <Content Include="Views\User\Log_in.cshtml" />
+    <Content Include="Views\Home\MyFinanses.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\StatusEnum\Controllers\" />
+    <Folder Include="Areas\StatusEnum\Models\" />
+    <Folder Include="Areas\StatusEnum\Views\Shared\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

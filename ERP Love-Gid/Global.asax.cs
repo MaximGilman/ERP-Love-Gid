@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-
+using ERP_Love_Gid.Controllers;
 namespace ERP_Love_Gid
 {
     public class MvcApplication : System.Web.HttpApplication
@@ -13,6 +13,9 @@ namespace ERP_Love_Gid
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
+            ControllerBuilder.Current.SetControllerFactory(new ControllerFactory());
+
+
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);

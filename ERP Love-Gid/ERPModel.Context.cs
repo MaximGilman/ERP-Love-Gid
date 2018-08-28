@@ -13,10 +13,10 @@ namespace ERP_Love_Gid
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class ERP_x0020_modelContainer : DbContext
+    public partial class ERPModelContainer : DbContext
     {
-        public ERP_x0020_modelContainer()
-            : base("name=ERP_x0020_modelContainer")
+        public ERPModelContainer()
+            : base("name=ERPModelContainer")
         {
         }
     
@@ -25,11 +25,11 @@ namespace ERP_Love_Gid
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<Account> AccountSet { get; set; }
+        public virtual DbSet<Client> ClientSet { get; set; }
+        public virtual DbSet<Contract> ContractSet { get; set; }
         public virtual DbSet<Employee> EmployeeSet { get; set; }
         public virtual DbSet<Event> EventSet { get; set; }
-        public virtual DbSet<Contract> ContractSet { get; set; }
-        public virtual DbSet<Client> ClientSet { get; set; }
-        public virtual DbSet<Account> AccountSet { get; set; }
         public virtual DbSet<Payments> PaymentsSet { get; set; }
         public virtual DbSet<PaymentToPeers> PaymentToPeersSet { get; set; }
     }

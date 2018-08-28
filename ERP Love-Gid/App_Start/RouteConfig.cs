@@ -16,7 +16,7 @@ namespace ERP_Love_Gid
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "User", action = "Log_in", id = UrlParameter.Optional }
             );
         }
     }

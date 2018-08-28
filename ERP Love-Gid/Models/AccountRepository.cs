@@ -7,10 +7,10 @@ namespace ERP_Love_Gid.Models
 {
     public class AccountRepository
     {
-        private ERP_x0020_modelContainer cont;
+        private ERPModelContainer cont;
 
 
-        public AccountRepository(ERP_x0020_modelContainer _cont)
+        public AccountRepository(ERPModelContainer _cont)
         {
             cont = _cont;
         }

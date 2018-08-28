@@ -7,10 +7,10 @@ namespace ERP_Love_Gid.Models
 {
     public class PaymentsRepository
     {
-        private ERP_x0020_modelContainer cont;
+        private ERPModelContainer cont;
 
 
-        public PaymentsRepository(ERP_x0020_modelContainer _cont)
+        public PaymentsRepository(ERPModelContainer _cont)
         {
             cont = _cont;
         }
@@ -21,6 +21,11 @@ namespace ERP_Love_Gid.Models
             return cont.PaymentsSet.OrderBy(cw => cw.Id);
         }
 
+        public IEnumerable<Payments> GetEmplPays(int id)
+        {
+
+            return cont.PaymentsSet.Where(x=>x.Contract.EmployeeSet.Id==id).OrderBy(cw => cw.Id);
+        }
         public Payments GetElem(int id)
         {
             return cont.PaymentsSet.Find(id);

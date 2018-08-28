@@ -1,0 +1,42 @@
+﻿
+@{
+    ViewBag.Title = "Вход"; 
+}
+<style>
+    tr td {
+        padding: 10px;
+        border-collapse: separate;
+        border: 0px solid black!important;
+    }
+    table {
+       
+        border:none;
+        border-collapse: separate;
+        table-layout: auto;
+    }
+</style>
+<img src="~/Content/Images/LoveGuide.png"  width="250" height="200" alt="Love Guide" style="padding:10px;"/>
+<h1  style="font-family:Arial; font:200; " ><strong> Управляй мечтой</strong></h1>
+
+<p>@ViewBag.Error</p>
+<form method="post">
+    <input type="hidden" value="@ViewBag.UserId" name="UserId" />
+    <table border="0">
+        <tr >
+            <td> </td>
+        </tr>
+        <tr>
+            <td><p>Введите логин</p></td>
+            <td> <p><input type="text" name="Login" , class="form-control" /></p></td>
+        </tr>
+        <tr>
+            <td><p>Введите пароль</p></td>
+            <td> <p><input type="password" name="Password" , class="form-control" /></p></td>
+        </tr>
+        <tr><td><p><input type="submit" style="width:135%" value="Войти" class="form-control" /></p></td></tr>
+
+    </table>
+
+</form>
+
+

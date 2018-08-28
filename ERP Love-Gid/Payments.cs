@@ -14,24 +14,16 @@ namespace ERP_Love_Gid
     
     public partial class Payments
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Payments()
-        {
-            this.Contract = new HashSet<Contract>();
-        }
-    
         public int Id { get; set; }
         public int Receipt { get; set; }
-        public int IdToEmployee { get; set; }
         public string Comment { get; set; }
         public System.DateTime Date { get; set; }
         public int Sum { get; set; }
-        public int IdAccount { get; set; }
-        public int IdContract { get; set; }
+        public int AccountSet_Id { get; set; }
+        public int EmployeeSer_Id { get; set; }
     
-        public virtual Account Account { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Contract> Contract { get; set; }
         public virtual Employee Employee { get; set; }
+        public virtual Account Account { get; set; }
+        public virtual Contract Contract { get; set; }
     }
 }
