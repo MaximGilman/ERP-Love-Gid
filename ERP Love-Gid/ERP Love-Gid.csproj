@@ -196,6 +196,9 @@
     <Compile Include="Models\EventRepository.cs" />
     <Compile Include="Models\PaymentsRepository.cs" />
     <Compile Include="Models\PaymentToPeersRepository.cs" />
+    <Compile Include="PaymentEmployeeConnect.cs">
+      <DependentUpon>ERPModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Payments.cs">
       <DependentUpon>ERPModel.tt</DependentUpon>
     </Compile>

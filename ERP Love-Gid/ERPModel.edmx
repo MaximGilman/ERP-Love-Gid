@@ -13,6 +13,7 @@
     <EntitySet Name="EventSet" EntityType="ERPModel.Store.EventSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="PaymentsSet" EntityType="ERPModel.Store.PaymentsSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="PaymentToPeersSet" EntityType="ERPModel.Store.PaymentToPeersSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="PaymentEmployeeConnectSet" EntityType="ERPModel.Store.PaymentEmployeeConnectSet" store:Type="Tables" Schema="dbo" />
     <AssociationSet Name="FK_ClientContract" Association="ERPModel.Store.FK_ClientContract">
       <End Role="Client" EntitySet="ClientSet" />
       <End Role="Contract" EntitySet="ContractSet" />
@@ -33,10 +34,6 @@
       <End Role="Contract" EntitySet="ContractSet" />
       <End Role="PaymentToPeers" EntitySet="PaymentToPeersSet" />
     </AssociationSet>
-    <AssociationSet Name="PaymentsEmployee" Association="ERPModel.Store.PaymentsEmployee">
-      <End Role="Payments" EntitySet="PaymentsSet" />
-      <End Role="Employee" EntitySet="EmployeeSet" />
-    </AssociationSet>
     <AssociationSet Name="AccountPayments" Association="ERPModel.Store.AccountPayments">
       <End Role="Account" EntitySet="AccountSet" />
       <End Role="Payments" EntitySet="PaymentsSet" />
@@ -45,9 +42,17 @@
       <End Role="Contract" EntitySet="ContractSet" />
       <End Role="Payments" EntitySet="PaymentsSet" />
     </AssociationSet>
-    <AssociationSet Name="PaymentsEvent" Association="ERPModel.Store.PaymentsEvent">
+    <AssociationSet Name="PaymentsPaymentEmployeeConnect" Association="ERPModel.Store.PaymentsPaymentEmployeeConnect">
       <End Role="Payments" EntitySet="PaymentsSet" />
+      <End Role="PaymentEmployeeConnect" EntitySet="PaymentEmployeeConnectSet" />
+    </AssociationSet>
+    <AssociationSet Name="PaymentEmployeeConnectEvent" Association="ERPModel.Store.PaymentEmployeeConnectEvent">
+      <End Role="PaymentEmployeeConnect" EntitySet="PaymentEmployeeConnectSet" />
       <End Role="Event" EntitySet="EventSet" />
+    </AssociationSet>
+    <AssociationSet Name="PaymentEmployeeConnectEmployee" Association="ERPModel.Store.PaymentEmployeeConnectEmployee">
+      <End Role="PaymentEmployeeConnect" EntitySet="PaymentEmployeeConnectSet" />
+      <End Role="Employee" EntitySet="EmployeeSet" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="AccountSet">
@@ -117,12 +122,10 @@
     <Property Name="Comment" Type="nvarchar(max)" Nullable="false" />
     <Property Name="Date" Type="datetime" Nullable="false" />
     <Property Name="Sum" Type="int" Nullable="false" />
-    <Property Name="AccountSet_Id" Type="int" Nullable="false" />
-    <Property Name="EmployeeSer_Id" Type="int" Nullable="false" />
-    <Property Name="Employee_Id" Type="int" Nullable="false" />
+    <Property Name="AccounId" Type="int" Nullable="false" />
+    <Property Name="ContractId" Type="int" Nullable="false" />
     <Property Name="Account_Id" Type="int" Nullable="false" />
-    <Property Name="Contract_Id" Type="int" Nullable="false" />
-    <Property Name="Event_Id" Type="int" Nullable="false" />
+    <Property Name="Contract_Id" Type="int" Nullable="true" />
   </EntityType>
   <EntityType Name="PaymentToPeersSet">
     <Key>
@@ -136,6 +139,15 @@
     <Property Name="Comment" Type="nvarchar(max)" Nullable="false" />
     <Property Name="EventSet_Id" Type="int" Nullable="false" />
     <Property Name="ContractSet_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PaymentEmployeeConnectSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Payments_Id" Type="int" Nullable="false" />
+    <Property Name="Event_Id" Type="int" Nullable="false" />
+    <Property Name="Employee_Id" Type="int" Nullable="false" />
   </EntityType>
   <Association Name="FK_ClientContract">
     <End Role="Client" Type="ERPModel.Store.ClientSet" Multiplicity="1" />
@@ -197,18 +209,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="PaymentsEmployee">
-    <End Role="Payments" Type="ERPModel.Store.PaymentsSet" Multiplicity="*" />
-    <End Role="Employee" Type="ERPModel.Store.EmployeeSet" Multiplicity="1" />
-    <ReferentialConstraint>
-      <Principal Role="Employee">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Payments">
-        <PropertyRef Name="Employee_Id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="AccountPayments">
     <End Role="Account" Type="ERPModel.Store.AccountSet" Multiplicity="1" />
     <End Role="Payments" Type="ERPModel.Store.PaymentsSet" Multiplicity="*" />
@@ -222,7 +222,7 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="ContractPayments">
-    <End Role="Contract" Type="ERPModel.Store.ContractSet" Multiplicity="1" />
+    <End Role="Contract" Type="ERPModel.Store.ContractSet" Multiplicity="0..1" />
     <End Role="Payments" Type="ERPModel.Store.PaymentsSet" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Contract">
@@ -233,15 +233,39 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="PaymentsEvent">
-    <End Role="Payments" Type="ERPModel.Store.PaymentsSet" Multiplicity="*" />
+  <Association Name="PaymentsPaymentEmployeeConnect">
+    <End Role="Payments" Type="ERPModel.Store.PaymentsSet" Multiplicity="1" />
+    <End Role="PaymentEmployeeConnect" Type="ERPModel.Store.PaymentEmployeeConnectSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Payments">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PaymentEmployeeConnect">
+        <PropertyRef Name="Payments_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="PaymentEmployeeConnectEvent">
+    <End Role="PaymentEmployeeConnect" Type="ERPModel.Store.PaymentEmployeeConnectSet" Multiplicity="*" />
     <End Role="Event" Type="ERPModel.Store.EventSet" Multiplicity="1" />
     <ReferentialConstraint>
       <Principal Role="Event">
         <PropertyRef Name="Id" />
       </Principal>
-      <Dependent Role="Payments">
+      <Dependent Role="PaymentEmployeeConnect">
         <PropertyRef Name="Event_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="PaymentEmployeeConnectEmployee">
+    <End Role="PaymentEmployeeConnect" Type="ERPModel.Store.PaymentEmployeeConnectSet" Multiplicity="*" />
+    <End Role="Employee" Type="ERPModel.Store.EmployeeSet" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Employee">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PaymentEmployeeConnect">
+        <PropertyRef Name="Employee_Id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -277,10 +301,6 @@
             <End Role="Contract" EntitySet="ContractSet" />
             <End Role="PaymentToPeers" EntitySet="PaymentToPeersSet" />
           </AssociationSet>
-          <AssociationSet Name="PaymentsEmployee" Association="ERPModel.PaymentsEmployee">
-            <End Role="Payments" EntitySet="PaymentsSet" />
-            <End Role="Employee" EntitySet="EmployeeSet" />
-          </AssociationSet>
           <AssociationSet Name="AccountPayments" Association="ERPModel.AccountPayments">
             <End Role="Account" EntitySet="AccountSet" />
             <End Role="Payments" EntitySet="PaymentsSet" />
@@ -289,9 +309,18 @@
             <End Role="Contract" EntitySet="ContractSet" />
             <End Role="Payments" EntitySet="PaymentsSet" />
           </AssociationSet>
-          <AssociationSet Name="PaymentsEvent" Association="ERPModel.PaymentsEvent">
+          <EntitySet Name="PaymentEmployeeConnectSet" EntityType="ERPModel.PaymentEmployeeConnect" />
+          <AssociationSet Name="PaymentsPaymentEmployeeConnect" Association="ERPModel.PaymentsPaymentEmployeeConnect">
             <End Role="Payments" EntitySet="PaymentsSet" />
+            <End Role="PaymentEmployeeConnect" EntitySet="PaymentEmployeeConnectSet" />
+          </AssociationSet>
+          <AssociationSet Name="PaymentEmployeeConnectEvent" Association="ERPModel.PaymentEmployeeConnectEvent">
+            <End Role="PaymentEmployeeConnect" EntitySet="PaymentEmployeeConnectSet" />
             <End Role="Event" EntitySet="EventSet" />
+          </AssociationSet>
+          <AssociationSet Name="PaymentEmployeeConnectEmployee" Association="ERPModel.PaymentEmployeeConnectEmployee">
+            <End Role="PaymentEmployeeConnect" EntitySet="PaymentEmployeeConnectSet" />
+            <End Role="Employee" EntitySet="EmployeeSet" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Account">
@@ -348,7 +377,7 @@
           <Property Name="Login" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Password" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="ContractSet" Relationship="ERPModel.FK_ContractEmployee" FromRole="Employee" ToRole="Contract" />
-          <NavigationProperty Name="Payments" Relationship="ERPModel.PaymentsEmployee" FromRole="Employee" ToRole="Payments" />
+          <NavigationProperty Name="PaymentEmployeeConnect" Relationship="ERPModel.PaymentEmployeeConnectEmployee" FromRole="Employee" ToRole="PaymentEmployeeConnect" />
         </EntityType>
         <EntityType Name="Event">
           <Key>
@@ -359,7 +388,7 @@
           <Property Name="PercentToEmpl" Type="Int32" Nullable="false" />
           <NavigationProperty Name="ContractSet" Relationship="ERPModel.FK_ContractEvent" FromRole="Event" ToRole="Contract" />
           <NavigationProperty Name="PaymentToPeersSet" Relationship="ERPModel.FK_PaymentToPeersEvent" FromRole="Event" ToRole="PaymentToPeers" />
-          <NavigationProperty Name="Payments" Relationship="ERPModel.PaymentsEvent" FromRole="Event" ToRole="Payments" />
+          <NavigationProperty Name="PaymentEmployeeConnect" Relationship="ERPModel.PaymentEmployeeConnectEvent" FromRole="Event" ToRole="PaymentEmployeeConnect" />
         </EntityType>
         <EntityType Name="Payments">
           <Key>
@@ -370,12 +399,11 @@
           <Property Name="Comment" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Sum" Type="Int32" Nullable="false" />
-          <Property Name="AccountSet_Id" Type="Int32" Nullable="false" />
-          <Property Name="EmployeeSer_Id" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Employee" Relationship="ERPModel.PaymentsEmployee" FromRole="Payments" ToRole="Employee" />
           <NavigationProperty Name="Account" Relationship="ERPModel.AccountPayments" FromRole="Payments" ToRole="Account" />
           <NavigationProperty Name="Contract" Relationship="ERPModel.ContractPayments" FromRole="Payments" ToRole="Contract" />
-          <NavigationProperty Name="Event" Relationship="ERPModel.PaymentsEvent" FromRole="Payments" ToRole="Event" />
+          <NavigationProperty Name="PaymentEmployeeConnect" Relationship="ERPModel.PaymentsPaymentEmployeeConnect" FromRole="Payments" ToRole="PaymentEmployeeConnect" />
+          <Property Name="AccounId" Type="Int32" Nullable="false" />
+          <Property Name="ContractId" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="PaymentToPeers">
           <Key>
@@ -410,21 +438,34 @@
           <End Type="ERPModel.Contract" Role="Contract" Multiplicity="1" />
           <End Type="ERPModel.PaymentToPeers" Role="PaymentToPeers" Multiplicity="*" />
         </Association>
-        <Association Name="PaymentsEmployee">
-          <End Type="ERPModel.Payments" Role="Payments" Multiplicity="*" />
-          <End Type="ERPModel.Employee" Role="Employee" Multiplicity="1" />
-        </Association>
         <Association Name="AccountPayments">
           <End Type="ERPModel.Account" Role="Account" Multiplicity="1" />
           <End Type="ERPModel.Payments" Role="Payments" Multiplicity="*" />
         </Association>
         <Association Name="ContractPayments">
-          <End Type="ERPModel.Contract" Role="Contract" Multiplicity="1" />
+          <End Type="ERPModel.Contract" Role="Contract" Multiplicity="0..1" />
           <End Type="ERPModel.Payments" Role="Payments" Multiplicity="*" />
         </Association>
-        <Association Name="PaymentsEvent">
-          <End Type="ERPModel.Payments" Role="Payments" Multiplicity="*" />
+        <EntityType Name="PaymentEmployeeConnect">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Payments" Relationship="ERPModel.PaymentsPaymentEmployeeConnect" FromRole="PaymentEmployeeConnect" ToRole="Payments" />
+          <NavigationProperty Name="Event" Relationship="ERPModel.PaymentEmployeeConnectEvent" FromRole="PaymentEmployeeConnect" ToRole="Event" />
+          <NavigationProperty Name="Employee" Relationship="ERPModel.PaymentEmployeeConnectEmployee" FromRole="PaymentEmployeeConnect" ToRole="Employee" />
+        </EntityType>
+        <Association Name="PaymentsPaymentEmployeeConnect">
+          <End Type="ERPModel.Payments" Role="Payments" Multiplicity="1" />
+          <End Type="ERPModel.PaymentEmployeeConnect" Role="PaymentEmployeeConnect" Multiplicity="*" />
+        </Association>
+        <Association Name="PaymentEmployeeConnectEvent">
+          <End Type="ERPModel.PaymentEmployeeConnect" Role="PaymentEmployeeConnect" Multiplicity="1" />
           <End Type="ERPModel.Event" Role="Event" Multiplicity="1" />
+        </Association>
+        <Association Name="PaymentEmployeeConnectEmployee">
+          <End Type="ERPModel.PaymentEmployeeConnect" Role="PaymentEmployeeConnect" Multiplicity="1" />
+          <End Type="ERPModel.Employee" Role="Employee" Multiplicity="1" />
         </Association>
       </Schema>
     </edmx:ConceptualModels>
@@ -500,8 +541,8 @@
           <ScalarProperty Name="Comment" ColumnName="Comment" />
           <ScalarProperty Name="Date" ColumnName="Date" />
           <ScalarProperty Name="Sum" ColumnName="Sum" />
-          <ScalarProperty Name="AccountSet_Id" ColumnName="AccountSet_Id" />
-          <ScalarProperty Name="EmployeeSer_Id" ColumnName="EmployeeSer_Id" />
+          <ScalarProperty Name="AccounId" ColumnName="AccounId" />
+          <ScalarProperty Name="ContractId" ColumnName="ContractId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -514,6 +555,13 @@
           <ScalarProperty Name="IdContract" ColumnName="IdContract" />
           <ScalarProperty Name="Month" ColumnName="Month" />
           <ScalarProperty Name="Comment" ColumnName="Comment" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PaymentEmployeeConnectSet">
+      <EntityTypeMapping TypeName="IsTypeOf(ERPModel.PaymentEmployeeConnect)">
+        <MappingFragment StoreEntitySet="PaymentEmployeeConnectSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -557,14 +605,6 @@
         <ScalarProperty Name="Id" ColumnName="Id" />
       </EndProperty>
     </AssociationSetMapping>
-    <AssociationSetMapping Name="PaymentsEmployee" TypeName="ERPModel.PaymentsEmployee" StoreEntitySet="PaymentsSet">
-      <EndProperty Name="Employee">
-        <ScalarProperty Name="Id" ColumnName="Employee_Id" />
-      </EndProperty>
-      <EndProperty Name="Payments">
-        <ScalarProperty Name="Id" ColumnName="Id" />
-      </EndProperty>
-    </AssociationSetMapping>
     <AssociationSetMapping Name="AccountPayments" TypeName="ERPModel.AccountPayments" StoreEntitySet="PaymentsSet">
       <EndProperty Name="Account">
         <ScalarProperty Name="Id" ColumnName="Account_Id" />
@@ -580,12 +620,29 @@
       <EndProperty Name="Payments">
         <ScalarProperty Name="Id" ColumnName="Id" />
       </EndProperty>
+      <Condition ColumnName="Contract_Id" IsNull="false" />
     </AssociationSetMapping>
-    <AssociationSetMapping Name="PaymentsEvent" TypeName="ERPModel.PaymentsEvent" StoreEntitySet="PaymentsSet">
+    <AssociationSetMapping Name="PaymentsPaymentEmployeeConnect" TypeName="ERPModel.PaymentsPaymentEmployeeConnect" StoreEntitySet="PaymentEmployeeConnectSet">
+      <EndProperty Name="Payments">
+        <ScalarProperty Name="Id" ColumnName="Payments_Id" />
+      </EndProperty>
+      <EndProperty Name="PaymentEmployeeConnect">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="PaymentEmployeeConnectEvent" TypeName="ERPModel.PaymentEmployeeConnectEvent" StoreEntitySet="PaymentEmployeeConnectSet">
       <EndProperty Name="Event">
         <ScalarProperty Name="Id" ColumnName="Event_Id" />
       </EndProperty>
-      <EndProperty Name="Payments">
+      <EndProperty Name="PaymentEmployeeConnect">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="PaymentEmployeeConnectEmployee" TypeName="ERPModel.PaymentEmployeeConnectEmployee" StoreEntitySet="PaymentEmployeeConnectSet">
+      <EndProperty Name="Employee">
+        <ScalarProperty Name="Id" ColumnName="Employee_Id" />
+      </EndProperty>
+      <EndProperty Name="PaymentEmployeeConnect">
         <ScalarProperty Name="Id" ColumnName="Id" />
       </EndProperty>
     </AssociationSetMapping>

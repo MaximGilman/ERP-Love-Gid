@@ -30,14 +30,14 @@ namespace ERP_Love_Gid.Models
         {
             return cont.ContractSet.Select(x => x.Date_of_event.Year).Distinct().OrderBy(y => y);
         }
-        public Contract Add(int sumonly, int eventid, string client, DateTime sign, DateTime _event, DateTime pay1, DateTime pay2 ,DateTime pay3,int paysum1, int paysum2, int paysum3, string comment, int emplid  )
+        public Contract Add(int sumonly, int eventid, string client, DateTime sign, DateTime _event, DateTime pay1, DateTime pay2, DateTime pay3, int paysum1, int paysum2, int paysum3, string comment, int emplid)
         {
             Contract add = new Contract();
             add.Sum_only_contract = sumonly;
             add.EventSet = cont.EventSet.Find(eventid);
             Client cladd = new Client();
             cladd.FIO = client;
-            if (cont.ClientSet.Where(x => x.FIO == cladd.FIO).Count() == 0) cont.ClientSet.Add(cladd);
+            if (cont.ClientSet.Where(x => x.FIO == cladd.FIO).Count() == 0) {cont.ClientSet.Add(cladd);  cont.SaveChanges(); }
             add.ClientSet = cont.ClientSet.Where(x=>x.FIO==cladd.FIO).FirstOrDefault();
             add.Date_of_sign = sign;
             add.Date_of_event   = _event;
@@ -60,8 +60,7 @@ namespace ERP_Love_Gid.Models
         }
         public Contract Add(Contract M)
         {
-            Contract a = new Contract();
-            a = M;
+            
             cont.ContractSet.Add(a);
             cont.SaveChanges();
 

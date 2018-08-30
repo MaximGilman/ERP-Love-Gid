@@ -116,11 +116,15 @@ namespace ERP_Love_Gid.Controllers
         public ActionResult AddPaymentDetail()
         {
             Payments Adder = new Payments();
+            
             Adder.Receipt = Convert.ToInt32(Request.Form["Receipt"]);
             Adder.Account = _DataManager.AccR.GetElem(Convert.ToInt32(Request.Form["Account"]));
             Adder.Contract = _DataManager.ConR.GetElem(Convert.ToInt32(Request.Form["Contract"]));
-            Adder.Event = _DataManager.EvR.GetElem(Convert.ToInt32(Request.Form["Event"]));
-            Adder.Employee = _DataManager.EmR.GetElem(Convert.ToInt32(Request.Form["Employee"]));
+PaymentEmployeeConnect linkstoEvent_Pay =             new PaymentEmployeeConnect();
+            linkstoEvent_Pay.Employee= _DataManager.EmR.GetElem(Convert.ToInt32(Request.Form["Employee"]));
+            linkstoEvent_Pay.Event = _DataManager.EvR.GetElem(Convert.ToInt32(Request.Form["Event"]));
+            Adder.PaymentEmployeeConnect.Add(linkstoEvent_Pay);
+            
             Adder.Comment = Request.Form["Comment"];
             Adder.Date = new DateTime(Convert.ToInt32(Request.Form["calendarPay"].Split('-')[0]), Convert.ToInt32(Request.Form["calendarPay"].Split('-')[1]), Convert.ToInt32(Request.Form["calendarPay"].Split('-')[2]));
 
@@ -143,7 +147,7 @@ namespace ERP_Love_Gid.Controllers
             if (CurEmployee == null) return RedirectToAction("Log_in", "User");
 
             ViewBag.User = CurEmployee.FIO;
-            ViewBag.Account = _DataManager.AccR.GetCollection();
+            ViewBag.Account = new SelectList(_DataManager.AccR.GetCollection(), "Id", "Type");
             return View();
         }
         [HttpPost]

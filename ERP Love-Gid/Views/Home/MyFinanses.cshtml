@@ -21,17 +21,19 @@
         </tr>
         @foreach (Payments cw in (IEnumerable<Payments>)ViewBag.Payments)
         {
-
+            foreach (PaymentEmployeeConnect PE in cw.PaymentEmployeeConnect)
+            {
             <tr>
                 <td>@cw.Receipt</td>
                 <td>@cw.Account.Type</td>
                 <td>@cw.Contract.Name</td>
                 <td>@cw.Contract.EventSet.Type</td>
-                <td>@cw.Employee.FIO</td>
+                <td>@PE.Employee.FIO</td>
                 <td>@cw.Comment</td>
                 <td>@cw.Date</td>
 
             </tr>
+            }
         }
     </table>
     <p><b>Итого @ViewBag.PaymentSum</b></p>

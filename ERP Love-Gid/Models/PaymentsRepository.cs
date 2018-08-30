@@ -41,7 +41,7 @@ namespace ERP_Love_Gid.Models
 
         public Payments Add(Payments M)
         {
-
+            M.Contract = cont.ContractSet.First();
             cont.PaymentsSet.Add(M);
             cont.SaveChanges();
 

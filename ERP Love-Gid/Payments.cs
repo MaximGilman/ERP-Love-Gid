@@ -14,17 +14,23 @@ namespace ERP_Love_Gid
     
     public partial class Payments
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Payments()
+        {
+            this.PaymentEmployeeConnect = new HashSet<PaymentEmployeeConnect>();
+        }
+    
         public int Id { get; set; }
         public int Receipt { get; set; }
         public string Comment { get; set; }
         public System.DateTime Date { get; set; }
         public int Sum { get; set; }
-        public int AccountSet_Id { get; set; }
-        public int EmployeeSer_Id { get; set; }
+        public int AccounId { get; set; }
+        public int ContractId { get; set; }
     
-        public virtual Employee Employee { get; set; }
         public virtual Account Account { get; set; }
         public virtual Contract Contract { get; set; }
-        public virtual Event Event { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PaymentEmployeeConnect> PaymentEmployeeConnect { get; set; }
     }
 }
