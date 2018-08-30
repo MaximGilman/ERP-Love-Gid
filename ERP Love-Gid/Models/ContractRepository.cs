@@ -37,7 +37,8 @@ namespace ERP_Love_Gid.Models
             add.EventSet = cont.EventSet.Find(eventid);
             Client cladd = new Client();
             cladd.FIO = client;
-            add.ClientSet = cont.ClientSet.Add(cladd);
+            if (cont.ClientSet.Where(x => x.FIO == cladd.FIO).Count() == 0) cont.ClientSet.Add(cladd);
+            add.ClientSet = cont.ClientSet.Where(x=>x.FIO==cladd.FIO).FirstOrDefault();
             add.Date_of_sign = sign;
             add.Date_of_event   = _event;
             add.Payment1Date =       pay1;

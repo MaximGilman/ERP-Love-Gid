@@ -1,0 +1,71 @@
+﻿
+@{
+    ViewBag.Title = "Сдача денег в кассу";
+}
+
+<h2>Добавление перевода</h2>
+
+<div class="container">
+    <header>
+
+
+        <nav class="secondary_header" id="menu">
+            <section>
+
+
+                @using (Html.BeginForm("AddReceivedMoney", "Home", FormMethod.Post))
+                {
+
+
+                    <p>@Html.ActionLink("Обратно к списку", "MyFinanses")</p>
+                    <table>
+
+
+
+
+                        <tr>
+                            <td>
+                                <p>
+                                    Размер платежа:
+                                </p>
+                            </td>
+
+                            <td><p> @Html.TextBox("Sum", null, new { @class = "form-control", type = "number", @min = "0" })</p></td>
+                        </tr>
+                        <tr>
+                            <td><p>Счет для перевода:</p></td>
+                            <td><p> @Html.DropDownList("Account", (IEnumerable<SelectListItem>)ViewData["Accounts"], null, new { style = "width : 200px", @class = "form-control" }) @Html.ValidationMessage("Accounts")</p></td>
+
+                        </tr>
+
+
+                       
+                        <tr>
+                            <td><p>Дата оплаты: </p></td>
+                            <td>
+                                <p>
+                                    <input type="date" name="calendarPay" class="form-control">
+                                </p>
+                            </td>
+                        </tr>
+
+
+                    </table>
+                    <p></p>
+                    <p><input type="submit" value="Сохранить" /></p>
+                }
+
+
+
+
+
+
+
+
+            </section>
+        </nav>
+    </header>
+
+
+</div>
+

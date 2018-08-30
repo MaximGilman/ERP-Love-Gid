@@ -25,5 +25,6 @@ namespace ERP_Love_Gid
         public virtual Employee Employee { get; set; }
         public virtual Account Account { get; set; }
         public virtual Contract Contract { get; set; }
+        public virtual Event Event { get; set; }
     }
 }

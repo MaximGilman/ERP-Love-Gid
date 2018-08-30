@@ -20,7 +20,7 @@ namespace ERP_Love_Gid.Controllers
 
             _DataManager = _DM;
         }
-
+#region Мои_Договоры
         /// <summary>
         /// Мои договоры
         /// </summary>
@@ -45,6 +45,9 @@ namespace ERP_Love_Gid.Controllers
         {
             return RedirectToAction("AddContract");
         }
+        #endregion
+
+#region Добавление_контракта
         [HttpGet]
         public ActionResult AddContract()
         {
@@ -65,29 +68,12 @@ namespace ERP_Love_Gid.Controllers
                new DateTime(Convert.ToInt32(Request.Form["2pay"].Split('-')[0]), Convert.ToInt32(Request.Form["2pay"].Split('-')[1]), Convert.ToInt32(Request.Form["2pay"].Split('-')[2])),
               new DateTime(Convert.ToInt32(Request.Form["3pay"].Split('-')[0]), Convert.ToInt32(Request.Form["3pay"].Split('-')[1]), Convert.ToInt32(Request.Form["3pay"].Split('-')[2])),
               Convert.ToInt32(Request.Form["1paySum"]), Convert.ToInt32(Request.Form["2paySum"]), Convert.ToInt32(Request.Form["3paySum"]), Request.Form["Comment"], CurEmployee.Id);
-            //Contract add = new Contract();
-            //add.Sum_only_contract = Convert.ToInt32(Request.Form["Cost"]);
-            //add.EventSet = _DataManager.EvR.GetElem(Convert.ToInt32(Request.Form["Event"]));
-
-            //add.ClientSet = _DataManager.CliR.Add(Request.Form["Client"]);
-            //add.Date_of_sign = new DateTime(Convert.ToInt32(Request.Form["calendarContract"].Split('-')[0]), Convert.ToInt32(Request.Form["calendarContract"].Split('-')[1]), Convert.ToInt32(Request.Form["calendarContract"].Split('-')[2]));
-            //add.Date_of_event = new DateTime(Convert.ToInt32(Request.Form["calendarEvent"].Split('-')[0]), Convert.ToInt32(Request.Form["calendarEvent"].Split('-')[1]), Convert.ToInt32(Request.Form["calendarEvent"].Split('-')[2]));
-            //add.Payment1Date = new DateTime(Convert.ToInt32(Request.Form["1pay"].Split('-')[0]), Convert.ToInt32(Request.Form["1pay"].Split('-')[1]), Convert.ToInt32(Request.Form["1pay"].Split('-')[2]));
-            //add.Payment2Date = new DateTime(Convert.ToInt32(Request.Form["2pay"].Split('-')[0]), Convert.ToInt32(Request.Form["2pay"].Split('-')[1]), Convert.ToInt32(Request.Form["2pay"].Split('-')[2]));
-            //add.Payment3Date = new DateTime(Convert.ToInt32(Request.Form["3pay"].Split('-')[0]), Convert.ToInt32(Request.Form["3pay"].Split('-')[1]), Convert.ToInt32(Request.Form["3pay"].Split('-')[2]));
-            //add.Payment1Sum = Convert.ToInt32(Request.Form["1paySum"]); add.Payment2Sum = Convert.ToInt32(Request.Form["2paySum"]);
-            //add.Payment3Sum = Convert.ToInt32(Request.Form["3paySum"]);
-
-            //add.Comment = Request.Form["Comment"];
-            //add.Received = 0;
-            //add.Sum_plus = 0;
-            //add.Status = Status.Активный.ToString();
-            //add.EmployeeSet = CurEmployee; // Убрать потом при регистрации!!!!!!!
-            //add.Name = add.Date_of_event.ToString().Split(' ')[0] + " — " +" ("+ add.EmployeeSet.FIO +") "+ add.ClientSet.FIO;
-            //_DataManager.ConR.Add(add);
+           
             return RedirectToAction("Index");
         }
+        #endregion
 
+#region Мои_Финансы
         [HttpGet]
         public ActionResult MyFinanses(string error = "")
         {
@@ -106,10 +92,14 @@ namespace ERP_Love_Gid.Controllers
             {
                 return RedirectToAction("AddPaymentDetail");
             }
-            // 
-            else
-                return RedirectToAction("MyFinanses");
-        }
+
+            else { return RedirectToAction("AddReceivedMoney"); }
+         }
+        #endregion
+
+
+      
+#region Добавление_платежа_в_1_табл
         [HttpGet]
         public ActionResult AddPaymentDetail(string error = "")
         {
@@ -122,12 +112,6 @@ namespace ERP_Love_Gid.Controllers
             ViewBag.Employees = new SelectList(_DataManager.EmR.GetCollection(), "Id", "FIO");
             return View();
         }
-        public ActionResult Exit()
-        {
-            CurEmployee = null;
-
-            return RedirectToAction("Log_in", "User");
-        }
         [HttpPost]
         public ActionResult AddPaymentDetail()
         {
@@ -135,10 +119,55 @@ namespace ERP_Love_Gid.Controllers
             Adder.Receipt = Convert.ToInt32(Request.Form["Receipt"]);
             Adder.Account = _DataManager.AccR.GetElem(Convert.ToInt32(Request.Form["Account"]));
             Adder.Contract = _DataManager.ConR.GetElem(Convert.ToInt32(Request.Form["Contract"]));
-            Adder. = _DataManager.ConR.GetElem(Convert.ToInt32(Request.Form["Contract"]));
+            Adder.Event = _DataManager.EvR.GetElem(Convert.ToInt32(Request.Form["Event"]));
+            Adder.Employee = _DataManager.EmR.GetElem(Convert.ToInt32(Request.Form["Employee"]));
+            Adder.Comment = Request.Form["Comment"];
+            Adder.Date = new DateTime(Convert.ToInt32(Request.Form["calendarPay"].Split('-')[0]), Convert.ToInt32(Request.Form["calendarPay"].Split('-')[1]), Convert.ToInt32(Request.Form["calendarPay"].Split('-')[2]));
+
+
 
             _DataManager.PayR.Add(Adder);
             return RedirectToAction("MyFinanses");
+        }
+        #endregion
+
+#region Добавление_платежа_в_табл_2
+        /// <summary>
+        /// добавление в таблицу СДАНО
+        /// </summary>
+        /// <param name="error"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult AddReceivedMoney(string error = "")
+        {
+            if (CurEmployee == null) return RedirectToAction("Log_in", "User");
+
+            ViewBag.User = CurEmployee.FIO;
+            ViewBag.Account = _DataManager.AccR.GetCollection();
+            return View();
+        }
+        [HttpPost]
+        public ActionResult AddReceivedMoney()
+
+        {
+            Payments Adder = new Payments();
+            Adder.Sum = Convert.ToInt32(Request.Form["Sum"]);
+            Adder.Account = _DataManager.AccR.GetElem(Convert.ToInt32(Request.Form["Account"]));
+            
+            Adder.Date = new DateTime(Convert.ToInt32(Request.Form["calendarPay"].Split('-')[0]), Convert.ToInt32(Request.Form["calendarPay"].Split('-')[1]), Convert.ToInt32(Request.Form["calendarPay"].Split('-')[2]));
+
+
+
+            _DataManager.PayR.Add(Adder);
+            return RedirectToAction("MyFinanses");
+        }
+        #endregion
+
+        public ActionResult Exit()
+        {
+            CurEmployee = null;
+
+            return RedirectToAction("Log_in", "User");
         }
     }
 }

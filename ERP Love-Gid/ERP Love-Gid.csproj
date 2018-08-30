@@ -264,6 +264,7 @@
     <Content Include="Views\User\Log_in.cshtml" />
     <Content Include="Views\Home\MyFinanses.cshtml" />
     <Content Include="Views\Home\AddPaymentDetail.cshtml" />
+    <Content Include="Views\Home\AddReceivedMoney.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

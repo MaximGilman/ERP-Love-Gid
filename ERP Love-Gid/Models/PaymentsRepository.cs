@@ -23,13 +23,16 @@ namespace ERP_Love_Gid.Models
 
         public IEnumerable<Payments> GetEmplPays(int id)
         {
-
-            return cont.PaymentsSet.Where(x=>x.Contract.EmployeeSet.Id==id).OrderBy(cw => cw.Id);
-        }
+             return cont.PaymentsSet.Where(x => x.Contract.EmployeeSet.Id == id).OrderBy(cw => cw.Id);  
+            
+         }
         public int GetEmplPaysSum(int id)
         {
-
-            return cont.PaymentsSet.Where(x => x.Contract.EmployeeSet.Id == id).Select(y=>y.Receipt).Sum();
+            try
+            {
+                return cont.PaymentsSet.Where(x => x.Contract.EmployeeSet.Id == id).Select(y => y.Receipt).Sum();
+            }
+            catch { return 0; }
         }
         public Payments GetElem(int id)
         {

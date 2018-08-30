@@ -28,8 +28,8 @@ namespace ERP_Love_Gid.Models
 
         public Client Add(Client M)
         {
+            if (cont.ClientSet.Where(x=>x.FIO==M.FIO).Count()==0) cont.ClientSet.Add(M);
 
-            cont.ClientSet.Add(M);
             cont.SaveChanges();
 
             return M;
@@ -38,7 +38,7 @@ namespace ERP_Love_Gid.Models
         {
             Client add = new Client();
             add.FIO = M;
-            cont.ClientSet.Add(add);
+            if (cont.ClientSet.Where(x => x.FIO == M).Count() == 0) cont.ClientSet.Add(add);
             cont.SaveChanges();
 
             return add;

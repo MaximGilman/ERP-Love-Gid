@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 08/28/2018 13:32:01
+-- Date Created: 08/28/2018 19:39:49
 -- Generated from EDMX file: C:\Users\Maxim Gilman\source\repos\ERP Love-Gid\ERP Love-Gid\ERPModel.edmx
 -- --------------------------------------------------
 
@@ -17,17 +17,11 @@ GO
 -- Dropping existing FOREIGN KEY constraints
 -- --------------------------------------------------
 
-IF OBJECT_ID(N'[dbo].[FK_PaymentsAccount]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[PaymentsSet] DROP CONSTRAINT [FK_PaymentsAccount];
-GO
 IF OBJECT_ID(N'[dbo].[FK_ClientContract]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[ContractSet] DROP CONSTRAINT [FK_ClientContract];
 GO
 IF OBJECT_ID(N'[dbo].[FK_ContractEmployee]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[ContractSet] DROP CONSTRAINT [FK_ContractEmployee];
-GO
-IF OBJECT_ID(N'[dbo].[FK_PaymentsEmployee]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[PaymentsSet] DROP CONSTRAINT [FK_PaymentsEmployee];
 GO
 IF OBJECT_ID(N'[dbo].[FK_ContractEvent]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[ContractSet] DROP CONSTRAINT [FK_ContractEvent];
@@ -37,6 +31,15 @@ IF OBJECT_ID(N'[dbo].[FK_PaymentToPeersEvent]', 'F') IS NOT NULL
 GO
 IF OBJECT_ID(N'[dbo].[FK_PaymentToPeersContract]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[PaymentToPeersSet] DROP CONSTRAINT [FK_PaymentToPeersContract];
+GO
+IF OBJECT_ID(N'[dbo].[FK_PaymentsEmployee]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[PaymentsSet] DROP CONSTRAINT [FK_PaymentsEmployee];
+GO
+IF OBJECT_ID(N'[dbo].[FK_AccountPayments]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[PaymentsSet] DROP CONSTRAINT [FK_AccountPayments];
+GO
+IF OBJECT_ID(N'[dbo].[FK_ContractPayments]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[PaymentsSet] DROP CONSTRAINT [FK_ContractPayments];
 GO
 
 -- --------------------------------------------------
@@ -138,7 +141,8 @@ CREATE TABLE [dbo].[PaymentsSet] (
     [EmployeeSer_Id] int  NOT NULL,
     [Employee_Id] int  NOT NULL,
     [Account_Id] int  NOT NULL,
-    [Contract_Id] int  NOT NULL
+    [Contract_Id] int  NOT NULL,
+    [Event_Id] int  NOT NULL
 );
 GO
 
@@ -323,6 +327,21 @@ GO
 CREATE INDEX [IX_FK_ContractPayments]
 ON [dbo].[PaymentsSet]
     ([Contract_Id]);
+GO
+
+-- Creating foreign key on [Event_Id] in table 'PaymentsSet'
+ALTER TABLE [dbo].[PaymentsSet]
+ADD CONSTRAINT [FK_PaymentsEvent]
+    FOREIGN KEY ([Event_Id])
+    REFERENCES [dbo].[EventSet]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_PaymentsEvent'
+CREATE INDEX [IX_FK_PaymentsEvent]
+ON [dbo].[PaymentsSet]
+    ([Event_Id]);
 GO
 
 -- --------------------------------------------------

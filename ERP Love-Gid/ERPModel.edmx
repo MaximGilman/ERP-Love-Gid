@@ -45,6 +45,10 @@
       <End Role="Contract" EntitySet="ContractSet" />
       <End Role="Payments" EntitySet="PaymentsSet" />
     </AssociationSet>
+    <AssociationSet Name="PaymentsEvent" Association="ERPModel.Store.PaymentsEvent">
+      <End Role="Payments" EntitySet="PaymentsSet" />
+      <End Role="Event" EntitySet="EventSet" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="AccountSet">
     <Key>
@@ -118,6 +122,7 @@
     <Property Name="Employee_Id" Type="int" Nullable="false" />
     <Property Name="Account_Id" Type="int" Nullable="false" />
     <Property Name="Contract_Id" Type="int" Nullable="false" />
+    <Property Name="Event_Id" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="PaymentToPeersSet">
     <Key>
@@ -228,6 +233,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="PaymentsEvent">
+    <End Role="Payments" Type="ERPModel.Store.PaymentsSet" Multiplicity="*" />
+    <End Role="Event" Type="ERPModel.Store.EventSet" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Event">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Payments">
+        <PropertyRef Name="Event_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -271,6 +288,10 @@
           <AssociationSet Name="ContractPayments" Association="ERPModel.ContractPayments">
             <End Role="Contract" EntitySet="ContractSet" />
             <End Role="Payments" EntitySet="PaymentsSet" />
+          </AssociationSet>
+          <AssociationSet Name="PaymentsEvent" Association="ERPModel.PaymentsEvent">
+            <End Role="Payments" EntitySet="PaymentsSet" />
+            <End Role="Event" EntitySet="EventSet" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Account">
@@ -338,6 +359,7 @@
           <Property Name="PercentToEmpl" Type="Int32" Nullable="false" />
           <NavigationProperty Name="ContractSet" Relationship="ERPModel.FK_ContractEvent" FromRole="Event" ToRole="Contract" />
           <NavigationProperty Name="PaymentToPeersSet" Relationship="ERPModel.FK_PaymentToPeersEvent" FromRole="Event" ToRole="PaymentToPeers" />
+          <NavigationProperty Name="Payments" Relationship="ERPModel.PaymentsEvent" FromRole="Event" ToRole="Payments" />
         </EntityType>
         <EntityType Name="Payments">
           <Key>
@@ -353,6 +375,7 @@
           <NavigationProperty Name="Employee" Relationship="ERPModel.PaymentsEmployee" FromRole="Payments" ToRole="Employee" />
           <NavigationProperty Name="Account" Relationship="ERPModel.AccountPayments" FromRole="Payments" ToRole="Account" />
           <NavigationProperty Name="Contract" Relationship="ERPModel.ContractPayments" FromRole="Payments" ToRole="Contract" />
+          <NavigationProperty Name="Event" Relationship="ERPModel.PaymentsEvent" FromRole="Payments" ToRole="Event" />
         </EntityType>
         <EntityType Name="PaymentToPeers">
           <Key>
@@ -398,6 +421,10 @@
         <Association Name="ContractPayments">
           <End Type="ERPModel.Contract" Role="Contract" Multiplicity="1" />
           <End Type="ERPModel.Payments" Role="Payments" Multiplicity="*" />
+        </Association>
+        <Association Name="PaymentsEvent">
+          <End Type="ERPModel.Payments" Role="Payments" Multiplicity="*" />
+          <End Type="ERPModel.Event" Role="Event" Multiplicity="1" />
         </Association>
       </Schema>
     </edmx:ConceptualModels>
@@ -549,6 +576,14 @@
     <AssociationSetMapping Name="ContractPayments" TypeName="ERPModel.ContractPayments" StoreEntitySet="PaymentsSet">
       <EndProperty Name="Contract">
         <ScalarProperty Name="Id" ColumnName="Contract_Id" />
+      </EndProperty>
+      <EndProperty Name="Payments">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="PaymentsEvent" TypeName="ERPModel.PaymentsEvent" StoreEntitySet="PaymentsSet">
+      <EndProperty Name="Event">
+        <ScalarProperty Name="Id" ColumnName="Event_Id" />
       </EndProperty>
       <EndProperty Name="Payments">
         <ScalarProperty Name="Id" ColumnName="Id" />
