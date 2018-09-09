@@ -34,7 +34,7 @@
                         </tr>
                         <tr>
                             <td><p>Счет для перевода:</p></td>
-                            <td><p> @Html.DropDownList("Account", (IEnumerable<SelectListItem>)ViewData["Accounts"], null, new { style = "width : 200px", @class = "form-control" }) @Html.ValidationMessage("Accounts")</p></td>
+                            <td><p> @Html.DropDownList("Account", (IEnumerable<SelectListItem>)ViewData["Accounts"], null, new { style = "width : 200px", @class = "form-control", id = "Acc" }) @Html.ValidationMessage("Accounts")</p></td>
 
                         </tr>
 
@@ -69,3 +69,4 @@
 
 </div>
 
+ 

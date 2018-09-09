@@ -26,16 +26,16 @@ namespace ERP_Love_Gid
         public int Sum_only_contract { get; set; }
         public int Sum_plus { get; set; }
         public int Received { get; set; }
-        public System.DateTime Date_of_event { get; set; }
+        public Nullable<System.DateTime> Date_of_event { get; set; }
         public System.DateTime Date_of_sign { get; set; }
-        public System.DateTime Payment1Date { get; set; }
-        public System.DateTime Payment2Date { get; set; }
-        public System.DateTime Payment3Date { get; set; }
+        public Nullable<System.DateTime> Payment1Date { get; set; }
+        public Nullable<System.DateTime> Payment2Date { get; set; }
+        public Nullable<System.DateTime> Payment3Date { get; set; }
         public string Comment { get; set; }
         public string Status { get; set; }
-        public int Payment1Sum { get; set; }
-        public int Payment2Sum { get; set; }
-        public int Payment3Sum { get; set; }
+        public Nullable<int> Payment1Sum { get; set; }
+        public Nullable<int> Payment2Sum { get; set; }
+        public Nullable<int> Payment3Sum { get; set; }
     
         public virtual Client ClientSet { get; set; }
         public virtual Employee EmployeeSet { get; set; }

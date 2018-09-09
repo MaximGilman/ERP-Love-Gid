@@ -18,6 +18,7 @@ namespace ERP_Love_Gid
         public Account()
         {
             this.Payments = new HashSet<Payments>();
+            this.Pay_min = new HashSet<Pay_min>();
         }
     
         public int Id { get; set; }
@@ -26,5 +27,7 @@ namespace ERP_Love_Gid
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Payments> Payments { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Pay_min> Pay_min { get; set; }
     }
 }

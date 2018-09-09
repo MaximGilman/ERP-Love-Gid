@@ -176,11 +176,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ERPModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="ERPModel.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ERPModel.edmx</DependentUpon>
-    </Compile>
     <Compile Include="Event.cs">
       <DependentUpon>ERPModel.tt</DependentUpon>
     </Compile>
@@ -196,13 +191,16 @@
     <Compile Include="Models\EventRepository.cs" />
     <Compile Include="Models\PaymentsRepository.cs" />
     <Compile Include="Models\PaymentToPeersRepository.cs" />
-    <Compile Include="PaymentEmployeeConnect.cs">
-      <DependentUpon>ERPModel.tt</DependentUpon>
-    </Compile>
+    <Compile Include="Models\Pay_minRepository.cs" />
+    <Compile Include="Parials.cs" />
+    <Compile Include="Partials.cs" />
     <Compile Include="Payments.cs">
       <DependentUpon>ERPModel.tt</DependentUpon>
     </Compile>
     <Compile Include="PaymentToPeers.cs">
+      <DependentUpon>ERPModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Pay_min.cs">
       <DependentUpon>ERPModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -236,9 +234,6 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>ERPModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="ERPModel.edmx.diagram">
-      <DependentUpon>ERPModel.edmx</DependentUpon>
-    </Content>
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />

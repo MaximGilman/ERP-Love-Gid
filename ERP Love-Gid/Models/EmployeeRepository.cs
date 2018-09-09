@@ -17,8 +17,9 @@ namespace ERP_Love_Gid.Models
 
         public IEnumerable<Employee> GetCollection()
         {
-          
-            return cont.EmployeeSet.OrderBy(cw => cw.FIO);
+          foreach (Employee em in cont.EmployeeSet)
+            { em.FIO = em.Name + " " + em.Surname; }
+            return cont.EmployeeSet.OrderBy(cw => cw.Name);
         }
 
         public Employee GetElem(int id)

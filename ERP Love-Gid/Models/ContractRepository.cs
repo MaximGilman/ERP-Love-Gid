@@ -28,7 +28,7 @@ namespace ERP_Love_Gid.Models
         }
         public IEnumerable<int> GetYears()
         {
-            return cont.ContractSet.Select(x => x.Date_of_event.Year).Distinct().OrderBy(y => y);
+            return cont.ContractSet.Select(x => x.Date_of_event.Value.Year).Distinct().OrderBy(y => y);
         }
         public Contract Add(int sumonly, int eventid, string client, DateTime sign, DateTime _event, DateTime pay1, DateTime pay2, DateTime pay3, int paysum1, int paysum2, int paysum3, string comment, int emplid)
         {
@@ -53,7 +53,7 @@ namespace ERP_Love_Gid.Models
             add.Sum_plus = 0;
             add.Status = Status.Активный.ToString();
             add.EmployeeSet = cont.EmployeeSet.Find(emplid); // Убрать потом при регистрации!!!!!!!
-            add.Name = add.Date_of_event.ToString().Split(' ')[0] + " — " + " (" + add.EmployeeSet.FIO + ") " + add.ClientSet.FIO;
+            add.Name = add.Date_of_event.ToString().Split(' ')[0] + " — " + " (" + add.EmployeeSet.Name.First()+add.EmployeeSet.Surname.First() + ") " + add.ClientSet.FIO;
             cont.ContractSet.Add(add);
             cont.SaveChanges();
             return add;
@@ -61,10 +61,10 @@ namespace ERP_Love_Gid.Models
         public Contract Add(Contract M)
         {
             
-            cont.ContractSet.Add(a);
+            cont.ContractSet.Add(M);
             cont.SaveChanges();
 
-            return a;
+            return M;
         }
 
         public void Delete(int id)
@@ -76,5 +76,15 @@ namespace ERP_Love_Gid.Models
                 cont.SaveChanges();
             }
         }
+        public IEnumerable<Contract> GetAllPaysForMonth(int id, int year = 0, int month = 0 )
+        {
+            if (year == 0) year = DateTime.Now.Year; if (month == 0) month = DateTime.Now.Month;
+            return cont.ContractSet.Where(x => ( x.Payment1Date.Value.Month == month && x.Payment1Date.Value.Year == year|| x.Payment2Date.Value.Month == month && x.Payment2Date.Value.Year == year|| x.Payment3Date.Value.Month == month && x.Payment3Date.Value.Year == year) && x.EmployeeSet.Id==id).OrderBy(sort=>sort.Id);
+        }
+        //public int GetAllPaysForMonthSum(int id, int year = 0, int month = 0)
+        //{
+        //    if (year == 0) year = DateTime.Now.Year; if (month == 0) month = DateTime.Now.Month;
+        //    return cont.ContractSet.Where(x => (x.Payment1Date.Month == month && x.Payment1Date.Year == year || x.Payment2Date.Month == month && x.Payment2Date.Year == year || x.Payment3Date.Month == month && x.Payment3Date.Year == year) && x.EmployeeSet.Id == id).OrderBy(sort => sort.Id).Select();
+        //}
     }
 }

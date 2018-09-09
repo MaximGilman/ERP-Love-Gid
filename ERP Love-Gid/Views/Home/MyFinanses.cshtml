@@ -2,13 +2,14 @@
 @{
     ViewBag.Title = "Мои финансы";
 }
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
 <h1>Мои финансы</h1>
-<h3>Детализация моих платежей</h3>
-
+<h3>1.Детализация платежей</h3>
+<p>@ViewBag.Error</p>
 @using (Html.BeginForm("MyFinanses", "Home", FormMethod.Post))
 {
-     <table>
+    <table>
         <tr>
             <td>Приход</td>
             <td>Счет</td>
@@ -17,49 +18,72 @@
             <td>Кому деньги</td>
             <td>Коммент</td>
             <td>Дата</td>
- 
+
         </tr>
         @foreach (Payments cw in (IEnumerable<Payments>)ViewBag.Payments)
         {
-            foreach (PaymentEmployeeConnect PE in cw.PaymentEmployeeConnect)
-            {
-            <tr>
-                <td>@cw.Receipt</td>
-                <td>@cw.Account.Type</td>
-                <td>@cw.Contract.Name</td>
-                <td>@cw.Contract.EventSet.Type</td>
-                <td>@PE.Employee.FIO</td>
-                <td>@cw.Comment</td>
-                <td>@cw.Date</td>
+            
+                <tr>
+                    <td>@cw.Receipt</td>
+                    <td>@cw.Account.Type</td>
+                    @*<td>@cw.Contract.Name</td>*@
+                  @if (@cw.Contract != null) {<td>@cw.Contract.Date_of_event.ToString().Split(' ')[0]  —  (@cw.Contract.EmployeeSet.Name.First()@cw.Contract.EmployeeSet.Surname.First()) @cw.Contract.ClientSet.FIO</td>}
+                  else {<td>Не указано</td> }
+                    <td>@cw.Event.Type</td>
+              
+                    <td>@cw.Employee.Name @cw.Employee.Surname</td>
+                    <td>@cw.Comment</td>
+                    <td>@cw.Date.Day.@cw.Date.Month.@cw.Date.Year</td>
 
-            </tr>
-            }
+                </tr>
+            
         }
     </table>
     <p><b>Итого @ViewBag.PaymentSum</b></p>
-    <p><input type="submit" value="Добавить" name="MyPays" class ="form-control-added" /></p>
+    <p><input type="submit" value="Добавить" name="MyPays" class="form-control-added" /></p>
 
-    <h3>Сдала деньги</h3>
+    <h3>2. Переводы в кассу</h3>
 
-    <table>
+    <table class="NumericTable">
         <tr>
-            <td> <b>Сумма</b></td>
+             <td> <b>Сумма</b></td>
             <td><b>Счет</b></td>
             <td><b>Дата</b></td>
             <td><b>Проверка</b></td>
- 
+
 
         </tr>
-        @*@foreach (Contract cw in (IEnumerable<Contract>)ViewData["Contracts"])
-        {
+        @foreach ( Pay_min cw in (IEnumerable<Pay_min>)ViewBag.Pay_min)
+        { 
+            if (@cw.Finished)
+            {
+                <tr>
+                     <td> <b>@cw.Sum</b></td>
+                    <td><b>@cw.Account.Type</b></td>
+                    <td><b>@cw.Date.Day.@cw.Date.Month.@cw.Date.Year</b></td>
+                    <td><b>✔</b></td>
 
-            <tr></tr>
-        }*@
+                </tr>}
+            else
+            {
+                <tr>
+ 
+                    <td> <b>@cw.Sum</b></td>
+                    <td><b>@cw.Account.Type</b></td>
+                    <td><b>@cw.Date.Day.@cw.Date.Month.@cw.Date.Year</b></td>
+                    <td><b>Не соответствие суммы</b></td>
+
+                </tr>}
+        }
+
     </table>
+    <p><b>Итого @ViewBag.Pay_minSum</b></p>
+
     <p><input type="submit" value="Добавить" name="Handed" class="form-control-added" /></p>
 
-    <h3>Ожидаю оплату от клиентов</h3>
-    <table>
+    if (@ViewBag.InformerCount != 0) { 
+    <h3>3. План выплат от клиентов</h3>
+    <table >
         <tr>
             <td> <b>Сумма</b></td>
             <td><b>Проект</b></td>
@@ -67,16 +91,54 @@
             <td><b>Дата</b></td>
             <td><b>Статус</b></td>
 
-
         </tr>
-        @*@foreach (Contract cw in (IEnumerable<Contract>)ViewData["Contracts"])
+        
+        @foreach (Contract cw in (IEnumerable<Contract>)ViewBag.Informer)
         {
+            if(cw.Payment1Date.Value.Month==DateTime.Today.Month&& cw.Payment1Date.Value.Year == DateTime.Today.Year )
+            { 
+             <tr>
+                <td class="Informer"> <b>@cw.Payment1Sum</b></td>
+                <td><b>@cw.Name</b></td>
+                <td><b>@cw.EventSet.Type</b></td>
+                  <td><b>@cw.Payment1Date.Value.Day.@cw.Payment1Date.Value.Month.@cw.Payment1Date.Value.Year</b></td>
 
-            <tr></tr>
-        }*@
+                <td><b>@cw.Status</b></td>
+            </tr>}
+            else
+                 if (cw.Payment2Date.Value.Month == DateTime.Today.Month && cw.Payment2Date.Value.Year == DateTime.Today.Year)
+            {
+                <tr>
+                    <td class="Informer"> <b>@cw.Payment2Sum</b></td>
+                    <td><b>@cw.Name</b></td>
+                    <td><b>@cw.EventSet.Type</b></td>
+                    <td><b>@cw.Payment2Date.Value.Day.@cw.Payment2Date.Value.Month.@cw.Payment2Date.Value.Year</b></td>
+                    <td><b>@cw.Status</b></td>
+                </tr>}
+            else
+                 if (cw.Payment3Date.Value.Month == DateTime.Today.Month && cw.Payment3Date.Value.Year == DateTime.Today.Year)
+            {
+                <tr>
+                    <td class="Informer"> <b>@cw.Payment3Sum</b></td>
+                    <td><b>@cw.Name</b></td>
+                    <td><b>@cw.EventSet.Type</b></td>
+                    <td><b>@cw.Payment3Date.Value.Day.@cw.Payment3Date.Value.Month.@cw.Payment3Date.Value.Year</b></td>
+                    <td><b>@cw.Status</b></td>
+                </tr>}
+        }
     </table>
-    <p>Ожидаю</p>
+    <p>Ожидаю <b class="Informator" id="info">@ViewBag.InformerSum</b></p>}
     @*<div contenteditable="true" style="width:100%!important ; box-sizing:border-box!important; position:absolute!important; ;">  @Html.TextArea("Notes")</div>*@
 
 }
-
+ 
+<script>
+    var b = 0;
+    $('.Informer').each(function () {
+        b += parseFloat($(this).text());
+    });
+ 
+   
+     
+        $('#info').text(b);
+ </script>

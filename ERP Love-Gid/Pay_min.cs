@@ -12,12 +12,22 @@ namespace ERP_Love_Gid
     using System;
     using System.Collections.Generic;
     
-    public partial class PaymentEmployeeConnect
+    public partial class Pay_min
     {
-        public int Id { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Pay_min()
+        {
+            this.Payments = new HashSet<Payments>();
+        }
     
-        public virtual Payments Payments { get; set; }
-        public virtual Event Event { get; set; }
+        public int Id { get; set; }
+        public int Sum { get; set; }
+        public System.DateTime Date { get; set; }
+        public bool Finished { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Payments> Payments { get; set; }
+        public virtual Account Account { get; set; }
         public virtual Employee Employee { get; set; }
     }
 }
