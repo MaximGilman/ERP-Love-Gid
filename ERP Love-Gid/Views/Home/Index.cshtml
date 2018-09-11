@@ -23,7 +23,7 @@
     @foreach (Contract cw in (IEnumerable<Contract>)ViewData["Contracts"])
     {
 
-            <tr>
+            <tr onclick="window.location.href = '@Url.Action("EditContract", "Home", new { id = cw.Id })'">
                 <td>@cw.Date_of_event.Value.Day.@cw.Date_of_event.Value.Month.@cw.Date_of_event.Value.Year</td>
 
                 <td>@cw.ClientSet.FIO</td>
@@ -38,10 +38,42 @@
             </tr>
     }
 </table>
-    <p></p>
+    <p ></p>
     <p><input type="submit" value="Добавить" class="form-control-added" /></p>
 
                 @*<div contenteditable="true" style="width:100%!important ; box-sizing:border-box!important; position:absolute!important; ;">  @Html.TextArea("Notes")</div>*@ 
 
 }
 @*<div> @Html.TextArea("Notes")</div>*@
+ @*<script  >
+     $(document).ready(function () {
+
+         $('#').click(function (event) {
+             event.stopPropagation();
+             var data = {
+                 'message': $('#TextBoxSender').val(),
+             }
+
+             $.ajax({
+                 url: 'MessageHandler',
+                 type: 'POST',
+                 data: JSON.stringify(data),
+                 cache: false,
+                 dataType: 'json',
+                 processData: false,
+                 contentType: "application/json; charset=utf-8",
+                 success: function (data) {
+                     if (data == true) {
+                         alert("Сообщение доставлено");
+                         location.reload();
+                     }
+                     else {
+                         alert("Внимание! Сообщение не доставлено!");
+                     }
+                 },
+                 error: function () {
+                     alert("Произошел сбой бла бла бла");
+                 }
+             });
+         });
+    </script>*@

@@ -752,6 +752,28 @@
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
+      <Diagram DiagramId="e76c284d5ec04aec81370172203fcc71" Name="Diagram1" ZoomLevel="81">
+        <EntityTypeShape EntityType="ERPModel.Account" Width="1.5" PointX="12" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ERPModel.Client" Width="1.5" PointX="0.75" PointY="6.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ERPModel.Contract" Width="1.5" PointX="3" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ERPModel.Employee" Width="1.5" PointX="7.5" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ERPModel.Event" Width="1.5" PointX="7.5" PointY="9.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ERPModel.Payments" Width="1.5" PointX="5.25" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ERPModel.PaymentToPeers" Width="1.5" PointX="8.25" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ERPModel.Pay_min" Width="1.5" PointX="9.75" PointY="9.5" IsExpanded="true" />
+        <AssociationConnector Association="ERPModel.FK_ClientContract" ManuallyRouted="false" />
+        <AssociationConnector Association="ERPModel.FK_ContractEmployee" ManuallyRouted="false" />
+        <AssociationConnector Association="ERPModel.FK_ContractEvent" ManuallyRouted="false" />
+        <AssociationConnector Association="ERPModel.FK_PaymentToPeersEvent" ManuallyRouted="false" />
+        <AssociationConnector Association="ERPModel.FK_PaymentToPeersContract" ManuallyRouted="false" />
+        <AssociationConnector Association="ERPModel.AccountPayments" ManuallyRouted="false" />
+        <AssociationConnector Association="ERPModel.ContractPayments" ManuallyRouted="false" />
+        <AssociationConnector Association="ERPModel.Pay_minPayments" ManuallyRouted="false" />
+        <AssociationConnector Association="ERPModel.Pay_minAccount" ManuallyRouted="false" />
+        <AssociationConnector Association="ERPModel.EmployeePay_min" ManuallyRouted="false" />
+        <AssociationConnector Association="ERPModel.PaymentsEmployee" ManuallyRouted="false" />
+        <AssociationConnector Association="ERPModel.PaymentsEvent" ManuallyRouted="false" />
+      </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

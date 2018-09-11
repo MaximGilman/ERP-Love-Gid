@@ -7,6 +7,8 @@ using ERP_Love_Gid.Models;
 using System.IO;
 using System.Web.UI.WebControls;
 using System.Web.UI;
+using System.Runtime.InteropServices;
+
 namespace ERP_Love_Gid.Controllers
 {
     public class HomeController : Controller
@@ -49,10 +51,10 @@ namespace ERP_Love_Gid.Controllers
 
 #region Добавление_контракта
         [HttpGet]
-        public ActionResult AddContract()
+        public ActionResult AddContract(string error="")
         {
             if (CurEmployee == null) return RedirectToAction("Log_in", "User");
-
+            ViewBag.Error = error;
             ViewBag.User = CurEmployee.Surname + " " + CurEmployee.Name; ;
 
             if (_DataManager.EvR != null)
@@ -63,17 +65,38 @@ namespace ERP_Love_Gid.Controllers
         [HttpPost]
         public ActionResult AddContract(int id = 0)
         {
-            _DataManager.ConR.Add(Convert.ToInt32(Request.Form["Cost"]), Convert.ToInt32(Request.Form["Event"]), Request.Form["Client"], new DateTime(Convert.ToInt32(Request.Form["calendarContract"].Split('-')[0]), Convert.ToInt32(Request.Form["calendarContract"].Split('-')[1]), Convert.ToInt32(Request.Form["calendarContract"].Split('-')[2]))
-                , new DateTime(Convert.ToInt32(Request.Form["calendarEvent"].Split('-')[0]), Convert.ToInt32(Request.Form["calendarEvent"].Split('-')[1]), Convert.ToInt32(Request.Form["calendarEvent"].Split('-')[2])), new DateTime(Convert.ToInt32(Request.Form["1pay"].Split('-')[0]), Convert.ToInt32(Request.Form["1pay"].Split('-')[1]), Convert.ToInt32(Request.Form["1pay"].Split('-')[2])),
-               new DateTime(Convert.ToInt32(Request.Form["2pay"].Split('-')[0]), Convert.ToInt32(Request.Form["2pay"].Split('-')[1]), Convert.ToInt32(Request.Form["2pay"].Split('-')[2])),
-              new DateTime(Convert.ToInt32(Request.Form["3pay"].Split('-')[0]), Convert.ToInt32(Request.Form["3pay"].Split('-')[1]), Convert.ToInt32(Request.Form["3pay"].Split('-')[2])),
-              Convert.ToInt32(Request.Form["1paySum"]), Convert.ToInt32(Request.Form["2paySum"]), Convert.ToInt32(Request.Form["3paySum"]), Request.Form["Comment"], CurEmployee.Id);
-           
+
+            try
+            {
+                DateTime pay1 = default(DateTime), pay2 = default(DateTime), pay3 = default(DateTime);
+                int cost = Convert.ToInt32(Request.Form["Cost"]);
+                int eventid = Convert.ToInt32(Request.Form["Event"]);
+                string clientid = Request.Form["Client"];
+                DateTime sign = new DateTime(Convert.ToInt32(Request.Form["calendarContract"].Split('-')[0]), Convert.ToInt32(Request.Form["calendarContract"].Split('-')[1]), Convert.ToInt32(Request.Form["calendarContract"].Split('-')[2]));
+                DateTime dateevent = new DateTime(Convert.ToInt32(Request.Form["calendarEvent"].Split('-')[0]), Convert.ToInt32(Request.Form["calendarEvent"].Split('-')[1]), Convert.ToInt32(Request.Form["calendarEvent"].Split('-')[2]));
+                try {   pay1 = new DateTime(Convert.ToInt32(Request.Form["1pay"].Split('-')[0]), Convert.ToInt32(Request.Form["1pay"].Split('-')[1]), Convert.ToInt32(Request.Form["1pay"].Split('-')[2])); } catch { }
+                try
+                {   pay2 = new DateTime(Convert.ToInt32(Request.Form["2pay"].Split('-')[0]), Convert.ToInt32(Request.Form["2pay"].Split('-')[1]), Convert.ToInt32(Request.Form["2pay"].Split('-')[2])); }
+                catch { }
+                try {   pay3 = new DateTime(Convert.ToInt32(Request.Form["3pay"].Split('-')[0]), Convert.ToInt32(Request.Form["3pay"].Split('-')[1]), Convert.ToInt32(Request.Form["3pay"].Split('-')[2])); } catch { }
+
+                Int32.TryParse(Request.Form["1paySum"], out int paysum1); Int32.TryParse(Request.Form["2paySum"], out int paysum2); Int32.TryParse(Request.Form["3paySum"], out int paysum3);  string comment = Request.Form["Comment"];
+                _DataManager.ConR.Add(cost, eventid, clientid, sign, dateevent, pay1, pay2, pay3, paysum1, paysum2, paysum3, comment, CurEmployee.Id);
+            }
+          
+            catch (Exception) { return RedirectToAction("AddContract", new { error = "Не все поля заполнены" }); }
             return RedirectToAction("Index");
         }
+        [HttpPost]
+        public JsonResult MeesageHandler(string data)
+        {
+            var result = "Сообщение " + data + "принято";
+    return Json(result);
+        }
+
         #endregion
 
-#region Мои_Финансы
+        #region Мои_Финансы
         [HttpGet]
         public ActionResult MyFinanses(string error = "")
         {
@@ -176,6 +199,18 @@ namespace ERP_Love_Gid.Controllers
         }
         #endregion
 
+       
+        public ActionResult EditContract(int id=0, string error = "")
+        {
+            if (CurEmployee == null) return RedirectToAction("Log_in", "User");
+            ViewBag.Error = error;
+            ViewBag.User = CurEmployee.Surname + " " + CurEmployee.Name; 
+
+            return View();
+        }
+
+
+
         public ActionResult Exit()
         {
             CurEmployee = null;
@@ -183,4 +218,5 @@ namespace ERP_Love_Gid.Controllers
             return RedirectToAction("Log_in", "User");
         }
     }
+    
 }

@@ -41,12 +41,16 @@ namespace ERP_Love_Gid.Models
             add.ClientSet = cont.ClientSet.Where(x=>x.FIO==cladd.FIO).FirstOrDefault();
             add.Date_of_sign = sign;
             add.Date_of_event   = _event;
+            if (pay1!= default(DateTime))
             add.Payment1Date =       pay1;
-            add.Payment2Date =      pay2;
-            add.Payment3Date =pay3;
-            add.Payment1Sum = paysum1; add.Payment2Sum = paysum2;
+            if (pay2 != default(DateTime))
+                add.Payment2Date =      pay2;
+            if (pay3 != default(DateTime))
+                add.Payment3Date =pay3;
+            if(paysum1!=0)add.Payment1Sum = paysum1;
+            if (paysum2 != 0) add.Payment2Sum = paysum2;
 
-            add.Payment3Sum = paysum3;
+            if (paysum3 != 0) add.Payment3Sum = paysum3;
 
             add.Comment = comment;
             add.Received = 0;
