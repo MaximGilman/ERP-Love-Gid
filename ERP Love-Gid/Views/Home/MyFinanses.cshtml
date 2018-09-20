@@ -23,7 +23,7 @@
         @foreach (Payments cw in (IEnumerable<Payments>)ViewBag.Payments)
         {
             
-                <tr>
+                <tr onclick="window.location.href = '@Url.Action("EditPaymentDetail", "Home", new { id = cw.Id })'">
                     <td>@cw.Receipt</td>
                     <td>@cw.Account.Type</td>
                     @*<td>@cw.Contract.Name</td>*@

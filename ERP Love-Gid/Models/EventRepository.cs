@@ -15,9 +15,9 @@ namespace ERP_Love_Gid.Models
             cont = _cont;
         }
 
-        public IEnumerable<Event> GetCollection()
+        public IEnumerable<Event> GetCollection(string sort ="")
         {
-
+ 
             return cont.EventSet.OrderBy(cw => cw.Id).Select(x=>x);
         }
 

@@ -2,19 +2,19 @@
 @{
     ViewBag.Title = "Добавление контракта";
 }
-
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <h2>Изменение контракта</h2>
 @ViewBag.Error
 <div class="container">
     <header>
 
-
         <nav class="secondary_header" id="menu">
             <section>
 
 
-                @using (Html.BeginForm("AddContract", "Home", FormMethod.Post))
+                @using (Html.BeginForm("EditContract", "Home", FormMethod.Post))
                 {
+                    <input type="hidden" value="@ViewBag.ID" name="Id_Cont"/>
 
 
                     <p>@Html.ActionLink("Обратно к списку", "Index")</p>
@@ -47,7 +47,7 @@
                             <td><p>Дата заключения договора: </p></td>
                             <td>
                                 <p>
-                                    <input type="date" name="calendarContract" class="form-control">
+                                    <input type="date" id="DATE " name="calendarContract" class="form-control" value=@ViewBag.DateOfSign>
                                 </p>
                             </td>
 
@@ -56,7 +56,7 @@
                             <td><p>Дата мероприятия: </p></td>
                             <td>
                                 <p>
-                                    <input type="date" name="calendarEvent" class="form-control">
+                                    <input type="date" name="calendarEvent" class="form-control" value=@ViewBag.DateOfEvent>
                                 </p>
                             </td>
                         </tr>
@@ -65,9 +65,9 @@
                             <td><p>1 платеж: </p><p>Дата / сумма</p></td>
                             <td>
                                 <p>
-                                    <input type="date" name="1pay" class="form-control">
+                                    <input type="date" name="1pay" class="form-control" value=@ViewBag.DateOfPay1>
                                 </p>
-                                <p> @Html.TextBox("1paySum", null, new { @class = "form-control", type = "number", @min = "0" })</p>
+                                <p> @Html.TextBox("paySum1", null, new { @class = "form-control", type = "number", @min = "0" })</p>
                             </td>
                         </tr>
                         <tr>
@@ -75,9 +75,9 @@
                             <td><p>2 платеж: </p><p>Дата / сумма</p></td>
                             <td>
                                 <p>
-                                    <input type="date" name="2pay" class="form-control">
+                                    <input type="date" name="2pay" class="form-control" value=@ViewBag.DateOfPay2>
                                 </p>
-                                <p> @Html.TextBox("2paySum", null, new { @class = "form-control", type = "number", @min = "0" })</p>
+                                <p> @Html.TextBox("paySum2", null, new { @class = "form-control", type = "number", @min = "0" })</p>
 
                             </td>
                         </tr>
@@ -85,9 +85,9 @@
                             <td><p>3 платеж: </p><p>Дата / сумма</p></td>
                             <td>
                                 <p>
-                                    <input type="date" name="3pay" class="form-control">
+                                    <input type="date" name="3pay" class="form-control" value=@ViewBag.DateOfPay3>
                                 </p>
-                                <p> @Html.TextBox("3paySum", null, new { @class = "form-control", type = "number", @min = "0" })</p>
+                                <p> @Html.TextBox("paySum3", null, new { @class = "form-control", type = "number", @min = "0" })</p>
 
                             </td>
                         </tr>
@@ -119,4 +119,4 @@
 
 
 </div>
-
+ 

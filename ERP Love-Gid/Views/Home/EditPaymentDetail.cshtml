@@ -1,9 +1,9 @@
 ﻿
 @{
-    ViewBag.Title = "Добавление операции";
+    ViewBag.Title = "Изменение данных о платеже";
 }
 
-<h2>Добавление операции</h2>
+<h2>Изменение данных о платеже</h2>
 
 <div class="container">
     <header>
@@ -13,7 +13,7 @@
             <section>
 
 
-                @using (Html.BeginForm("AddPaymentDetail", "Home", FormMethod.Post))
+                @using (Html.BeginForm("EditPaymentDetail", "Home", FormMethod.Post))
                 {
 
 
@@ -67,12 +67,12 @@
                             <td><p>Дата оплаты: </p></td>
                             <td>
                                 <p>
-                                    <input type="date" name="calendarPay" class="form-control" value="@ViewBag.DateOfSign">
+                                    <input type="date" name="calendarPay" class="form-control">
                                 </p>
                             </td>
                         </tr>
 
- 
+
                     </table>
                     <p></p>
                     <p><input type="submit" value="Сохранить" /></p>

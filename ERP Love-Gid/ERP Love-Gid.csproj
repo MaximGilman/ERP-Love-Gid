@@ -269,6 +269,7 @@
     <Content Include="Views\Home\AddPaymentDetail.cshtml" />
     <Content Include="Views\Home\AddReceivedMoney.cshtml" />
     <Content Include="Views\Home\EditContract.cshtml" />
+    <Content Include="Views\Home\EditPaymentDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
