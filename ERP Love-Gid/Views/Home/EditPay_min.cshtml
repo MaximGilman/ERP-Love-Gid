@@ -1,0 +1,71 @@
+﻿
+@{
+    ViewBag.Title = "Изменение данных о переводе";
+}
+
+<h2>Изменение перевода</h2>
+
+<div class="container">
+    <header>
+
+
+        <nav class="secondary_header" id="menu">
+            <section>
+
+
+                @using (Html.BeginForm("EditPay_min", "Home", FormMethod.Post))
+                {
+
+
+                    <p>@Html.ActionLink("Обратно к списку", "MyFinanses")</p>
+                    <table>
+
+
+
+
+                        <tr>
+                            <td>
+                                <p>
+                                    Размер платежа:
+                                </p>
+                            </td>
+
+                            <td><p> @Html.TextBox("Sum", null, new { @class = "form-control", type = "number", @min = "0" })</p></td>
+                        </tr>
+                        <tr>
+                            <td><p>Счет для перевода:</p></td>
+                            <td><p> @Html.DropDownList("Account", (IEnumerable<SelectListItem>)@ViewBag.Accounts, null, new { style = "width : 200px", @class = "form-control", id = "Acc" }) @Html.ValidationMessage("Accounts")</p></td>
+
+                        </tr>
+
+
+
+                        <tr>
+                            <td><p>Дата оплаты: </p></td>
+                            <td>
+                                <p>
+                                    <input type="date" name="calendarPay" class="form-control" value=@ViewBag.Date>
+                                </p>
+                            </td>
+                        </tr>
+
+
+                    </table>
+                    <p></p>
+                    <p><input type="submit" value="Сохранить" /></p>
+                }
+
+
+
+
+
+
+
+
+            </section>
+        </nav>
+    </header>
+
+
+</div>
+

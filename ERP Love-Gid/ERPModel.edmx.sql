@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 09/09/2018 10:33:32
+-- Date Created: 09/21/2018 07:47:20
 -- Generated from EDMX file: C:\Users\ГильманМаксимМихайло\Desktop\Бекап флешки\ERP Love-Gid\ERP Love-Gid\ERPModel.edmx
 -- --------------------------------------------------
 
@@ -53,6 +53,15 @@ GO
 IF OBJECT_ID(N'[dbo].[FK_PaymentsEvent]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[PaymentsSet] DROP CONSTRAINT [FK_PaymentsEvent];
 GO
+IF OBJECT_ID(N'[dbo].[FK_EmployeeSalary]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[SalarySet] DROP CONSTRAINT [FK_EmployeeSalary];
+GO
+IF OBJECT_ID(N'[dbo].[FK_EventSalary]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[SalarySet] DROP CONSTRAINT [FK_EventSalary];
+GO
+IF OBJECT_ID(N'[dbo].[FK_PaymentsEmployee1]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[PaymentsSet] DROP CONSTRAINT [FK_PaymentsEmployee1];
+GO
 
 -- --------------------------------------------------
 -- Dropping existing tables
@@ -81,6 +90,9 @@ IF OBJECT_ID(N'[dbo].[PaymentToPeersSet]', 'U') IS NOT NULL
 GO
 IF OBJECT_ID(N'[dbo].[Pay_minSet]', 'U') IS NOT NULL
     DROP TABLE [dbo].[Pay_minSet];
+GO
+IF OBJECT_ID(N'[dbo].[SalarySet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[SalarySet];
 GO
 
 -- --------------------------------------------------
@@ -129,8 +141,8 @@ GO
 CREATE TABLE [dbo].[EmployeeSet] (
     [Id] int IDENTITY(1,1) NOT NULL,
     [IsAdmin] bit  NOT NULL,
-    [Salary] int  NOT NULL,
-    [Notes] nvarchar(max)  NOT NULL,
+    [Scale] int  NOT NULL,
+    [Notes] nvarchar(max)  NULL,
     [Login] nvarchar(max)  NOT NULL,
     [Password] nvarchar(max)  NOT NULL,
     [Name] nvarchar(max)  NOT NULL,
@@ -142,8 +154,7 @@ GO
 -- Creating table 'EventSet'
 CREATE TABLE [dbo].[EventSet] (
     [Id] int IDENTITY(1,1) NOT NULL,
-    [Type] nvarchar(max)  NOT NULL,
-    [PercentToEmpl] int  NOT NULL
+    [Type] nvarchar(max)  NOT NULL
 );
 GO
 
@@ -151,16 +162,18 @@ GO
 CREATE TABLE [dbo].[PaymentsSet] (
     [Id] int IDENTITY(1,1) NOT NULL,
     [Receipt] int  NOT NULL,
-    [Comment] nvarchar(max)  NOT NULL,
+    [Comment] nvarchar(max)  NULL,
     [Date] datetime  NOT NULL,
     [Sum] int  NOT NULL,
-    [AccounId] int  NOT NULL,
+    [EmployeeId] int  NOT NULL,
     [ContractId] int  NOT NULL,
-    [Account_Id] int  NOT NULL,
+    [StatusForPeers] bit  NULL,
+    [Account_Id] int  NULL,
     [Contract_Id] int  NULL,
     [Pay_min_Id] int  NULL,
     [Employee_Id] int  NOT NULL,
-    [Event_Id] int  NOT NULL
+    [Event_Id] int  NOT NULL,
+    [EmployeeTo_Id] int  NULL
 );
 GO
 
@@ -171,7 +184,7 @@ CREATE TABLE [dbo].[PaymentToPeersSet] (
     [IdToEmployee] int  NOT NULL,
     [IdContract] int  NOT NULL,
     [Month] datetime  NOT NULL,
-    [Comment] nvarchar(max)  NOT NULL,
+    [Comment] nvarchar(max)  NULL,
     [EventSet_Id] int  NOT NULL,
     [ContractSet_Id] int  NOT NULL
 );
@@ -185,6 +198,15 @@ CREATE TABLE [dbo].[Pay_minSet] (
     [Finished] bit  NOT NULL,
     [Account_Id] int  NOT NULL,
     [Employee_Id] int  NOT NULL
+);
+GO
+
+-- Creating table 'SalarySet'
+CREATE TABLE [dbo].[SalarySet] (
+    [Id] int IDENTITY(1,1) NOT NULL,
+    [PercentOfSalary] int  NOT NULL,
+    [Employee_Id] int  NOT NULL,
+    [Event_Id] int  NOT NULL
 );
 GO
 
@@ -237,6 +259,12 @@ GO
 -- Creating primary key on [Id] in table 'Pay_minSet'
 ALTER TABLE [dbo].[Pay_minSet]
 ADD CONSTRAINT [PK_Pay_minSet]
+    PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
+-- Creating primary key on [Id] in table 'SalarySet'
+ALTER TABLE [dbo].[SalarySet]
+ADD CONSTRAINT [PK_SalarySet]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
@@ -422,6 +450,51 @@ GO
 CREATE INDEX [IX_FK_PaymentsEvent]
 ON [dbo].[PaymentsSet]
     ([Event_Id]);
+GO
+
+-- Creating foreign key on [Employee_Id] in table 'SalarySet'
+ALTER TABLE [dbo].[SalarySet]
+ADD CONSTRAINT [FK_EmployeeSalary]
+    FOREIGN KEY ([Employee_Id])
+    REFERENCES [dbo].[EmployeeSet]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_EmployeeSalary'
+CREATE INDEX [IX_FK_EmployeeSalary]
+ON [dbo].[SalarySet]
+    ([Employee_Id]);
+GO
+
+-- Creating foreign key on [Event_Id] in table 'SalarySet'
+ALTER TABLE [dbo].[SalarySet]
+ADD CONSTRAINT [FK_EventSalary]
+    FOREIGN KEY ([Event_Id])
+    REFERENCES [dbo].[EventSet]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_EventSalary'
+CREATE INDEX [IX_FK_EventSalary]
+ON [dbo].[SalarySet]
+    ([Event_Id]);
+GO
+
+-- Creating foreign key on [EmployeeTo_Id] in table 'PaymentsSet'
+ALTER TABLE [dbo].[PaymentsSet]
+ADD CONSTRAINT [FK_PaymentsEmployee1]
+    FOREIGN KEY ([EmployeeTo_Id])
+    REFERENCES [dbo].[EmployeeSet]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_PaymentsEmployee1'
+CREATE INDEX [IX_FK_PaymentsEmployee1]
+ON [dbo].[PaymentsSet]
+    ([EmployeeTo_Id]);
 GO
 
 -- --------------------------------------------------

@@ -20,11 +20,11 @@ namespace ERP_Love_Gid
             this.ContractSet = new HashSet<Contract>();
             this.PaymentToPeersSet = new HashSet<PaymentToPeers>();
             this.Payments = new HashSet<Payments>();
+            this.Salary = new HashSet<Salary>();
         }
     
         public int Id { get; set; }
         public string Type { get; set; }
-        public int PercentToEmpl { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Contract> ContractSet { get; set; }
@@ -32,5 +32,7 @@ namespace ERP_Love_Gid
         public virtual ICollection<PaymentToPeers> PaymentToPeersSet { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Payments> Payments { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Salary> Salary { get; set; }
     }
 }

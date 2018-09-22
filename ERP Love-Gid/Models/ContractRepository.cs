@@ -16,10 +16,12 @@ namespace ERP_Love_Gid.Models
             cont = _cont;
         }
 
-        public IEnumerable<Contract> GetCollection()
+        public IEnumerable<Contract> GetCollection(int id=0)
         {
+            if (id!=0)
+            return cont.ContractSet.Where(x=>x.EmployeeSet.Id==id).OrderBy(cw => cw.Id);
+            else return cont.ContractSet.OrderBy(cw => cw.Id);
 
-            return cont.ContractSet.OrderBy(cw => cw.Id);
         }
 
         public Contract GetElem(int id)
@@ -52,6 +54,7 @@ namespace ERP_Love_Gid.Models
 
             if (paysum3 != 0) add.Payment3Sum = paysum3;
 
+            
             add.Comment = comment;
             add.Received = 0;
             add.Sum_plus = 0;

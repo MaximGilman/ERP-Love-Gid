@@ -23,7 +23,7 @@ namespace ERP_Love_Gid.Models
 
         public IEnumerable<Payments> GetEmplPays(int id)
         {
-             return cont.PaymentsSet.Where(x => x.Employee.Id == id).OrderBy(cw => cw.Id);  
+             return cont.PaymentsSet.Where(x => x.Employee.Id==id).OrderBy(cw => cw.Id);  
             
          }
         public int GetEmplPaysSum(int id)
@@ -55,6 +55,20 @@ namespace ERP_Love_Gid.Models
                 cont.PaymentsSet.Remove(cw);
                 cont.SaveChanges();
             }
+        }
+
+        public IEnumerable<Payments> GetEmplJobs(int id)
+        {
+            return cont.PaymentsSet.Where(x => x.Employee.Id == id).OrderBy(cw => cw.Id);
+
+        }
+
+        public Payments EditPaymentDetail(Payments adder)
+        {
+            Payments edit = GetElem(adder.Id);
+            edit = adder;
+            cont.SaveChanges();
+            return adder;
         }
     }
 }

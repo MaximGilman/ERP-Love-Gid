@@ -209,6 +209,9 @@
       <DependentUpon>ERPModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Salary.cs">
+      <DependentUpon>ERPModel.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -233,6 +236,7 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Areas\StatusEnum\Views\web.config" />
     <EntityDeploy Include="ERPModel.edmx">
@@ -270,6 +274,8 @@
     <Content Include="Views\Home\AddReceivedMoney.cshtml" />
     <Content Include="Views\Home\EditContract.cshtml" />
     <Content Include="Views\Home\EditPaymentDetail.cshtml" />
+    <Content Include="Views\Home\EditPay_min.cshtml" />
+    <Content Include="Views\Home\AddMyJobPayment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

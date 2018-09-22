@@ -38,7 +38,7 @@ namespace ERP_Love_Gid.Controllers
             if (CurEmployee == null) return RedirectToAction("Log_in", "User");
 
             // ViewData["Years"] = new SelectList(_DataManager.ConR.GetYears()); 
-            ViewData["Contracts"] = _DataManager.ConR.GetCollection();
+            ViewData["Contracts"] = _DataManager.ConR.GetCollection(CurEmployee.Id);
             ViewBag.User = CurEmployee.Surname + " " + CurEmployee.Name;
             return View();
         }
@@ -53,6 +53,7 @@ namespace ERP_Love_Gid.Controllers
         [HttpGet]
         public ActionResult AddContract(string error = "")
         {
+ 
             if (CurEmployee == null) return RedirectToAction("Log_in", "User");
             ViewBag.Error = error;
             ViewBag.User = CurEmployee.Surname + " " + CurEmployee.Name;
@@ -101,6 +102,7 @@ namespace ERP_Love_Gid.Controllers
         [HttpGet]
         public ActionResult MyFinanses(string error = "")
         {
+ 
             if (CurEmployee == null) return RedirectToAction("Log_in", "User");
 
             ViewBag.User = CurEmployee.Surname + " " + CurEmployee.Name; ;
@@ -110,12 +112,13 @@ namespace ERP_Love_Gid.Controllers
             ViewBag.Pay_minSum = _DataManager.Pay_minR.GetEmplPaysSum(CurEmployee.Id);
 
             ViewBag.Informer = _DataManager.ConR.GetAllPaysForMonth(CurEmployee.Id);
-            var a = _DataManager.ConR.GetAllPaysForMonth(CurEmployee.Id).Count();
+            //var a = _DataManager.ConR.GetAllPaysForMonth(CurEmployee.Id).Count();
             ViewBag.InformerCount = _DataManager.ConR.GetAllPaysForMonth(CurEmployee.Id).Count();
             ViewBag.InformerSum = _DataManager.ConR.GetAllPaysForMonth(CurEmployee.Id).Select(x => x.Received).Sum();
 
 
-
+            //ViewBag.MyJob = _DataManager.PayR.GetEmplJobs(CurEmployee.Id).Except(_DataManager.PayR.GetCollection().Where(x=>x.Employee.Id==CurEmployee.Id));
+            ViewBag.MyJob = _DataManager.PayR.GetCollection().Where(x=>x.EmployeeTo.Id==CurEmployee.Id&&x.Employee.Id!=CurEmployee.Id);
 
             return View();
         }
@@ -128,7 +131,12 @@ namespace ERP_Love_Gid.Controllers
                 return RedirectToAction("AddPaymentDetail");
             }
 
-            else { return RedirectToAction("AddReceivedMoney"); }
+            else if(!string.IsNullOrEmpty(Request.Params.AllKeys.FirstOrDefault(key => key.StartsWith("MyJob")))) //добавление детализации
+            {
+                return RedirectToAction("AddMyJobPayment");
+            }
+            else
+            { return RedirectToAction("AddReceivedMoney"); }
         }
         #endregion
 
@@ -138,8 +146,10 @@ namespace ERP_Love_Gid.Controllers
         [HttpGet]
         public ActionResult AddPaymentDetail(string error = "")
         {
+ 
             if (CurEmployee == null) return RedirectToAction("Log_in", "User");
-            ViewBag.DateOfSign = String.Join("-", ((DateTime.Now).ToShortDateString()).Split('.').Reverse());
+
+             ViewBag.DateOfSign = String.Join("-", ((DateTime.Now).ToShortDateString()).Split('.').Reverse());
 
             ViewBag.User = CurEmployee.Surname + " " + CurEmployee.Name;
             ViewBag.Events = new SelectList(_DataManager.EvR.GetCollection(), "Id", "Type");
@@ -157,11 +167,11 @@ namespace ERP_Love_Gid.Controllers
             Adder.Account = _DataManager.AccR.GetElem(Convert.ToInt32(Request.Form["Account"]));
             Adder.Contract = _DataManager.ConR.GetElem(Convert.ToInt32(Request.Form["Contract"]));
             Adder.Event = _DataManager.EvR.GetElem(Convert.ToInt32(Request.Form["Event"]));
-            Adder.Employee = _DataManager.EmR.GetElem(Convert.ToInt32(Request.Form["Employee"]));
+            Adder.Employee = _DataManager.EmR.GetElem(CurEmployee.Id);
 
             Adder.Comment = Request.Form["Comment"];
             Adder.Date = new DateTime(Convert.ToInt32(Request.Form["calendarPay"].Split('-')[0]), Convert.ToInt32(Request.Form["calendarPay"].Split('-')[1]), Convert.ToInt32(Request.Form["calendarPay"].Split('-')[2]));
-
+            Adder.EmployeeTo = _DataManager.EmR.GetElem(Convert.ToInt32(Request.Form["Employee"]));
 
 
             _DataManager.PayR.Add(Adder);
@@ -178,6 +188,7 @@ namespace ERP_Love_Gid.Controllers
         [HttpGet]
         public ActionResult AddReceivedMoney(string error = "")
         {
+ 
             if (CurEmployee == null) return RedirectToAction("Log_in", "User");
 
             ViewBag.User = CurEmployee.Surname + " " + CurEmployee.Name;
@@ -205,6 +216,8 @@ namespace ERP_Love_Gid.Controllers
         [HttpGet]
         public ActionResult EditContract(int id = 0, string error = "")
         {
+            
+
             if (CurEmployee == null) return RedirectToAction("Log_in", "User");
             ViewBag.Error = error;
             ViewBag.User = CurEmployee.Surname + " " + CurEmployee.Name;
@@ -274,26 +287,93 @@ namespace ERP_Love_Gid.Controllers
             ViewBag.Accounts = new SelectList(_DataManager.AccR.GetCollection(), "Id", "Type", _DataManager.PayR.GetElem(id).Account.Id);
             ViewBag.Contracts = new SelectList(_DataManager.ConR.GetCollection(), "Id", "Name", _DataManager.PayR.GetElem(id).Contract.Id);
             ViewBag.Employees = new SelectList(_DataManager.EmR.GetCollection(), "Id", "FIO", _DataManager.EmR.GetElem(CurEmployee.Id));
+            ViewBag.Date = String.Join("-", (((DateTime)_DataManager.PayR.GetElem(id).Date).ToShortDateString()).Split('.').Reverse());
+            ViewBag.Id = id;
             return View();
         }
         [HttpPost]
-        public ActionResult EditPaymentDetail()
+        public ActionResult EditPaymentDetail(int id=0)
         {
-            Payments Adder = new Payments();
+            Payments Adder = _DataManager.PayR.GetElem(id);
 
             Adder.Receipt = Convert.ToInt32(Request.Form["Receipt"]);
             Adder.Account = _DataManager.AccR.GetElem(Convert.ToInt32(Request.Form["Account"]));
             Adder.Contract = _DataManager.ConR.GetElem(Convert.ToInt32(Request.Form["Contract"]));
             Adder.Event = _DataManager.EvR.GetElem(Convert.ToInt32(Request.Form["Event"]));
-            Adder.Employee = _DataManager.EmR.GetElem(Convert.ToInt32(Request.Form["Employee"]));
-
+            Adder.EmployeeTo = _DataManager.EmR.GetElem(Convert.ToInt32(Request.Form["Employee"]));
+            Adder.EmployeeTo = _DataManager.EmR.GetElem(CurEmployee.Id);
             Adder.Comment = Request.Form["Comment"];
             Adder.Date = new DateTime(Convert.ToInt32(Request.Form["calendarPay"].Split('-')[0]), Convert.ToInt32(Request.Form["calendarPay"].Split('-')[1]), Convert.ToInt32(Request.Form["calendarPay"].Split('-')[2]));
 
-
-
-            _DataManager.PayR.Add(Adder);
+            _DataManager.PayR.EditPaymentDetail(Adder);
             return RedirectToAction("MyFinanses");
+        }
+
+        [HttpGet]
+        public ActionResult EditPay_min(int id = 0, string error = "")
+        {
+            if (CurEmployee == null) return RedirectToAction("Log_in", "User");
+            ViewBag.Sum = _DataManager.Pay_minR.GetElem(id).Sum;
+ 
+            ViewBag.Accounts = new SelectList(_DataManager.AccR.GetCollection(), "Id", "Type", _DataManager.Pay_minR.GetElem(id).Account.Id);
+       
+            ViewBag.Date = String.Join("-", (((DateTime)_DataManager.Pay_minR.GetElem(id).Date).ToShortDateString()).Split('.').Reverse());
+
+            return View();
+        }
+        [HttpPost]
+        public ActionResult EditPay_min(int id = 0)
+        {
+            Pay_min Adder = _DataManager.Pay_minR.GetElem(id);
+            Adder.Sum = Convert.ToInt32(Request.Form["Sum"]);
+            Adder.Account = _DataManager.AccR.GetElem(Convert.ToInt32(Request.Form["Account"]));
+            Adder.Employee = _DataManager.EmR.GetElem(CurEmployee.Id);
+            Adder.Date = new DateTime(Convert.ToInt32(Request.Form["calendarPay"].Split('-')[0]), Convert.ToInt32(Request.Form["calendarPay"].Split('-')[1]), Convert.ToInt32(Request.Form["calendarPay"].Split('-')[2]));
+            Adder.Finished = false;
+
+
+            _DataManager.Pay_minR.Edit_PayMin(Adder);
+            return RedirectToAction("MyFinanses");
+        }
+        [HttpGet]
+        public ActionResult AddMyJobPayment(string error = "")
+        {
+
+            if (CurEmployee == null) return RedirectToAction("Log_in", "User");
+
+            ViewBag.User = CurEmployee.Surname + " " + CurEmployee.Name;
+            ViewBag.Contract = new SelectList(_DataManager.ConR.GetCollection(), "Id", "Name");
+            ViewBag.Event = new SelectList(_DataManager.EvR.GetCollection(), "Id", "Type");
+            ViewBag.Employees = new SelectList(_DataManager.EmR.GetCollection(CurEmployee.Id), "Id", "FIO");
+            ViewBag.Date = String.Join("-", ((DateTime.Now).ToShortDateString()).Split('.').Reverse());
+
+            return View();
+        }
+        [HttpPost]
+        public ActionResult AddMyJobPayment()
+
+        {
+
+
+            Payments Adder = new Payments();
+
+            Adder.Receipt = Convert.ToInt32(Request.Form["Sum"]);
+             Adder.Contract = _DataManager.ConR.GetElem(Convert.ToInt32(Request.Form["Contract"]));
+            Adder.Event = _DataManager.EvR.GetElem(Convert.ToInt32(Request.Form["Event"]));
+            Adder.Employee= _DataManager.EmR.GetElem(Convert.ToInt32(Request.Form["Employee"]));
+            Adder.EmployeeTo =  _DataManager.EmR.GetElem(CurEmployee.Id);
+            Adder.Comment = Request.Form["Comment"];
+            Adder.Date = new DateTime(Convert.ToInt32(Request.Form["calendarPay"].Split('-')[0]), Convert.ToInt32(Request.Form["calendarPay"].Split('-')[1]), Convert.ToInt32(Request.Form["calendarPay"].Split('-')[2]));
+            Adder.Account = _DataManager.AccR.GetCollection().Where(x => x.Type.Contains("указано")).FirstOrDefault();
+                        _DataManager.PayR.Add(Adder);
+            return RedirectToAction("MyFinanses");
+        }
+
+        public ActionResult DeletePaymentDetail (int id)
+        {
+            _DataManager.PayR.Delete(id);
+            return RedirectToAction("MyFinanses");
+
         }
     }
 

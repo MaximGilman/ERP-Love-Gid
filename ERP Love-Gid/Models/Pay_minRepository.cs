@@ -26,9 +26,13 @@ namespace ERP_Love_Gid.Models
             {
                  try
                 {
-                    pm.Finished = cont.Pay_minSet.Where(
-                        x => x.Account.Id == pm.Account.Id && x.Date == pm.Date).Select(y => y.Sum).Sum() ==
-                       cont.PaymentsSet.Where(x => x.Account.Id == pm.Account.Id && x.Date == pm.Date).Select(y => y.Receipt).Sum();
+
+                    var a = cont.Pay_minSet.Where(
+                       x => x.Account.Id == pm.Account.Id && x.Date == pm.Date&&x.Employee.Id==pm.Employee.Id).Select(y => y.Sum).Sum();
+                    var b = cont.PaymentsSet.Where(x => x.Account.Id == pm.Account.Id && x.Date == pm.Date&&x.Employee.Id==pm.Employee.Id).Select(y => y.Receipt).Sum();
+                   
+                    pm.Finished = a ==
+                       b;
 
                 }
                 catch { pm.Finished = false; }
@@ -63,5 +67,13 @@ namespace ERP_Love_Gid.Models
 
             return M;
         }
+
+        public Pay_min Edit_PayMin(Pay_min adder)
+        {
+            Pay_min edit = GetElem(adder.Id);
+            edit = adder;
+            cont.SaveChanges();
+            return adder;
+         }
     }
 }

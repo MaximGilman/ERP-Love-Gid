@@ -15,11 +15,16 @@ namespace ERP_Love_Gid.Models
             cont = _cont;
         }
 
-        public IEnumerable<Employee> GetCollection()
+        public IEnumerable<Employee> GetCollection(int id=0)
         {
+
           foreach (Employee em in cont.EmployeeSet)
             { em.FIO = em.Name + " " + em.Surname; }
+
+          if (id==0)
             return cont.EmployeeSet.OrderBy(cw => cw.Name);
+            else return cont.EmployeeSet.Where(x=>x.Id!=id).OrderBy(cw => cw.Name);
+
         }
 
         public Employee GetElem(int id)
