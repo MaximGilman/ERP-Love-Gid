@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 09/21/2018 07:47:20
+-- Date Created: 10/11/2018 20:06:27
 -- Generated from EDMX file: C:\Users\ГильманМаксимМихайло\Desktop\Бекап флешки\ERP Love-Gid\ERP Love-Gid\ERPModel.edmx
 -- --------------------------------------------------
 
@@ -168,6 +168,8 @@ CREATE TABLE [dbo].[PaymentsSet] (
     [EmployeeId] int  NOT NULL,
     [ContractId] int  NOT NULL,
     [StatusForPeers] bit  NULL,
+    [StatusForSalary] bit  NULL,
+    [DateForPayment] datetime  NULL,
     [Account_Id] int  NULL,
     [Contract_Id] int  NULL,
     [Pay_min_Id] int  NULL,

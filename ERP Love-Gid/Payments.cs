@@ -22,6 +22,8 @@ namespace ERP_Love_Gid
         public int EmployeeId { get; set; }
         public int ContractId { get; set; }
         public Nullable<bool> StatusForPeers { get; set; }
+        public Nullable<bool> StatusForSalary { get; set; }
+        public Nullable<System.DateTime> DateForPayment { get; set; }
     
         public virtual Account Account { get; set; }
         public virtual Contract Contract { get; set; }

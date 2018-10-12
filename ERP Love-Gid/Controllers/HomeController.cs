@@ -118,8 +118,10 @@ namespace ERP_Love_Gid.Controllers
 
 
             //ViewBag.MyJob = _DataManager.PayR.GetEmplJobs(CurEmployee.Id).Except(_DataManager.PayR.GetCollection().Where(x=>x.Employee.Id==CurEmployee.Id));
-            ViewBag.MyJob = _DataManager.PayR.GetCollection().Where(x=>x.EmployeeTo.Id==CurEmployee.Id&&x.Employee.Id!=CurEmployee.Id);
+            ViewBag.MyJob = _DataManager.PayR.GetCollection(true).Where(x=>x.EmployeeTo.Id==CurEmployee.Id&&x.Employee.Id!=CurEmployee.Id);
 
+
+            ViewBag.MySalary = _DataManager.PayR.GetCollection().Where(x => x.EmployeeTo.Id == CurEmployee.Id);
             return View();
         }
         [HttpPost]
@@ -193,6 +195,8 @@ namespace ERP_Love_Gid.Controllers
 
             ViewBag.User = CurEmployee.Surname + " " + CurEmployee.Name;
             ViewBag.Account = new SelectList(_DataManager.AccR.GetCollection(), "Id", "Type");
+            ViewBag.DateOfSign = String.Join("-", ((DateTime.Now).ToShortDateString()).Split('.').Reverse());
+
             return View();
         }
         [HttpPost]
@@ -288,6 +292,22 @@ namespace ERP_Love_Gid.Controllers
             ViewBag.Contracts = new SelectList(_DataManager.ConR.GetCollection(), "Id", "Name", _DataManager.PayR.GetElem(id).Contract.Id);
             ViewBag.Employees = new SelectList(_DataManager.EmR.GetCollection(), "Id", "FIO", _DataManager.EmR.GetElem(CurEmployee.Id));
             ViewBag.Date = String.Join("-", (((DateTime)_DataManager.PayR.GetElem(id).Date).ToShortDateString()).Split('.').Reverse());
+
+            ViewBag.DatePays = new SelectList(new List<SelectListItem>
+            {
+                new SelectListItem{Text = "Январь", Value = "1"},
+                new SelectListItem{Text = "Февраль", Value = "2"},
+                new SelectListItem{Text = "Март", Value = "3"},
+                new SelectListItem{Text = "Апрель", Value = "4"},
+                new SelectListItem{Text = "Май", Value = "5"},
+                new SelectListItem{Text = "Июнь", Value = "6"},
+                new SelectListItem{Text = "Июль", Value = "7"},
+                new SelectListItem{Text = "Август", Value = "8"},
+                new SelectListItem{Text = "Сентябрь", Value = "9"},
+                new SelectListItem{Text = "Октябрь", Value = "10"},
+                new SelectListItem{Text = "Ноябрь", Value = "11"},
+                new SelectListItem{Text = "Декабрь", Value = "12"}
+            },"Value", "Text", DateTime.Now.Month);
             ViewBag.Id = id;
             return View();
         }
@@ -301,10 +321,10 @@ namespace ERP_Love_Gid.Controllers
             Adder.Contract = _DataManager.ConR.GetElem(Convert.ToInt32(Request.Form["Contract"]));
             Adder.Event = _DataManager.EvR.GetElem(Convert.ToInt32(Request.Form["Event"]));
             Adder.EmployeeTo = _DataManager.EmR.GetElem(Convert.ToInt32(Request.Form["Employee"]));
-            Adder.EmployeeTo = _DataManager.EmR.GetElem(CurEmployee.Id);
+            Adder.Employee = _DataManager.EmR.GetElem(CurEmployee.Id);
             Adder.Comment = Request.Form["Comment"];
             Adder.Date = new DateTime(Convert.ToInt32(Request.Form["calendarPay"].Split('-')[0]), Convert.ToInt32(Request.Form["calendarPay"].Split('-')[1]), Convert.ToInt32(Request.Form["calendarPay"].Split('-')[2]));
-
+            Adder.DateForPayment =  Convert.ToInt32(Request.Form["DatePay"])>=DateTime.Now.Month? new DateTime(DateTime.Today.Year, Convert.ToInt32(Request.Form["DatePay"]), Adder.Date.Day) : new DateTime(DateTime.Today.Year, Convert.ToInt32(Request.Form["DatePay"]), Adder.Date.Day).AddYears(1);
             _DataManager.PayR.EditPaymentDetail(Adder);
             return RedirectToAction("MyFinanses");
         }
@@ -374,6 +394,37 @@ namespace ERP_Love_Gid.Controllers
             _DataManager.PayR.Delete(id);
             return RedirectToAction("MyFinanses");
 
+        }
+        [HttpGet]
+        public ActionResult EditPayFromPeer(int id = 0, string error = "")
+        {
+            if (CurEmployee == null) return RedirectToAction("Log_in", "User");
+            ViewBag.Sum = _DataManager.PayR.GetElem(id).Receipt;
+            ViewBag.User = CurEmployee.Surname + " " + CurEmployee.Name;
+            ViewBag.Contract = new SelectList(_DataManager.ConR.GetCollection(), "Id", "Name",_DataManager.PayR.GetElem(id).Contract.Id);
+            ViewBag.Event = new SelectList(_DataManager.EvR.GetCollection(), "Id", "Type", _DataManager.PayR.GetElem(id).Event.Id);
+            ViewBag.Employees = new SelectList(_DataManager.EmR.GetCollection(CurEmployee.Id), "Id", "FIO", _DataManager.PayR.GetElem(id).Employee.Id);
+            ViewBag.Date = String.Join("-", ((_DataManager.PayR.GetElem(id).Date).ToShortDateString()).Split('.').Reverse());
+            ViewBag.Comment = _DataManager.PayR.GetElem(id).Comment;
+
+            return View();
+        }
+        [HttpPost]
+        public ActionResult EditPayFromPeer(int id = 0)
+        {
+            Payments Adder = _DataManager.PayR.GetElem(id);
+
+            Adder.Receipt = Convert.ToInt32(Request.Form["Receipt"]);
+            Adder.Account = _DataManager.AccR.GetElem(Convert.ToInt32(Request.Form["Account"]));
+            Adder.Contract = _DataManager.ConR.GetElem(Convert.ToInt32(Request.Form["Contract"]));
+            Adder.Event = _DataManager.EvR.GetElem(Convert.ToInt32(Request.Form["Event"]));
+            Adder.EmployeeTo = _DataManager.EmR.GetElem(Convert.ToInt32(Request.Form["Employee"]));
+            Adder.EmployeeTo = _DataManager.EmR.GetElem(CurEmployee.Id);
+            Adder.Comment = Request.Form["Comment"];
+            Adder.Date = new DateTime(Convert.ToInt32(Request.Form["calendarPay"].Split('-')[0]), Convert.ToInt32(Request.Form["calendarPay"].Split('-')[1]), Convert.ToInt32(Request.Form["calendarPay"].Split('-')[2]));
+
+            _DataManager.PayR.EditPaymentDetail(Adder);
+            return RedirectToAction("MyFinanses");
         }
     }
 

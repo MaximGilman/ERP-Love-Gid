@@ -147,6 +147,8 @@
     <Property Name="EmployeeId" Type="int" Nullable="false" />
     <Property Name="ContractId" Type="int" Nullable="false" />
     <Property Name="StatusForPeers" Type="bit" Nullable="true" />
+    <Property Name="StatusForSalary" Type="bit" Nullable="true" />
+    <Property Name="DateForPayment" Type="datetime" Nullable="true" />
     <Property Name="Account_Id" Type="int" Nullable="true" />
     <Property Name="Contract_Id" Type="int" Nullable="true" />
     <Property Name="Pay_min_Id" Type="int" Nullable="true" />
@@ -533,6 +535,8 @@
           <NavigationProperty Name="Event" Relationship="ERPModel.PaymentsEvent" FromRole="Payments" ToRole="Event" />
           <Property Name="StatusForPeers" Type="Boolean" Nullable="true" />
           <NavigationProperty Name="EmployeeTo" Relationship="ERPModel.PaymentsEmployee1" FromRole="Payments" ToRole="Employee" />
+          <Property Name="StatusForSalary" Type="Boolean" Nullable="true" />
+          <Property Name="DateForPayment" Type="DateTime" Nullable="true" />
         </EntityType>
         <EntityType Name="PaymentToPeers">
           <Key>
@@ -706,6 +710,8 @@
           <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
           <ScalarProperty Name="ContractId" ColumnName="ContractId" />
           <ScalarProperty Name="StatusForPeers" ColumnName="StatusForPeers" />
+          <ScalarProperty Name="StatusForSalary" ColumnName="StatusForSalary" />
+          <ScalarProperty Name="DateForPayment" ColumnName="DateForPayment" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

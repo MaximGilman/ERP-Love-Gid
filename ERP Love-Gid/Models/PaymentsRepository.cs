@@ -20,7 +20,27 @@ namespace ERP_Love_Gid.Models
 
             return cont.PaymentsSet.OrderBy(cw => cw.Id);
         }
+        public IEnumerable<Payments> GetCollection(bool flagofstatus)
+        {
+            foreach (Payments pm in cont.PaymentsSet)
+            {
+                try
+                {
 
+                    pm.StatusForSalary = cont.Pay_minSet.Where(x => x.Date == pm.Date && pm.Account.Id == x.Account.Id).Select(y => y.Finished).FirstOrDefault();
+
+                }
+                catch { pm.StatusForSalary = false; }
+
+
+
+
+
+            }
+            cont.SaveChanges();
+
+            return cont.PaymentsSet.OrderBy(cw => cw.Id);
+        }
         public IEnumerable<Payments> GetEmplPays(int id)
         {
              return cont.PaymentsSet.Where(x => x.Employee.Id==id).OrderBy(cw => cw.Id);  

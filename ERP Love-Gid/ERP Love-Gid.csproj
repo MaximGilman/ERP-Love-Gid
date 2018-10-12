@@ -276,6 +276,7 @@
     <Content Include="Views\Home\EditPaymentDetail.cshtml" />
     <Content Include="Views\Home\EditPay_min.cshtml" />
     <Content Include="Views\Home\AddMyJobPayment.cshtml" />
+    <Content Include="Views\Home\EditPayFromPeer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

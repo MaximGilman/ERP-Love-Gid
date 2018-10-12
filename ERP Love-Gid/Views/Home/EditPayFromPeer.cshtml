@@ -1,9 +1,9 @@
 ﻿
 @{
-    ViewBag.Title = "Изменение данных о платеже";
+    ViewBag.Title = "Изменение платежа от колллег";
 }
 
-<h2>Изменение данных о платеже</h2>
+<h2>Изменение платежа от коллег</h2>
 
 <div class="container">
     <header>
@@ -13,7 +13,7 @@
             <section>
 
 
-                @using (Html.BeginForm("EditPaymentDetail", "Home", FormMethod.Post))
+                @using (Html.BeginForm("AddMyJobPayment", "Home", FormMethod.Post))
                 {
 
 
@@ -30,11 +30,11 @@
                                 </p>
                             </td>
 
-                            <td><p> @Html.TextBox("Receipt", null, new { @class = "form-control", type = "number", @min = "0" })</p></td>
+                            <td><p> @Html.TextBox("Sum", null, new { @class = "form-control", type = "number", @min = "0" })</p></td>
                         </tr>
                         <tr>
-                            <td><p>Счет для перевода:</p></td>
-                            <td><p> @Html.DropDownList("Account", (IEnumerable<SelectListItem>)ViewData["Accounts"], null, new { style = "width : 200px", @class = "form-control" }) @Html.ValidationMessage("Accounts")</p></td>
+                            <td><p>От кого деньги:</p></td>
+                            <td><p> @Html.DropDownList("Employee", (IEnumerable<SelectListItem>)ViewData["Employees"], null, new { style = "width : 200px", @class = "form-control" }) @Html.ValidationMessage("Employee")</p></td>
 
                         </tr>
 
@@ -49,12 +49,7 @@
 
 
                         </tr>
-                        <tr>
-                            <td><p>Для кого оплата: </p></td>
-                            <td><p> @Html.DropDownList("Employee", (IEnumerable<SelectListItem>)ViewData["Employees"], null, new { style = "width : 200px", @class = "form-control" }) @Html.ValidationMessage("Employees")</p></td>
 
-
-                        </tr>
                         <tr>
                             <td>
                                 <p>
@@ -63,27 +58,24 @@
                             </td>
                             <td><p> @Html.TextBox("Comment", null, new { @class = "form-control" })</p></td>
                         </tr>
+
                         <tr>
-                            <td><p>Дата оплаты (для отчета): </p></td>
+                            <td>
+                                <p>
+                                    На дату:
+                                </p>
+                            </td>
                             <td>
                                 <p>
                                     <input type="date" name="calendarPay" class="form-control" value=@ViewBag.Date>
                                 </p>
                             </td>
                         </tr>
-                        
-                        <tr>
-                            <td><p>Оплачу реально: </p></td>
-                            <td><p> @Html.DropDownList("DatePay", (IEnumerable<SelectListItem>)ViewData["DatePays"], null, new { style = "width : 200px", @class = "form-control" }) @Html.ValidationMessage("DatePays")</p></td>
 
-                        </tr>
-                        
 
                     </table>
-                    <p></p>
-                    <p><input type="submit" value="Сохранить" /></p>
 
-                    <P>@Html.ActionLink("Удалить платеж","DeletePaymentDetail",new { id = @ViewBag.Id })</P>
+                    <p><input type="submit" value="Сохранить" /></p>
                 }
 
 
