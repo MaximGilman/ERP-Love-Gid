@@ -40,6 +40,7 @@ namespace ERP_Love_Gid.Controllers
             // ViewData["Years"] = new SelectList(_DataManager.ConR.GetYears()); 
             ViewData["Contracts"] = _DataManager.ConR.GetCollection(CurEmployee.Id);
             ViewBag.User = CurEmployee.Surname + " " + CurEmployee.Name;
+            if (CurEmployee.IsAdmin) ViewBag.Admin = true;
             return View();
         }
         [HttpPost]
@@ -58,6 +59,7 @@ namespace ERP_Love_Gid.Controllers
             ViewBag.Error = error;
             ViewBag.User = CurEmployee.Surname + " " + CurEmployee.Name;
             ViewBag.DateOfSign = String.Join("-", ((DateTime.Now).ToShortDateString()).Split('.').Reverse());
+            if (CurEmployee.IsAdmin) ViewBag.Admin = true;
 
             if (_DataManager.EvR != null)
                 ViewData["Events"] = new SelectList(_DataManager.EvR.GetCollection(), "Id", "Type");
@@ -119,6 +121,7 @@ namespace ERP_Love_Gid.Controllers
 
             //ViewBag.MyJob = _DataManager.PayR.GetEmplJobs(CurEmployee.Id).Except(_DataManager.PayR.GetCollection().Where(x=>x.Employee.Id==CurEmployee.Id));
             ViewBag.MyJob = _DataManager.PayR.GetCollection(true).Where(x=>x.EmployeeTo.Id==CurEmployee.Id&&x.Employee.Id!=CurEmployee.Id);
+            if (CurEmployee.IsAdmin) ViewBag.Admin = true;
 
 
             ViewBag.MySalary = _DataManager.PayR.GetCollection().Where(x => x.EmployeeTo.Id == CurEmployee.Id);
@@ -158,6 +161,8 @@ namespace ERP_Love_Gid.Controllers
             ViewBag.Accounts = new SelectList(_DataManager.AccR.GetCollection(), "Id", "Type");
             ViewBag.Contracts = new SelectList(_DataManager.ConR.GetCollection(), "Id", "Name");
             ViewBag.Employees = new SelectList(_DataManager.EmR.GetCollection(), "Id", "FIO");
+            if (CurEmployee.IsAdmin) ViewBag.Admin = true;
+
             return View();
         }
         [HttpPost]
@@ -192,6 +197,7 @@ namespace ERP_Love_Gid.Controllers
         {
  
             if (CurEmployee == null) return RedirectToAction("Log_in", "User");
+            if (CurEmployee.IsAdmin) ViewBag.Admin = true;
 
             ViewBag.User = CurEmployee.Surname + " " + CurEmployee.Name;
             ViewBag.Account = new SelectList(_DataManager.AccR.GetCollection(), "Id", "Type");
@@ -223,7 +229,8 @@ namespace ERP_Love_Gid.Controllers
             
 
             if (CurEmployee == null) return RedirectToAction("Log_in", "User");
-            ViewBag.Error = error;
+            ViewBag.Error = error; if (CurEmployee.IsAdmin) ViewBag.Admin = true;
+
             ViewBag.User = CurEmployee.Surname + " " + CurEmployee.Name;
             ViewBag.Cost = _DataManager.ConR.GetElem(id).Sum_only_contract;
             ViewData["Events"] = new SelectList(_DataManager.EvR.GetCollection("MyFirst"), "Id", "Type", _DataManager.ConR.GetElem(id).EventSet.Id);
@@ -285,6 +292,7 @@ namespace ERP_Love_Gid.Controllers
             if (CurEmployee == null) return RedirectToAction("Log_in", "User");
             ViewBag.Receipt = _DataManager.PayR.GetElem(id).Receipt;
             ViewBag.Comment = _DataManager.PayR.GetElem(id).Comment;
+            if (CurEmployee.IsAdmin) ViewBag.Admin = true;
 
             ViewBag.User = CurEmployee.Surname + " " + CurEmployee.Name;
             ViewBag.Events = new SelectList(_DataManager.EvR.GetCollection(), "Id", "Type", _DataManager.PayR.GetElem(id).Event.Id);
@@ -334,7 +342,8 @@ namespace ERP_Love_Gid.Controllers
         {
             if (CurEmployee == null) return RedirectToAction("Log_in", "User");
             ViewBag.Sum = _DataManager.Pay_minR.GetElem(id).Sum;
- 
+            if (CurEmployee.IsAdmin) ViewBag.Admin = true;
+
             ViewBag.Accounts = new SelectList(_DataManager.AccR.GetCollection(), "Id", "Type", _DataManager.Pay_minR.GetElem(id).Account.Id);
        
             ViewBag.Date = String.Join("-", (((DateTime)_DataManager.Pay_minR.GetElem(id).Date).ToShortDateString()).Split('.').Reverse());
@@ -360,6 +369,7 @@ namespace ERP_Love_Gid.Controllers
         {
 
             if (CurEmployee == null) return RedirectToAction("Log_in", "User");
+            if (CurEmployee.IsAdmin) ViewBag.Admin = true;
 
             ViewBag.User = CurEmployee.Surname + " " + CurEmployee.Name;
             ViewBag.Contract = new SelectList(_DataManager.ConR.GetCollection(), "Id", "Name");
@@ -406,6 +416,7 @@ namespace ERP_Love_Gid.Controllers
             ViewBag.Employees = new SelectList(_DataManager.EmR.GetCollection(CurEmployee.Id), "Id", "FIO", _DataManager.PayR.GetElem(id).Employee.Id);
             ViewBag.Date = String.Join("-", ((_DataManager.PayR.GetElem(id).Date).ToShortDateString()).Split('.').Reverse());
             ViewBag.Comment = _DataManager.PayR.GetElem(id).Comment;
+            if (CurEmployee.IsAdmin) ViewBag.Admin = true;
 
             return View();
         }
@@ -425,6 +436,10 @@ namespace ERP_Love_Gid.Controllers
 
             _DataManager.PayR.EditPaymentDetail(Adder);
             return RedirectToAction("MyFinanses");
+        }
+        public ActionResult ChangeToAdmin()
+        {
+            return RedirectToAction("Index", "Admin", new { id = CurEmployee.Id });
         }
     }
 

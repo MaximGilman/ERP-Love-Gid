@@ -16,13 +16,15 @@
         <div class="container">
             <div class="navbar-header">
 
-                @Html.ActionLink("Мои договоры", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-                @Html.ActionLink("Мои Финансы", "MyFinanses", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Все договоры", "Index", "Admin", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Финансы компании", "CompanyFinanses", "Admin", new { area = "" }, new { @class = "navbar-brand" })
+
+                @Html.ActionLink("Сотрудники", "Employees", "Admin", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Зарплаты", "Salary", "Admin", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Режим сотрудника", "ChangeToUser", "Admin", new { area = "" }, new { @class = "navbar-brand" })
 
 
-                @if (ViewBag.Admin == true) {@Html.ActionLink("Режим Администратора", "ChangeToAdmin", "Home", new { area = "" }, new { @class = "navbar-brand" })}
-
-                @Html.ActionLink("Выйти", "Exit", "Home", new { @class = "navbar-brand" })
+                @Html.ActionLink("Выйти", "Exit", "Admin", new { @class = "navbar-brand" })
                 <text class="navbar-brand"><strong>@ViewBag.User</strong> </text>
 
 
