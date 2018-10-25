@@ -69,7 +69,7 @@
                     <td> <b>@cw.Sum</b></td>
                     <td><b>@cw.Account.Type</b></td>
                     <td><b>@cw.Date.Day.@cw.Date.Month.@cw.Date.Year</b></td>
-                    <td><b >✔</b></td>
+                    <td><b>✔</b></td>
 
                 </tr>}
             else
@@ -79,7 +79,7 @@
                     <td> <b>@cw.Sum</b></td>
                     <td><b>@cw.Account.Type</b></td>
                     <td><b>@cw.Date.Day.@cw.Date.Month.@cw.Date.Year</b></td>
-                    <td><b >Не соответствие суммы, счета или даты</b></td>
+                    <td><b>Не соответствие суммы, счета или даты</b></td>
 
                 </tr>}
         }
@@ -222,11 +222,11 @@
 
                     </tr>}
                 else
-                 if (@cw.Employee.Id!=cw.EmployeeTo.Id)
+                 if (@cw.Employee.Id != cw.EmployeeTo.Id)
                 {
                     <tr>
 
-                        <td> <p>@cw.Receipt</p></td>
+                        <td > <p>@cw.Receipt</p></td>
                         <td><p></p></td>
 
                         <td><p>@cw.Contract.Name</p></td>
@@ -236,7 +236,7 @@
                         <td><p>Не оплачено</p></td>
 
                     </tr>}
-                
+
                 else
                 {
                     <tr>
@@ -251,10 +251,13 @@
                         <td><p class="CheckMySalary">Не сходится счет или сумма</p></td>
 
                     </tr>}
+
             }
         }
 
     </table>
+    <p> <b> План @ViewBag.SalarySum    Факт @ViewBag.FactSalarySum </b></p>
+
 }
 
 <script>
@@ -267,4 +270,15 @@
 
     $('#info').text(b);
 </script>
- 
+
+<script>
+    var b = 0;
+    $('.Salary').each(function () {
+        b += parseFloat($(this).text());
+    });
+
+
+
+    $('#salarySum').text(b);
+</script>
+

@@ -1,6 +1,7 @@
 ﻿
 @{
     ViewBag.Title = "Добавление контракта";
+    if (ViewBag.Admin==true) { Layout = "~/Views/Shared/_LayoutAdmin.cshtml"; }
 }
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <h2>Изменение контракта</h2>

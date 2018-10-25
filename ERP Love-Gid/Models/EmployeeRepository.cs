@@ -58,15 +58,15 @@ namespace ERP_Love_Gid.Models
             }
         }
 
-        //public void Edit(int id, string fio, int cost, int count, int margin, string resol)
-        //{
-        //    Employee cw = GetElem(id);
-        //    if (cw != null)
-        //    {
-        //        cw.FIO = fio;
-        //        cw.
-        //        cont.SaveChanges();
-        //    }
-        //}
+        public void Edit(Employee tmp)
+        {
+            Employee cw = GetElem(tmp.Id);
+            if (cw != null)
+            {
+                cw = tmp;
+
+                cont.SaveChanges();
+            }
+        }
     }
 }

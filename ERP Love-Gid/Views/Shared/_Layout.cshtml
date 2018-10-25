@@ -20,11 +20,12 @@
                 @Html.ActionLink("Мои Финансы", "MyFinanses", "Home", new { area = "" }, new { @class = "navbar-brand" })
 
 
-                @if (ViewBag.Admin == true) {@Html.ActionLink("Режим Администратора", "ChangeToAdmin", "Home", new { area = "" }, new { @class = "navbar-brand" })}
+                @if (ViewBag.Admin == true)
+                {@Html.ActionLink("Режим Администратора", "ChangeToAdmin", "Home", new { area = "" }, new { @class = "navbar-brand" })}
 
                 @Html.ActionLink("Выйти", "Exit", "Home", new { @class = "navbar-brand" })
                 <text class="navbar-brand"><strong>@ViewBag.User</strong> </text>
-
+               
 
             </div>
 
