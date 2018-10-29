@@ -198,6 +198,7 @@
     <Compile Include="Models\PaymentsRepository.cs" />
     <Compile Include="Models\PaymentToPeersRepository.cs" />
     <Compile Include="Models\Pay_minRepository.cs" />
+    <Compile Include="Models\SalaryRepository.cs" />
     <Compile Include="Parials.cs" />
     <Compile Include="Partials.cs" />
     <Compile Include="Payments.cs">
@@ -211,6 +212,9 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Salary.cs">
+      <DependentUpon>ERPModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SalaryTypes.cs">
       <DependentUpon>ERPModel.tt</DependentUpon>
     </Compile>
   </ItemGroup>
@@ -284,12 +288,15 @@
     <Content Include="Views\Admin\Employees.cshtml" />
     <Content Include="Views\Admin\ChangeUser.cshtml" />
     <Content Include="Views\Admin\Events.cshtml" />
+    <Content Include="Views\Admin\Salary.cshtml" />
+    <Content Include="Views\Admin\AddEmployee.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\StatusEnum\Controllers\" />
     <Folder Include="Areas\StatusEnum\Models\" />
     <Folder Include="Areas\StatusEnum\Views\Shared\" />
+    <Folder Include="Views\Salary\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

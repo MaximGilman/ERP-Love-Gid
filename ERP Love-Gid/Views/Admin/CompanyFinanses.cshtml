@@ -8,51 +8,59 @@
 @using (Html.BeginForm("CompanyFinanses", "Admin", FormMethod.Post))
 {
     @*<p> @Html.DropDownList("Year", (IEnumerable<SelectListItem>)ViewData["Years"], null, new { style = "width : 200px", @class = "form-control" }) @Html.ValidationMessage("Years")</p>*@
-<table>
-    <tr>
-        <td> <b>Работник</b></td>
-   
-        @foreach (Employee cw in (IEnumerable<Employee>)ViewData["Employees"])
-        {
+    <table>
+        <tr>
+            <td> <b>Работник</b></td>
+
+            @foreach (Employee cw in (IEnumerable<Employee>)ViewData["Employees"])
+            {
 
 
-            <td>@cw.Name @cw.Surname.First()</td>
-            
+                <td>@cw.Name @cw.Surname.First()</td>
 
-        }
 
-      
-
+            }
 
 
 
-  
-    <tr>
-        <td> <b>Зп План </b></td>
-        @foreach (Employee cw in (IEnumerable<Employee>)ViewData["Employees"])
-        {
 
 
-            <td>@cw.Scale </td>
 
 
-        }
-
-    </tr>
-    <tr>
-        <td><b>ЗП факт</b></td>
-        @foreach (int cw in (int [])ViewData["EmployeesSalaryFact"])
-        {
+        <tr>
+            <td> <b>Зп План </b></td>
+            @foreach (Employee cw in (IEnumerable<Employee>)ViewData["Employees"])
+            {
 
 
-            <td>@cw </td>
+                <td>@cw.Scale </td>
 
 
-        }
+            }
 
-    </tr>
-    <tr> <td><b>Принес в компанию</b></td></tr>
+        </tr>
+        <tr>
+            <td><b>ЗП факт</b></td>
+            @foreach (int cw in (int[])ViewData["SalaryFact"])
+            {
 
 
-</table>}
+                <td>@cw</td>
+
+            }
+
+        </tr>
+        <tr>
+            <td><b>Принес в компанию</b></td>
+            @foreach (int cw in (int[])ViewData["EmployeesSalaryFact"])
+            {
+
+
+                <td>@cw </td>
+
+
+            }
+        </tr>
+
+    </table>}
 

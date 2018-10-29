@@ -15,6 +15,7 @@
     <EntitySet Name="PaymentToPeersSet" EntityType="ERPModel.Store.PaymentToPeersSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Pay_minSet" EntityType="ERPModel.Store.Pay_minSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="SalarySet" EntityType="ERPModel.Store.SalarySet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="SalaryTypesSet" EntityType="ERPModel.Store.SalaryTypesSet" store:Type="Tables" Schema="dbo" />
     <AssociationSet Name="FK_ClientContract" Association="ERPModel.Store.FK_ClientContract">
       <End Role="Client" EntitySet="ClientSet" />
       <End Role="Contract" EntitySet="ContractSet" />
@@ -134,6 +135,7 @@
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Type" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Percent" Type="nvarchar(max)" Nullable="true" />
   </EntityType>
   <EntityType Name="PaymentsSet">
     <Key>
@@ -185,9 +187,17 @@
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="PercentOfSalary" Type="int" Nullable="false" />
+    <Property Name="PercentOfSalary" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Value" Type="int" Nullable="false" />
     <Property Name="Employee_Id" Type="int" Nullable="false" />
     <Property Name="Event_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SalaryTypesSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Type" Type="nvarchar(max)" Nullable="false" />
   </EntityType>
   <Association Name="FK_ClientContract">
     <End Role="Client" Type="ERPModel.Store.ClientSet" Multiplicity="1" />
@@ -443,6 +453,7 @@
             <End Role="Payments" EntitySet="PaymentsSet" />
             <End Role="Employee" EntitySet="EmployeeSet" />
           </AssociationSet>
+          <EntitySet Name="SalaryTypesSet" EntityType="ERPModel.SalaryTypes" />
         </EntityContainer>
         <EntityType Name="Account">
           <Key>
@@ -516,6 +527,7 @@
           <NavigationProperty Name="PaymentToPeersSet" Relationship="ERPModel.FK_PaymentToPeersEvent" FromRole="Event" ToRole="PaymentToPeers" />
           <NavigationProperty Name="Payments" Relationship="ERPModel.PaymentsEvent" FromRole="Event" ToRole="Payments" />
           <NavigationProperty Name="Salary" Relationship="ERPModel.EventSalary" FromRole="Event" ToRole="Salary" />
+          <Property Name="Percent" Type="String" Nullable="true" />
         </EntityType>
         <EntityType Name="Payments">
           <Key>
@@ -618,7 +630,8 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="Employee" Relationship="ERPModel.EmployeeSalary" FromRole="Salary" ToRole="Employee" />
           <NavigationProperty Name="Event" Relationship="ERPModel.EventSalary" FromRole="Salary" ToRole="Event" />
-          <Property Name="PercentOfSalary" Type="Int32" Nullable="false" />
+          <Property Name="PercentOfSalary" Type="String" Nullable="false" />
+          <Property Name="Value" Type="Int32" Nullable="false" />
         </EntityType>
         <Association Name="EmployeeSalary">
           <End Type="ERPModel.Employee" Role="Employee" Multiplicity="1" />
@@ -632,6 +645,13 @@
           <End Type="ERPModel.Payments" Role="Payments" Multiplicity="*" />
           <End Type="ERPModel.Employee" Role="Employee" Multiplicity="0..1" />
         </Association>
+        <EntityType Name="SalaryTypes">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Type" Type="String" Nullable="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -696,6 +716,7 @@
         <MappingFragment StoreEntitySet="EventSet">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="Percent" ColumnName="Percent" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -742,6 +763,15 @@
         <MappingFragment StoreEntitySet="SalarySet">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="PercentOfSalary" ColumnName="PercentOfSalary" />
+          <ScalarProperty Name="Value" ColumnName="Value" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SalaryTypesSet">
+      <EntityTypeMapping TypeName="IsTypeOf(ERPModel.SalaryTypes)">
+        <MappingFragment StoreEntitySet="SalaryTypesSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -914,6 +944,7 @@
         <AssociationConnector Association="ERPModel.EmployeeSalary" />
         <AssociationConnector Association="ERPModel.EventSalary" />
         <AssociationConnector Association="ERPModel.PaymentsEmployee1" />
+        <EntityTypeShape EntityType="ERPModel.SalaryTypes" Width="1.5" PointX="2.5" PointY="1" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

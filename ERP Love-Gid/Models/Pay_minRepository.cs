@@ -46,11 +46,14 @@ namespace ERP_Love_Gid.Models
             return cont.Pay_minSet.Where(x => x.Employee.Id == id).OrderBy(cw => cw.Id);
 
         }
-        public int GetEmplPaysSum(int id)
+        public int GetEmplPaysSum(int id, int month=-1)
         {
             try
             {
-                return cont.Pay_minSet.Where(x => x.Employee.Id == id).Select(y => y.Sum).Sum();
+                if (month != -1) return cont.Pay_minSet.Where(x => x.Employee.Id == id&&x.Date.Month==month).Select(y => y.Sum).Sum();
+
+                else
+                    return cont.Pay_minSet.Where(x => x.Employee.Id == id).Select(y => y.Sum).Sum();
             }
             catch { return 0; }
         }

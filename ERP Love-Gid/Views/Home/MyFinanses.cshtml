@@ -28,6 +28,7 @@
                 @if (@cw.Account != null)
                 {
                     <td>@cw.Account.Type</td>}
+                else { <td><b>Счет не указан!</b></td> }
 
 
                 @*<td>@cw.Contract.Name</td>*@
@@ -207,12 +208,12 @@
         {
 
             {
-                if (@cw.StatusForSalary == true)
+                if (@cw.StatusForSalary == true&& cw.Employee.Id == cw.EmployeeTo.Id)
                 {
                     <tr>
 
                         <td> <p>@cw.Receipt</p></td>
-                        <td><p></p></td>
+                        <td><p>@cw.Event.Salary.Select(x => cw.Receipt- x.Value).FirstOrDefault()</p></td>
 
                         <td><p>@cw.Contract.Name</p></td>
                         <td><p>@cw.Event.Type</p></td>
@@ -226,9 +227,8 @@
                 {
                     <tr>
 
-                        <td > <p>@cw.Receipt</p></td>
-                        <td><p></p></td>
-
+                        <td> <p>@cw.Receipt</p></td>
+                        <td> <p>@cw.Receipt</p></td>
                         <td><p>@cw.Contract.Name</p></td>
                         <td><p>@cw.Event.Type</p></td>
 
@@ -242,7 +242,7 @@
                     <tr>
 
                         <td> <p>@cw.Receipt</p></td>
-                        <td><p></p></td>
+                        <td><p>@cw.Event.Salary.Select(x => cw.Receipt - x.Value).FirstOrDefault()</p></td>
 
                         <td><p>@cw.Contract.Name</p></td>
                         <td><p>@cw.Event.Type</p></td>
@@ -256,7 +256,7 @@
         }
 
     </table>
-    <p> <b> План @ViewBag.SalarySum    Факт @ViewBag.FactSalarySum </b></p>
+    <p> <b> План @ViewBag.TotalSumMinusSal @*@ViewBag.SalarySum*@    Факт   @ViewBag.TotalFactSumMinusSal@*@ViewBag.FactSalarySum*@ </b></p>
 
 }
 

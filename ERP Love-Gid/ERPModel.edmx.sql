@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 10/11/2018 20:06:27
+-- Date Created: 10/28/2018 08:52:29
 -- Generated from EDMX file: C:\Users\ГильманМаксимМихайло\Desktop\Бекап флешки\ERP Love-Gid\ERP Love-Gid\ERPModel.edmx
 -- --------------------------------------------------
 
@@ -94,6 +94,9 @@ GO
 IF OBJECT_ID(N'[dbo].[SalarySet]', 'U') IS NOT NULL
     DROP TABLE [dbo].[SalarySet];
 GO
+IF OBJECT_ID(N'[dbo].[SalaryTypesSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[SalaryTypesSet];
+GO
 
 -- --------------------------------------------------
 -- Creating all tables
@@ -154,7 +157,8 @@ GO
 -- Creating table 'EventSet'
 CREATE TABLE [dbo].[EventSet] (
     [Id] int IDENTITY(1,1) NOT NULL,
-    [Type] nvarchar(max)  NOT NULL
+    [Type] nvarchar(max)  NOT NULL,
+    [Percent] nvarchar(max)  NULL
 );
 GO
 
@@ -206,9 +210,17 @@ GO
 -- Creating table 'SalarySet'
 CREATE TABLE [dbo].[SalarySet] (
     [Id] int IDENTITY(1,1) NOT NULL,
-    [PercentOfSalary] int  NOT NULL,
+    [PercentOfSalary] nvarchar(max)  NOT NULL,
+    [Value] int  NOT NULL,
     [Employee_Id] int  NOT NULL,
     [Event_Id] int  NOT NULL
+);
+GO
+
+-- Creating table 'SalaryTypesSet'
+CREATE TABLE [dbo].[SalaryTypesSet] (
+    [Id] int IDENTITY(1,1) NOT NULL,
+    [Type] nvarchar(max)  NOT NULL
 );
 GO
 
@@ -267,6 +279,12 @@ GO
 -- Creating primary key on [Id] in table 'SalarySet'
 ALTER TABLE [dbo].[SalarySet]
 ADD CONSTRAINT [PK_SalarySet]
+    PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
+-- Creating primary key on [Id] in table 'SalaryTypesSet'
+ALTER TABLE [dbo].[SalaryTypesSet]
+ADD CONSTRAINT [PK_SalaryTypesSet]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 

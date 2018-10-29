@@ -41,15 +41,23 @@ namespace ERP_Love_Gid.Models
 
             return cont.PaymentsSet.OrderBy(cw => cw.Id);
         }
-        public IEnumerable<Payments> GetEmplPays(int id)
+        public IEnumerable<Payments> GetEmplPays(int id, int month = -1)
         {
-             return cont.PaymentsSet.Where(x => x.Employee.Id==id).OrderBy(cw => cw.Id);  
-            
-         }
-        public int GetEmplPaysSum(int id)
+            if(month!=-1) return cont.PaymentsSet.Where(x => x.Employee.Id == id&&x.Date.Month==month).OrderBy(cw => cw.Id);
+
+            else return cont.PaymentsSet.Where(x => x.Employee.Id == id).OrderBy(cw => cw.Id);
+
+
+
+        }
+        public int GetEmplPaysSum(int id, int month = -1)
         {
+
             try
             {
+                if (month != -1) return cont.PaymentsSet.Where(x => x.Employee.Id == id&& x.Date.Month==month).Select(y => y.Receipt).Sum();
+
+                else  
                 return cont.PaymentsSet.Where(x => x.Employee.Id == id).Select(y => y.Receipt).Sum();
             }
             catch { return 0; }

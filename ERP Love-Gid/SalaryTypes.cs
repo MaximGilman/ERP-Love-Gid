@@ -12,13 +12,9 @@ namespace ERP_Love_Gid
     using System;
     using System.Collections.Generic;
     
-    public partial class Salary
+    public partial class SalaryTypes
     {
         public int Id { get; set; }
-        public string PercentOfSalary { get; set; }
-        public int Value { get; set; }
-    
-        public virtual Employee Employee { get; set; }
-        public virtual Event Event { get; set; }
+        public string Type { get; set; }
     }
 }
