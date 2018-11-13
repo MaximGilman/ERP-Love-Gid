@@ -12,22 +12,9 @@ namespace ERP_Love_Gid
     using System;
     using System.Collections.Generic;
     
-    public partial class Account
+    public partial class SalaryTypes
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Account()
-        {
-            this.Payments = new HashSet<Payments>();
-            this.Pay_min = new HashSet<Pay_min>();
-        }
-    
         public int Id { get; set; }
         public string Type { get; set; }
-        public int Sum { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Payments> Payments { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Pay_min> Pay_min { get; set; }
     }
 }

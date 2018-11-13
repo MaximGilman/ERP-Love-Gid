@@ -32,6 +32,8 @@ namespace ERP_Love_Gid
         public virtual DbSet<Event> EventSet { get; set; }
         public virtual DbSet<Payments> PaymentsSet { get; set; }
         public virtual DbSet<PaymentToPeers> PaymentToPeersSet { get; set; }
-        public virtual DbSet<PaymentEmployeeConnect> PaymentEmployeeConnectSet { get; set; }
+        public virtual DbSet<Pay_min> Pay_minSet { get; set; }
+        public virtual DbSet<Salary> SalarySet { get; set; }
+        public virtual DbSet<SalaryTypes> SalaryTypesSet { get; set; }
     }
 }

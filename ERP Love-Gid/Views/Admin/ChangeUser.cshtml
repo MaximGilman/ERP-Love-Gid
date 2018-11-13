@@ -1,0 +1,63 @@
+﻿
+@{
+    ViewBag.Title = "Изменение сотрудника"; Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Данные о сотруднике</h2>
+
+@using (Html.BeginForm("ChangeUser", "Admin", FormMethod.Post))
+{
+
+
+    <p>@Html.ActionLink("Обратно к списку", "Employees")</p>
+    <input hidden value=@ViewBag.Id name="IdValue" />
+    <table>
+
+       
+     
+
+        <tr>
+            <td>
+                <p>
+                    Имя:
+                </p>
+            </td>
+
+            <td><p> @Html.TextBox("Name", null, new { @class = "form-control" })</p></td>
+        </tr>
+        <tr>
+            <td><p>Фамилия:</p></td>
+
+            <td><p> @Html.TextBox("Sname", null, new { @class = "form-control" })</p></td>
+        </tr>
+
+
+        <tr>
+            <td><p>Отчество: </p></td>
+            <td><p> @Html.TextBox("Pname", null, new { @class = "form-control" })</p></td>
+        </tr>
+        <tr>
+            <td><p>Логин: </p></td>
+            
+               
+            <td><p> @Html.TextBox("Login", null, new { @class = "form-control" })</p></td>
+
+
+        </tr>
+        <tr>
+            <td><p>Пароль: </p></td>
+            <td><p> @Html.TextBox("Password", null, new { @class = "form-control"})</p></td>
+
+        </tr>
+        <tr>
+
+            <td><p>Права админа: </p>
+             
+            <td><p> @Html.CheckBox("IsAdmin", new { @class = "form-control"})</p></td>
+         </tr>
+        
+    </table>
+    <p></p>
+    <p><input type="submit" value="Сохранить" /></p>
+}
+

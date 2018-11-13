@@ -17,6 +17,7 @@ namespace ERP_Love_Gid.Controllers
         [HttpGet]
         public ActionResult Log_in(int id = 0, string errormessage = "")
         {
+            
             ViewBag.UserId = id;
             ViewBag.Error = errormessage;
            

@@ -1,0 +1,35 @@
+﻿
+@{
+    ViewBag.Title = "Типы работ"; Layout = "~/Views/Shared/_LayoutAdmin.cshtml";}
+
+<h2>Типы работ</h2>
+
+<h4>Выставляется единоразово. Прежде чем нажать сохранить, проверь </h4>
+@using (Html.BeginForm("Events", "Admin", FormMethod.Post))
+{
+
+
+<table>
+    <tr>
+        <td> Наименование</td>
+        <td>Тек. значение</td>
+
+        <td>Изменить<td>
+    </tr>
+
+    @foreach (Event cw in (IEnumerable<Event>)ViewData["Events"])
+    {
+
+        <tr>
+            <td> @cw.Type</td>
+            <td>@cw.Percent</td>
+
+            <td>@Html.DropDownList("Types", (IEnumerable<SelectListItem>)ViewData["Types"], null, new { style = "width : 200px", @class = "form-control" }) @Html.ValidationMessage("Types")</td>
+        </tr>
+    }
+
+</table>
+    <p></p>
+    <p><input type="submit" value="Сохранить" /></p>
+}
+

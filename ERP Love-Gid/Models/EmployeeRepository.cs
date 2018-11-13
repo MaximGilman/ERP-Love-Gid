@@ -15,10 +15,16 @@ namespace ERP_Love_Gid.Models
             cont = _cont;
         }
 
-        public IEnumerable<Employee> GetCollection()
+        public IEnumerable<Employee> GetCollection(int id=0)
         {
-          
-            return cont.EmployeeSet.OrderBy(cw => cw.FIO);
+
+          foreach (Employee em in cont.EmployeeSet)
+            { em.FIO = em.Name + " " + em.Surname; }
+
+          if (id==0)
+            return cont.EmployeeSet.OrderBy(cw => cw.Name);
+            else return cont.EmployeeSet.Where(x=>x.Id!=id).OrderBy(cw => cw.Name);
+
         }
 
         public Employee GetElem(int id)
@@ -52,15 +58,15 @@ namespace ERP_Love_Gid.Models
             }
         }
 
-        //public void Edit(int id, string fio, int cost, int count, int margin, string resol)
-        //{
-        //    Employee cw = GetElem(id);
-        //    if (cw != null)
-        //    {
-        //        cw.FIO = fio;
-        //        cw.
-        //        cont.SaveChanges();
-        //    }
-        //}
+        public void Edit(Employee tmp)
+        {
+            Employee cw = GetElem(tmp.Id);
+            if (cw != null)
+            {
+                cw = tmp;
+
+                cont.SaveChanges();
+            }
+        }
     }
 }

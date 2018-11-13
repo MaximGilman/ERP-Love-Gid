@@ -1,0 +1,41 @@
+﻿
+@{
+    ViewBag.Title = "Зарплаты"; Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Зарплаты</h2>
+@using (Html.BeginForm("Salary", "Admin", FormMethod.Post))
+{
+
+
+<table>
+   
+    
+        @foreach (Employee cwEm in (IEnumerable<Employee>)ViewData["Employees"])
+        {
+    <tr>
+        <td><b> @cwEm.Name @cwEm.Surname</b></td>
+        <td> <b>Тип оплаты</b></td>
+        <td> <b>Тек. значение:</b> </td>
+        <td><b>Изменить значение</b></td>
+
+    </tr>
+            foreach (Event cwEv in (IEnumerable<Event>)ViewData["Events"])
+            {
+            <tr>
+                <td> @cwEv.Type</td>
+                <td> @cwEv.Percent</td>
+                <td>  @cwEm.Salary.Where(y => y.Employee.Id == cwEm.Id && y.Event.Id == cwEv.Id).Select(x => x.Value).FirstOrDefault()
+
+                <td> @Html.TextBox("SalaryValue", null, new { @class = "form-control", type = "number", @min = "0" })</td>
+
+            </tr>
+
+            }
+            <tr><td></td></tr>}
+        
+
+</table>
+            <p></p>
+            <p><input type="submit" value="Сохранить" /></p>
+        }

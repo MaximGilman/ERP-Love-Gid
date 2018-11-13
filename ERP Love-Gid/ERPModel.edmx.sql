@@ -2,13 +2,13 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 08/30/2018 13:40:07
--- Generated from EDMX file: C:\Users\Maxim Gilman\source\repos\ERP Love-Gid\ERP Love-Gid\ERPModel.edmx
+-- Date Created: 10/28/2018 08:52:29
+-- Generated from EDMX file: C:\Users\ГильманМаксимМихайло\Desktop\Бекап флешки\ERP Love-Gid\ERP Love-Gid\ERPModel.edmx
 -- --------------------------------------------------
 
 SET QUOTED_IDENTIFIER OFF;
 GO
-USE [ERP_LG];
+USE [ERPLoveGid];
 GO
 IF SCHEMA_ID(N'dbo') IS NULL EXECUTE(N'CREATE SCHEMA [dbo]');
 GO
@@ -38,14 +38,29 @@ GO
 IF OBJECT_ID(N'[dbo].[FK_ContractPayments]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[PaymentsSet] DROP CONSTRAINT [FK_ContractPayments];
 GO
-IF OBJECT_ID(N'[dbo].[FK_PaymentsPaymentEmployeeConnect]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[PaymentEmployeeConnectSet] DROP CONSTRAINT [FK_PaymentsPaymentEmployeeConnect];
+IF OBJECT_ID(N'[dbo].[FK_Pay_minPayments]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[PaymentsSet] DROP CONSTRAINT [FK_Pay_minPayments];
 GO
-IF OBJECT_ID(N'[dbo].[FK_PaymentEmployeeConnectEvent]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[PaymentEmployeeConnectSet] DROP CONSTRAINT [FK_PaymentEmployeeConnectEvent];
+IF OBJECT_ID(N'[dbo].[FK_Pay_minAccount]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Pay_minSet] DROP CONSTRAINT [FK_Pay_minAccount];
 GO
-IF OBJECT_ID(N'[dbo].[FK_PaymentEmployeeConnectEmployee]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[PaymentEmployeeConnectSet] DROP CONSTRAINT [FK_PaymentEmployeeConnectEmployee];
+IF OBJECT_ID(N'[dbo].[FK_EmployeePay_min]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Pay_minSet] DROP CONSTRAINT [FK_EmployeePay_min];
+GO
+IF OBJECT_ID(N'[dbo].[FK_PaymentsEmployee]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[PaymentsSet] DROP CONSTRAINT [FK_PaymentsEmployee];
+GO
+IF OBJECT_ID(N'[dbo].[FK_PaymentsEvent]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[PaymentsSet] DROP CONSTRAINT [FK_PaymentsEvent];
+GO
+IF OBJECT_ID(N'[dbo].[FK_EmployeeSalary]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[SalarySet] DROP CONSTRAINT [FK_EmployeeSalary];
+GO
+IF OBJECT_ID(N'[dbo].[FK_EventSalary]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[SalarySet] DROP CONSTRAINT [FK_EventSalary];
+GO
+IF OBJECT_ID(N'[dbo].[FK_PaymentsEmployee1]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[PaymentsSet] DROP CONSTRAINT [FK_PaymentsEmployee1];
 GO
 
 -- --------------------------------------------------
@@ -73,8 +88,14 @@ GO
 IF OBJECT_ID(N'[dbo].[PaymentToPeersSet]', 'U') IS NOT NULL
     DROP TABLE [dbo].[PaymentToPeersSet];
 GO
-IF OBJECT_ID(N'[dbo].[PaymentEmployeeConnectSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[PaymentEmployeeConnectSet];
+IF OBJECT_ID(N'[dbo].[Pay_minSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Pay_minSet];
+GO
+IF OBJECT_ID(N'[dbo].[SalarySet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[SalarySet];
+GO
+IF OBJECT_ID(N'[dbo].[SalaryTypesSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[SalaryTypesSet];
 GO
 
 -- --------------------------------------------------
@@ -99,20 +120,20 @@ GO
 -- Creating table 'ContractSet'
 CREATE TABLE [dbo].[ContractSet] (
     [Id] int IDENTITY(1,1) NOT NULL,
-    [Name] nvarchar(max)  NOT NULL,
+    [Name] nvarchar(max)  NULL,
     [Sum_only_contract] int  NOT NULL,
     [Sum_plus] int  NOT NULL,
     [Received] int  NOT NULL,
-    [Date_of_event] datetime  NOT NULL,
+    [Date_of_event] datetime  NULL,
     [Date_of_sign] datetime  NOT NULL,
-    [Payment1Date] datetime  NOT NULL,
-    [Payment2Date] datetime  NOT NULL,
-    [Payment3Date] datetime  NOT NULL,
-    [Comment] nvarchar(max)  NOT NULL,
+    [Payment1Date] datetime  NULL,
+    [Payment2Date] datetime  NULL,
+    [Payment3Date] datetime  NULL,
+    [Comment] nvarchar(max)  NULL,
     [Status] nvarchar(max)  NOT NULL,
-    [Payment1Sum] int  NOT NULL,
-    [Payment2Sum] int  NOT NULL,
-    [Payment3Sum] int  NOT NULL,
+    [Payment1Sum] int  NULL,
+    [Payment2Sum] int  NULL,
+    [Payment3Sum] int  NULL,
     [ClientSet_Id] int  NOT NULL,
     [EmployeeSet_Id] int  NOT NULL,
     [EventSet_Id] int  NOT NULL
@@ -122,12 +143,14 @@ GO
 -- Creating table 'EmployeeSet'
 CREATE TABLE [dbo].[EmployeeSet] (
     [Id] int IDENTITY(1,1) NOT NULL,
-    [FIO] nvarchar(max)  NOT NULL,
     [IsAdmin] bit  NOT NULL,
-    [Salary] int  NOT NULL,
-    [Notes] nvarchar(max)  NOT NULL,
+    [Scale] int  NOT NULL,
+    [Notes] nvarchar(max)  NULL,
     [Login] nvarchar(max)  NOT NULL,
-    [Password] nvarchar(max)  NOT NULL
+    [Password] nvarchar(max)  NOT NULL,
+    [Name] nvarchar(max)  NOT NULL,
+    [Surname] nvarchar(max)  NOT NULL,
+    [Patronymic] nvarchar(max)  NOT NULL
 );
 GO
 
@@ -135,7 +158,7 @@ GO
 CREATE TABLE [dbo].[EventSet] (
     [Id] int IDENTITY(1,1) NOT NULL,
     [Type] nvarchar(max)  NOT NULL,
-    [PercentToEmpl] int  NOT NULL
+    [Percent] nvarchar(max)  NULL
 );
 GO
 
@@ -143,13 +166,20 @@ GO
 CREATE TABLE [dbo].[PaymentsSet] (
     [Id] int IDENTITY(1,1) NOT NULL,
     [Receipt] int  NOT NULL,
-    [Comment] nvarchar(max)  NOT NULL,
+    [Comment] nvarchar(max)  NULL,
     [Date] datetime  NOT NULL,
     [Sum] int  NOT NULL,
-    [AccounId] int  NOT NULL,
+    [EmployeeId] int  NOT NULL,
     [ContractId] int  NOT NULL,
-    [Account_Id] int  NOT NULL,
-    [Contract_Id] int  NULL
+    [StatusForPeers] bit  NULL,
+    [StatusForSalary] bit  NULL,
+    [DateForPayment] datetime  NULL,
+    [Account_Id] int  NULL,
+    [Contract_Id] int  NULL,
+    [Pay_min_Id] int  NULL,
+    [Employee_Id] int  NOT NULL,
+    [Event_Id] int  NOT NULL,
+    [EmployeeTo_Id] int  NULL
 );
 GO
 
@@ -160,18 +190,37 @@ CREATE TABLE [dbo].[PaymentToPeersSet] (
     [IdToEmployee] int  NOT NULL,
     [IdContract] int  NOT NULL,
     [Month] datetime  NOT NULL,
-    [Comment] nvarchar(max)  NOT NULL,
+    [Comment] nvarchar(max)  NULL,
     [EventSet_Id] int  NOT NULL,
     [ContractSet_Id] int  NOT NULL
 );
 GO
 
--- Creating table 'PaymentEmployeeConnectSet'
-CREATE TABLE [dbo].[PaymentEmployeeConnectSet] (
+-- Creating table 'Pay_minSet'
+CREATE TABLE [dbo].[Pay_minSet] (
     [Id] int IDENTITY(1,1) NOT NULL,
-    [Payments_Id] int  NOT NULL,
-    [Event_Id] int  NOT NULL,
+    [Sum] int  NOT NULL,
+    [Date] datetime  NOT NULL,
+    [Finished] bit  NOT NULL,
+    [Account_Id] int  NOT NULL,
     [Employee_Id] int  NOT NULL
+);
+GO
+
+-- Creating table 'SalarySet'
+CREATE TABLE [dbo].[SalarySet] (
+    [Id] int IDENTITY(1,1) NOT NULL,
+    [PercentOfSalary] nvarchar(max)  NOT NULL,
+    [Value] int  NOT NULL,
+    [Employee_Id] int  NOT NULL,
+    [Event_Id] int  NOT NULL
+);
+GO
+
+-- Creating table 'SalaryTypesSet'
+CREATE TABLE [dbo].[SalaryTypesSet] (
+    [Id] int IDENTITY(1,1) NOT NULL,
+    [Type] nvarchar(max)  NOT NULL
 );
 GO
 
@@ -221,9 +270,21 @@ ADD CONSTRAINT [PK_PaymentToPeersSet]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
--- Creating primary key on [Id] in table 'PaymentEmployeeConnectSet'
-ALTER TABLE [dbo].[PaymentEmployeeConnectSet]
-ADD CONSTRAINT [PK_PaymentEmployeeConnectSet]
+-- Creating primary key on [Id] in table 'Pay_minSet'
+ALTER TABLE [dbo].[Pay_minSet]
+ADD CONSTRAINT [PK_Pay_minSet]
+    PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
+-- Creating primary key on [Id] in table 'SalarySet'
+ALTER TABLE [dbo].[SalarySet]
+ADD CONSTRAINT [PK_SalarySet]
+    PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
+-- Creating primary key on [Id] in table 'SalaryTypesSet'
+ALTER TABLE [dbo].[SalaryTypesSet]
+ADD CONSTRAINT [PK_SalaryTypesSet]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
@@ -336,49 +397,124 @@ ON [dbo].[PaymentsSet]
     ([Contract_Id]);
 GO
 
--- Creating foreign key on [Payments_Id] in table 'PaymentEmployeeConnectSet'
-ALTER TABLE [dbo].[PaymentEmployeeConnectSet]
-ADD CONSTRAINT [FK_PaymentsPaymentEmployeeConnect]
-    FOREIGN KEY ([Payments_Id])
-    REFERENCES [dbo].[PaymentsSet]
+-- Creating foreign key on [Pay_min_Id] in table 'PaymentsSet'
+ALTER TABLE [dbo].[PaymentsSet]
+ADD CONSTRAINT [FK_Pay_minPayments]
+    FOREIGN KEY ([Pay_min_Id])
+    REFERENCES [dbo].[Pay_minSet]
         ([Id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 GO
 
--- Creating non-clustered index for FOREIGN KEY 'FK_PaymentsPaymentEmployeeConnect'
-CREATE INDEX [IX_FK_PaymentsPaymentEmployeeConnect]
-ON [dbo].[PaymentEmployeeConnectSet]
-    ([Payments_Id]);
+-- Creating non-clustered index for FOREIGN KEY 'FK_Pay_minPayments'
+CREATE INDEX [IX_FK_Pay_minPayments]
+ON [dbo].[PaymentsSet]
+    ([Pay_min_Id]);
 GO
 
--- Creating foreign key on [Event_Id] in table 'PaymentEmployeeConnectSet'
-ALTER TABLE [dbo].[PaymentEmployeeConnectSet]
-ADD CONSTRAINT [FK_PaymentEmployeeConnectEvent]
-    FOREIGN KEY ([Event_Id])
-    REFERENCES [dbo].[EventSet]
+-- Creating foreign key on [Account_Id] in table 'Pay_minSet'
+ALTER TABLE [dbo].[Pay_minSet]
+ADD CONSTRAINT [FK_Pay_minAccount]
+    FOREIGN KEY ([Account_Id])
+    REFERENCES [dbo].[AccountSet]
         ([Id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 GO
 
--- Creating non-clustered index for FOREIGN KEY 'FK_PaymentEmployeeConnectEvent'
-CREATE INDEX [IX_FK_PaymentEmployeeConnectEvent]
-ON [dbo].[PaymentEmployeeConnectSet]
-    ([Event_Id]);
+-- Creating non-clustered index for FOREIGN KEY 'FK_Pay_minAccount'
+CREATE INDEX [IX_FK_Pay_minAccount]
+ON [dbo].[Pay_minSet]
+    ([Account_Id]);
 GO
 
--- Creating foreign key on [Employee_Id] in table 'PaymentEmployeeConnectSet'
-ALTER TABLE [dbo].[PaymentEmployeeConnectSet]
-ADD CONSTRAINT [FK_PaymentEmployeeConnectEmployee]
+-- Creating foreign key on [Employee_Id] in table 'Pay_minSet'
+ALTER TABLE [dbo].[Pay_minSet]
+ADD CONSTRAINT [FK_EmployeePay_min]
     FOREIGN KEY ([Employee_Id])
     REFERENCES [dbo].[EmployeeSet]
         ([Id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 GO
 
--- Creating non-clustered index for FOREIGN KEY 'FK_PaymentEmployeeConnectEmployee'
-CREATE INDEX [IX_FK_PaymentEmployeeConnectEmployee]
-ON [dbo].[PaymentEmployeeConnectSet]
+-- Creating non-clustered index for FOREIGN KEY 'FK_EmployeePay_min'
+CREATE INDEX [IX_FK_EmployeePay_min]
+ON [dbo].[Pay_minSet]
     ([Employee_Id]);
+GO
+
+-- Creating foreign key on [Employee_Id] in table 'PaymentsSet'
+ALTER TABLE [dbo].[PaymentsSet]
+ADD CONSTRAINT [FK_PaymentsEmployee]
+    FOREIGN KEY ([Employee_Id])
+    REFERENCES [dbo].[EmployeeSet]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_PaymentsEmployee'
+CREATE INDEX [IX_FK_PaymentsEmployee]
+ON [dbo].[PaymentsSet]
+    ([Employee_Id]);
+GO
+
+-- Creating foreign key on [Event_Id] in table 'PaymentsSet'
+ALTER TABLE [dbo].[PaymentsSet]
+ADD CONSTRAINT [FK_PaymentsEvent]
+    FOREIGN KEY ([Event_Id])
+    REFERENCES [dbo].[EventSet]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_PaymentsEvent'
+CREATE INDEX [IX_FK_PaymentsEvent]
+ON [dbo].[PaymentsSet]
+    ([Event_Id]);
+GO
+
+-- Creating foreign key on [Employee_Id] in table 'SalarySet'
+ALTER TABLE [dbo].[SalarySet]
+ADD CONSTRAINT [FK_EmployeeSalary]
+    FOREIGN KEY ([Employee_Id])
+    REFERENCES [dbo].[EmployeeSet]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_EmployeeSalary'
+CREATE INDEX [IX_FK_EmployeeSalary]
+ON [dbo].[SalarySet]
+    ([Employee_Id]);
+GO
+
+-- Creating foreign key on [Event_Id] in table 'SalarySet'
+ALTER TABLE [dbo].[SalarySet]
+ADD CONSTRAINT [FK_EventSalary]
+    FOREIGN KEY ([Event_Id])
+    REFERENCES [dbo].[EventSet]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_EventSalary'
+CREATE INDEX [IX_FK_EventSalary]
+ON [dbo].[SalarySet]
+    ([Event_Id]);
+GO
+
+-- Creating foreign key on [EmployeeTo_Id] in table 'PaymentsSet'
+ALTER TABLE [dbo].[PaymentsSet]
+ADD CONSTRAINT [FK_PaymentsEmployee1]
+    FOREIGN KEY ([EmployeeTo_Id])
+    REFERENCES [dbo].[EmployeeSet]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_PaymentsEmployee1'
+CREATE INDEX [IX_FK_PaymentsEmployee1]
+ON [dbo].[PaymentsSet]
+    ([EmployeeTo_Id]);
 GO
 
 -- --------------------------------------------------

@@ -1,0 +1,48 @@
+﻿
+@{
+    ViewBag.Title = "Все договоры компании"; Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Все договоры компании</h2>
+
+
+@using (Html.BeginForm("Index", "Admin", FormMethod.Post))
+{
+    @*<p> @Html.DropDownList("Year", (IEnumerable<SelectListItem>)ViewData["Years"], null, new { style = "width : 200px", @class = "form-control" }) @Html.ValidationMessage("Years")</p>*@
+    <table>
+        <tr>
+            <td> <b>Дата мероприятия</b></td>
+            <td> <b> Ответственный </b></td>
+
+            <td><b>ФИО клиента или название организации</b></td>
+            <td><b>Тип договора</b></td>
+            <td><b>Сумма по договору</b></td>
+            <td><b>Получено оплат по договору</b></td>
+            <td><b>Получено доп.</b></td>
+            <td><b>Статус</b></td>
+            <td><b>Комментарий</b></td>
+
+        </tr>
+        @foreach (Contract cw in (IEnumerable<Contract>)ViewData["Contracts"])
+        {
+
+        <tr onclick="window.location.href = '@Url.Action("EditContract", "Home", new { id = cw.Id, IsAdmin = true })'">
+            <td>@cw.Date_of_event.Value.Day.@cw.Date_of_event.Value.Month.@cw.Date_of_event.Value.Year</td>
+            <td>@cw.EmployeeSet.Name  @cw.EmployeeSet.Surname.First()</td>
+
+            <td>@cw.ClientSet.FIO</td>
+            <td>@cw.EventSet.Type</td>
+            <td>@cw.Sum_only_contract</td>
+
+            <td>@cw.Received</td>
+            <td>@cw.Sum_plus</td>
+            <td>@cw.Status</td>
+            <td>@cw.Comment</td>
+
+        </tr>
+        }
+    </table>
+
+    @*<div contenteditable="true" style="width:100%!important ; box-sizing:border-box!important; position:absolute!important; ;">  @Html.TextArea("Notes")</div>*@
+
+}

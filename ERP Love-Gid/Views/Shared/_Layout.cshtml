@@ -15,16 +15,25 @@
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
-               
+
+                @if (ViewBag.DateMonth1 != null)
+                {
+                    <span>
+                        @Html.DropDownList("DateMonth", (IEnumerable<SelectListItem>)ViewData["DateMonth1"], null, new { id= "Months",style = "width : 200px; background:#5682a3", @class = "navbar-brand", onchange = "onMyDropDownChange()" });@Html.ValidationMessage("DatePays");
+                    </span>
+                }
                 @Html.ActionLink("Мои договоры", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
                 @Html.ActionLink("Мои Финансы", "MyFinanses", "Home", new { area = "" }, new { @class = "navbar-brand" })
 
 
+                @if (ViewBag.Admin == true)
+                {@Html.ActionLink("Режим Администратора", "ChangeToAdmin", "Home", new { area = "" }, new { @class = "navbar-brand" })}
 
-                @Html.ActionLink("Выйти", "Exit", "Home", new { @class = "navbar-brand"})
-                <text class="navbar-brand" ><strong>@ViewBag.User</strong> </text>
+                @Html.ActionLink("Выйти", "Exit", "Home", new { @class = "navbar-brand" })
+                <text class="navbar-brand"><strong>@ViewBag.User</strong> </text>
 
-                
+
+
             </div>
 
           
@@ -45,3 +54,10 @@
     @RenderSection("scripts", required: false)
 </body>
 </html>
+<script>
+    function onMyDropDownChange() { 
+
+        window.location.href = '@(Url.Action(ViewContext.RouteData.Values["action"].ToString(), ViewContext.RouteData.Values["controller"].ToString()))?numberofMonth=' + $("#Months").get(0).selectedIndex ;
+    }
+ 
+</script>

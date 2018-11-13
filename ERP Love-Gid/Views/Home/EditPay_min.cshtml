@@ -1,9 +1,9 @@
 ﻿
 @{
-    ViewBag.Title = "Сдача денег в кассу";
+    ViewBag.Title = "Изменение данных о переводе";
 }
 
-<h2>Добавление перевода</h2>
+<h2>Изменение перевода</h2>
 
 <div class="container">
     <header>
@@ -13,7 +13,7 @@
             <section>
 
 
-                @using (Html.BeginForm("AddReceivedMoney", "Home", FormMethod.Post))
+                @using (Html.BeginForm("EditPay_min", "Home", FormMethod.Post))
                 {
 
 
@@ -34,17 +34,17 @@
                         </tr>
                         <tr>
                             <td><p>Счет для перевода:</p></td>
-                            <td><p> @Html.DropDownList("Account", (IEnumerable<SelectListItem>)ViewData["Accounts"], null, new { style = "width : 200px", @class = "form-control", id = "Acc" }) @Html.ValidationMessage("Accounts")</p></td>
+                            <td><p> @Html.DropDownList("Account", (IEnumerable<SelectListItem>)@ViewBag.Accounts, null, new { style = "width : 200px", @class = "form-control", id = "Acc" }) @Html.ValidationMessage("Accounts")</p></td>
 
                         </tr>
 
 
-                       
+
                         <tr>
                             <td><p>Дата оплаты: </p></td>
                             <td>
                                 <p>
-                                    <input type="date" name="calendarPay" class="form-control" value="@ViewBag.DateOfSign">
+                                    <input type="date" name="calendarPay" class="form-control" value=@ViewBag.Date>
                                 </p>
                             </td>
                         </tr>
@@ -69,4 +69,3 @@
 
 </div>
 
- 

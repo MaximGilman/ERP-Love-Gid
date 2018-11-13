@@ -12,28 +12,22 @@ namespace ERP_Love_Gid
     using System;
     using System.Collections.Generic;
     
-    public partial class Event
+    public partial class Pay_min
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Event()
+        public Pay_min()
         {
-            this.ContractSet = new HashSet<Contract>();
-            this.PaymentToPeersSet = new HashSet<PaymentToPeers>();
             this.Payments = new HashSet<Payments>();
-            this.Salary = new HashSet<Salary>();
         }
     
         public int Id { get; set; }
-        public string Type { get; set; }
-        public string Percent { get; set; }
+        public int Sum { get; set; }
+        public System.DateTime Date { get; set; }
+        public bool Finished { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Contract> ContractSet { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PaymentToPeers> PaymentToPeersSet { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Payments> Payments { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Salary> Salary { get; set; }
+        public virtual Account Account { get; set; }
+        public virtual Employee Employee { get; set; }
     }
 }

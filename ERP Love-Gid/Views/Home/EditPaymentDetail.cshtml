@@ -1,9 +1,9 @@
 ﻿
 @{
-    ViewBag.Title = "Добавление операции";
+    ViewBag.Title = "Изменение данных о платеже";
 }
 
-<h2>Добавление операции</h2>
+<h2>Изменение данных о платеже</h2>
 
 <div class="container">
     <header>
@@ -13,7 +13,7 @@
             <section>
 
 
-                @using (Html.BeginForm("AddPaymentDetail", "Home", FormMethod.Post))
+                @using (Html.BeginForm("EditPaymentDetail", "Home", FormMethod.Post))
                 {
 
 
@@ -64,18 +64,26 @@
                             <td><p> @Html.TextBox("Comment", null, new { @class = "form-control" })</p></td>
                         </tr>
                         <tr>
-                            <td><p>Дата оплаты: </p></td>
+                            <td><p>Дата оплаты (для отчета): </p></td>
                             <td>
                                 <p>
-                                    <input type="date" name="calendarPay" class="form-control" value="@ViewBag.DateOfSign">
+                                    <input type="date" name="calendarPay" class="form-control" value=@ViewBag.Date>
                                 </p>
                             </td>
                         </tr>
 
- 
+                        <tr>
+                            <td><p>Оплачу реально: </p></td>
+                            <td><p> @Html.DropDownList("DatePay", (IEnumerable<SelectListItem>)ViewData["DatePays"], null, new { style = "width : 200px", @class = "form-control" }) @Html.ValidationMessage("DatePays")</p></td>
+
+                        </tr>
+                   
+
                     </table>
                     <p></p>
                     <p><input type="submit" value="Сохранить" /></p>
+
+                    <P>@Html.ActionLink("Удалить платеж","DeletePaymentDetail",new { id = @ViewBag.Id })</P>
                 }
 
 

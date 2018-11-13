@@ -15,15 +15,14 @@ namespace ERP_Love_Gid.Models
         public EventRepository EvR;
         public PaymentsRepository PayR;
         public PaymentToPeersRepository PayToPR;
-
-
+        public Pay_minRepository Pay_minR;
+        public SalaryRepository SalR;
 
         public DataManager()
         {
             shop_cont = new ERPModelContainer();
             AccR = new AccountRepository(shop_cont);
             CliR = new ClientRepository(shop_cont);
-
             ConR = new ContractRepository(shop_cont);
 
             EmR = new EmployeeRepository(shop_cont);
@@ -31,9 +30,9 @@ namespace ERP_Love_Gid.Models
             EvR = new EventRepository(shop_cont);
 
             PayR = new PaymentsRepository(shop_cont);
-
+            SalR = new SalaryRepository(shop_cont);
             PayToPR = new PaymentToPeersRepository(shop_cont);
-             
+            Pay_minR = new Pay_minRepository(shop_cont);
           }          
     }
 }

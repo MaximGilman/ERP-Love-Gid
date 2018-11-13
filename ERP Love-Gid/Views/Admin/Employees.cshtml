@@ -1,0 +1,50 @@
+﻿
+@{
+    ViewBag.Title = "Сотрудники"; Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Сотрудники</h2>
+
+@using (Html.BeginForm("Employees", "Admin", FormMethod.Post))
+{
+
+
+    <p>@Html.ActionLink("Обратно к списку", "Index", new { id = ViewBag.ID })</p>
+    <table>
+
+        <tr>
+            <td> <b>ФИО</b></td>
+            <td><b>Логин</b></td>
+            <td><b>Пароль</b></td>
+            <td><b> Контрактов в этом месяце</b></td>
+
+            <td><b>Права</b></td>
+            <td><b>Действие</b></td>
+
+ 
+        </tr>
+        @foreach (Employee cw in (IEnumerable<Employee>)ViewData["Employees"])
+        {
+
+        <tr onclick="window.location.href = '@Url.Action("ShowEmployee", "Admin", new { id = cw.Id })'">
+
+            <td>@cw.Name @cw.Surname @cw.Patronymic</td>
+
+            <td>@cw.Login</td>
+            <td>@cw.Password</td>
+            <td>@cw.ContractSet.Where(x => x.Date_of_event.Value.Date.Month == DateTime.Now.Month && x.Date_of_event.Value.Date.Year == DateTime.Now.Year).Count()</td>
+
+            @if (cw.IsAdmin)
+            {
+                <td>Админ</td>}
+            else
+            {
+                <td>Пользователь</td>}
+
+                <td>@Html.ActionLink("Изменить", "ChangeUser", new { id = cw.Id })</td>
+
+        </tr>
+        }
+    </table>
+    <p><input type="submit" value="Добавить нового сотрудника" /></p>
+}

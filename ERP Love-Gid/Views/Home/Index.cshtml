@@ -1,30 +1,30 @@
 ﻿@{
-    ViewBag.Title = "Мои договоры"; 
+    ViewBag.Title = "Мои договоры";
 }
 
 
 <h2>Мои Договоры</h2>
-
+ 
 @using (Html.BeginForm("Index", "Home", FormMethod.Post))
 {
     @*<p> @Html.DropDownList("Year", (IEnumerable<SelectListItem>)ViewData["Years"], null, new { style = "width : 200px", @class = "form-control" }) @Html.ValidationMessage("Years")</p>*@
-<table>
-    <tr>
-        <td> <b>Дата мероприятия</b></td>
-        <td><b>ФИО клиента или название организации</b></td>
-        <td><b>Тип договора</b></td>
-        <td><b>Сумма по договору</b></td>
-        <td><b>Получено оплат по договору</b></td>
-        <td><b>Получено доп.</b></td>
-        <td><b>Статус</b></td>  
-        <td><b>Комментарий</b></td>
+    <table>
+        <tr>
+            <td> <b>Дата мероприятия</b></td>
+            <td><b>ФИО клиента или название организации</b></td>
+            <td><b>Тип договора</b></td>
+            <td><b>Сумма по договору</b></td>
+            <td><b>Получено оплат по договору</b></td>
+            <td><b>Получено доп.</b></td>
+            <td><b>Статус</b></td>
+            <td><b>Комментарий</b></td>
 
-    </tr>
-    @foreach (Contract cw in (IEnumerable<Contract>)ViewData["Contracts"])
-    {
+        </tr>
+        @foreach (Contract cw in (IEnumerable<Contract>)ViewData["Contracts"])
+        {
 
-            <tr>
-                <td>@cw.Date_of_event.Day.@cw.Date_of_event.Month.@cw.Date_of_event.Year</td>
+            <tr onclick="window.location.href = '@Url.Action("EditContract", "Home", new { id = cw.Id })'">
+                <td>@cw.Date_of_event.Value.Day.@cw.Date_of_event.Value.Month.@cw.Date_of_event.Value.Year</td>
 
                 <td>@cw.ClientSet.FIO</td>
                 <td>@cw.EventSet.Type</td>
@@ -36,12 +36,44 @@
                 <td>@cw.Comment</td>
 
             </tr>
-    }
-</table>
+        }
+    </table>
     <p></p>
     <p><input type="submit" value="Добавить" class="form-control-added" /></p>
 
-                @*<div contenteditable="true" style="width:100%!important ; box-sizing:border-box!important; position:absolute!important; ;">  @Html.TextArea("Notes")</div>*@ 
+    @*<div contenteditable="true" style="width:100%!important ; box-sizing:border-box!important; position:absolute!important; ;">  @Html.TextArea("Notes")</div>*@
 
 }
 @*<div> @Html.TextArea("Notes")</div>*@
+@*<script  >
+     $(document).ready(function () {
+
+         $('#').click(function (event) {
+             event.stopPropagation();
+             var data = {
+                 'message': $('#TextBoxSender').val(),
+             }
+
+             $.ajax({
+                 url: 'MessageHandler',
+                 type: 'POST',
+                 data: JSON.stringify(data),
+                 cache: false,
+                 dataType: 'json',
+                 processData: false,
+                 contentType: "application/json; charset=utf-8",
+                 success: function (data) {
+                     if (data == true) {
+                         alert("Сообщение доставлено");
+                         location.reload();
+                     }
+                     else {
+                         alert("Внимание! Сообщение не доставлено!");
+                     }
+                 },
+                 error: function () {
+                     alert("Произошел сбой бла бла бла");
+                 }
+             });
+         });
+    </script>*@

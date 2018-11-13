@@ -20,17 +20,45 @@ namespace ERP_Love_Gid.Models
 
             return cont.PaymentsSet.OrderBy(cw => cw.Id);
         }
+        public IEnumerable<Payments> GetCollection(bool flagofstatus)
+        {
+            foreach (Payments pm in cont.PaymentsSet)
+            {
+                try
+                {
 
-        public IEnumerable<Payments> GetEmplPays(int id)
+                    pm.StatusForSalary = cont.Pay_minSet.Where(x => x.Date == pm.Date && pm.Account.Id == x.Account.Id).Select(y => y.Finished).FirstOrDefault();
+
+                }
+                catch { pm.StatusForSalary = false; }
+
+
+
+
+
+            }
+            cont.SaveChanges();
+
+            return cont.PaymentsSet.OrderBy(cw => cw.Id);
+        }
+        public IEnumerable<Payments> GetEmplPays(int id, int month = -1)
         {
-             return cont.PaymentsSet.Where(x => x.Contract.EmployeeSet.Id == id).OrderBy(cw => cw.Id);  
-            
-         }
-        public int GetEmplPaysSum(int id)
+            if(month!=-1) return cont.PaymentsSet.Where(x => x.Employee.Id == id&&x.Date.Month==month).OrderBy(cw => cw.Id);
+
+            else return cont.PaymentsSet.Where(x => x.Employee.Id == id).OrderBy(cw => cw.Id);
+
+
+
+        }
+        public int GetEmplPaysSum(int id, int month = -1)
         {
+
             try
             {
-                return cont.PaymentsSet.Where(x => x.Contract.EmployeeSet.Id == id).Select(y => y.Receipt).Sum();
+                if (month != -1) return cont.PaymentsSet.Where(x => x.Employee.Id == id&& x.Date.Month==month).Select(y => y.Receipt).Sum();
+
+                else  
+                return cont.PaymentsSet.Where(x => x.Employee.Id == id).Select(y => y.Receipt).Sum();
             }
             catch { return 0; }
         }
@@ -41,7 +69,6 @@ namespace ERP_Love_Gid.Models
 
         public Payments Add(Payments M)
         {
-            M.Contract = cont.ContractSet.First();
             cont.PaymentsSet.Add(M);
             cont.SaveChanges();
 
@@ -56,6 +83,20 @@ namespace ERP_Love_Gid.Models
                 cont.PaymentsSet.Remove(cw);
                 cont.SaveChanges();
             }
+        }
+
+        public IEnumerable<Payments> GetEmplJobs(int id)
+        {
+            return cont.PaymentsSet.Where(x => x.Employee.Id == id).OrderBy(cw => cw.Id);
+
+        }
+
+        public Payments EditPaymentDetail(Payments adder)
+        {
+            Payments edit = GetElem(adder.Id);
+            edit = adder;
+            cont.SaveChanges();
+            return adder;
         }
     }
 }
