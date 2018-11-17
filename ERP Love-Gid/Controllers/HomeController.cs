@@ -485,7 +485,7 @@ namespace ERP_Love_Gid.Controllers
             if (CurEmployee.IsAdmin) ViewBag.Admin = true;
             ViewBag.CurUserId = CurEmployee.Id;
             ViewBag.adminId = adminId;
-
+            ViewBag.Id = id;
             ViewBag.Accounts = new SelectList(_DataManager.AccR.GetCollection(), "Id", "Type", _DataManager.Pay_minR.GetElem(id).Account.Id);
             AdminEmployee = _DataManager.EmR.GetElem(adminId);
 
@@ -556,6 +556,18 @@ namespace ERP_Love_Gid.Controllers
             return RedirectToAction("MyFinanses", new { CurUserId, adminId });
 
         }
+        public ActionResult DeletePay_minDetail(int id, int CurUserId = 0, int adminId = 0)
+        {
+            _DataManager.Pay_minR.Delete(id);
+            return RedirectToAction("MyFinanses", new { CurUserId, adminId });
+
+        }
+        public ActionResult DeletePaymentForPeerDetail(int id, int CurUserId = 0, int adminId = 0)
+        {
+            _DataManager.PayR.Delete(id);
+            return RedirectToAction("MyFinanses", new { CurUserId, adminId });
+
+        }
         [HttpGet]
         public ActionResult EditPayFromPeer(int id = 0, string error = "", int CurUserId = 0, int adminId = 0)
         {
@@ -564,7 +576,7 @@ namespace ERP_Love_Gid.Controllers
             if (CurEmployee == null) return RedirectToAction("Log_in", "User");
             ViewBag.CurUserId = CurEmployee.Id;
             ViewBag.adminId = adminId;
-
+            ViewBag.Id = id;
             ViewBag.Sum = _DataManager.PayR.GetElem(id).Receipt;
             ViewBag.User = CurEmployee.Surname + " " + CurEmployee.Name;
             ViewBag.Contract = new SelectList(_DataManager.ConR.GetCollection(), "Id", "Name", _DataManager.PayR.GetElem(id).Contract.Id);

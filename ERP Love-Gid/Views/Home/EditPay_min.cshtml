@@ -54,6 +54,8 @@
 
                     </table>
                     <p></p>
+                    <P>@Html.ActionLink("Удалить платеж", "DeletePay_minDetail", new { id = @ViewBag.Id, CurUserId = Convert.ToInt32(@ViewBag.CurUserId), adminId = Convert.ToInt32(@ViewBag.adminId) })</P>
+
                     <p><input type="submit" value="Сохранить" /></p>
                 }
 

@@ -78,5 +78,14 @@ namespace ERP_Love_Gid.Models
             cont.SaveChanges();
             return adder;
          }
+        public void Delete(int id)
+        {
+            Pay_min cw = GetElem(id);
+            if (cw != null)
+            {
+                cont.Pay_minSet.Remove(cw);
+                cont.SaveChanges();
+            }
+        }
     }
 }
