@@ -4,9 +4,10 @@
 
 
 <h2>Мои Договоры</h2>
- 
+
 @using (Html.BeginForm("Index", "Home", FormMethod.Post))
 {
+    <input hidden value="@ViewBag.CurUserId" name="CurUserId" />
     @*<p> @Html.DropDownList("Year", (IEnumerable<SelectListItem>)ViewData["Years"], null, new { style = "width : 200px", @class = "form-control" }) @Html.ValidationMessage("Years")</p>*@
     <table>
         <tr>
@@ -23,7 +24,7 @@
         @foreach (Contract cw in (IEnumerable<Contract>)ViewData["Contracts"])
         {
 
-            <tr onclick="window.location.href = '@Url.Action("EditContract", "Home", new { id = cw.Id })'">
+            <tr onclick="window.location.href = '@Url.Action("EditContract", "Home", new { id = cw.Id , CurUserId = Convert.ToInt32(@ViewBag.CurUserId)})'">
                 <td>@cw.Date_of_event.Value.Day.@cw.Date_of_event.Value.Month.@cw.Date_of_event.Value.Year</td>
 
                 <td>@cw.ClientSet.FIO</td>

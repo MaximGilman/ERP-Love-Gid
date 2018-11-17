@@ -31,10 +31,12 @@ namespace ERP_Love_Gid.Controllers
                 new SelectListItem{Text = "Декабрь", Value = "12"}
             } ;
         private DataManager _DataManager;
-        private static Employee CurEmployee;
+        private  Employee CurEmployee;
         private static Employee AdminEmployee;
-        
+        int curUserId = 0;
         public static bool lookfromAdmin = false;
+
+     
         public HomeController(DataManager _DM)
 
         {
@@ -49,17 +51,18 @@ namespace ERP_Love_Gid.Controllers
         /// <param name="sort"></param>
         /// <returns></returns>
         [HttpGet]
-        public ActionResult Index(int idUser = 0, string sort = "", bool isadmin = false, int adminId = 0, int numberofMonth = -1)
+        public ActionResult Index(int idUser = 0, string sort = "", bool isadmin = false, int adminId = 0, int numberofMonth = -1, int CurUserId = -1)
         {
-
-
+            if(curUserId==-1)
             CurEmployee = idUser == 0 ? CurEmployee : _DataManager.EmR.GetElem(idUser);
+            else
+                CurEmployee = CurUserId ==-1 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
 
             if (CurEmployee == null) return RedirectToAction("Log_in", "User");
 
             // ViewData["Years"] = new SelectList(_DataManager.ConR.GetYears()); 
 
-
+            ViewBag.CurUserId = CurEmployee.Id;
          
             ViewBag.User = CurEmployee.Surname + " " + CurEmployee.Name;
             if (CurEmployee.IsAdmin) ViewBag.Admin = true;
@@ -71,21 +74,26 @@ namespace ERP_Love_Gid.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult Index()
+        public ActionResult Index(int CurUserId)
         {
-            return RedirectToAction("AddContract");
+           
+            
+            return RedirectToAction("AddContract", new { CurUserId });
         }
         #endregion
 
         #region Добавление_контракта
         [HttpGet]
-        public ActionResult AddContract(string error = "")
+        public ActionResult AddContract(string error = "", int CurUserId = 0)
         {
- 
+            CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
+
             if (CurEmployee == null) return RedirectToAction("Log_in", "User");
             ViewBag.Error = error;
             ViewBag.User = CurEmployee.Surname + " " + CurEmployee.Name;
             ViewBag.DateOfSign = String.Join("-", ((DateTime.Now).ToShortDateString()).Split('.').Reverse());
+            ViewBag.CurUserId = CurEmployee.Id;
+
             if (CurEmployee.IsAdmin) ViewBag.Admin = true;
 
             if (_DataManager.EvR != null)
@@ -95,11 +103,13 @@ namespace ERP_Love_Gid.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult AddContract(int id = 0)
+        public ActionResult AddContract(int id = 0, int CurUserId = 0)
         {
 
             try
             {
+                CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
+
                 DateTime pay1 = default(DateTime), pay2 = default(DateTime), pay3 = default(DateTime);
                 int cost = Convert.ToInt32(Request.Form["Cost"]);
                 int eventid = Convert.ToInt32(Request.Form["Event"]);
@@ -116,23 +126,25 @@ namespace ERP_Love_Gid.Controllers
                 _DataManager.ConR.Add(cost, eventid, clientid, sign, dateevent, pay1, pay2, pay3, paysum1, paysum2, paysum3, comment, CurEmployee.Id);
             }
 
-            catch (Exception) { return RedirectToAction("AddContract", new { error = "Не все поля заполнены" }); }
-            return RedirectToAction("Index");
+            catch (Exception) { return RedirectToAction("AddContract", new { error = "Не все поля заполнены", CurUserId }); }
+            return RedirectToAction("Index", new { idUser = CurUserId });
         }
-        [HttpPost]
-        public JsonResult MeesageHandler(string data)
-        {
-            var result = "Сообщение " + data + "принято";
-            return Json(result);
-        }
+        //[HttpPost]
+        //public JsonResult MeesageHandler(string data)
+        //{
+        //    var result = "Сообщение " + data + "принято";
+        //    return Json(result);
+        //}
 
         #endregion
 
         #region Мои_Финансы
         [HttpGet]
-        public ActionResult MyFinanses(string error = "", int numberofMonth = -1)
+        public ActionResult MyFinanses(string error = "", int numberofMonth = -1, int CurUserId=0)
         {
- 
+            CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
+
+
             if (CurEmployee == null) return RedirectToAction("Log_in", "User");
             if (numberofMonth != -1)
             {
@@ -140,6 +152,9 @@ namespace ERP_Love_Gid.Controllers
             }
             else currmonth = DateTime.Now.Month;
             //////
+            ///
+            ViewBag.CurUserId = CurEmployee.Id;
+
             ViewBag.User = CurEmployee.Surname + " " + CurEmployee.Name; ;
                 ViewBag.Payments = _DataManager.PayR.GetEmplPays(CurEmployee.Id).Where(x=>x.Date.Month==currmonth);
                 ViewBag.PaymentSum = _DataManager.PayR.GetEmplPaysSum(CurEmployee.Id,currmonth);
@@ -185,20 +200,20 @@ namespace ERP_Love_Gid.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult MyFinanses()
+        public ActionResult MyFinanses(int CurUserId=0)
         {
 
             if (!string.IsNullOrEmpty(Request.Params.AllKeys.FirstOrDefault(key => key.StartsWith("MyPays")))) //добавление детализации
             {
-                return RedirectToAction("AddPaymentDetail");
+                return RedirectToAction("AddPaymentDetail", new { CurUserId });
             }
 
             else if(!string.IsNullOrEmpty(Request.Params.AllKeys.FirstOrDefault(key => key.StartsWith("MyJob")))) //добавление детализации
             {
-                return RedirectToAction("AddMyJobPayment");
+                return RedirectToAction("AddMyJobPayment", new { CurUserId });
             }
             else
-            { return RedirectToAction("AddReceivedMoney"); }
+            { return RedirectToAction("AddReceivedMoney", new { CurUserId }); }
         }
         #endregion
 
@@ -206,12 +221,15 @@ namespace ERP_Love_Gid.Controllers
 
         #region Добавление_платежа_в_1_табл
         [HttpGet]
-        public ActionResult AddPaymentDetail(string error = "")
+        public ActionResult AddPaymentDetail(string error = "", int CurUserId=0)
         {
- 
+                CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
+
+
             if (CurEmployee == null) return RedirectToAction("Log_in", "User");
 
              ViewBag.DateOfSign = String.Join("-", ((DateTime.Now).ToShortDateString()).Split('.').Reverse());
+            ViewBag.CurUserId = CurEmployee.Id;
 
             ViewBag.User = CurEmployee.Surname + " " + CurEmployee.Name;
             ViewBag.Events = new SelectList(_DataManager.EvR.GetCollection(), "Id", "Type");
@@ -224,8 +242,10 @@ namespace ERP_Love_Gid.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult AddPaymentDetail()
+        public ActionResult AddPaymentDetail( int CurUserId = 0)
         {
+                CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
+
             Payments Adder = new Payments();
 
             Adder.Receipt = Convert.ToInt32(Request.Form["Receipt"]);
@@ -240,7 +260,7 @@ namespace ERP_Love_Gid.Controllers
 
 
             _DataManager.PayR.Add(Adder);
-            return RedirectToAction("MyFinanses");
+            return RedirectToAction("MyFinanses", new { CurUserId });
         }
         #endregion
 
@@ -251,11 +271,13 @@ namespace ERP_Love_Gid.Controllers
         /// <param name="error"></param>
         /// <returns></returns>
         [HttpGet]
-        public ActionResult AddReceivedMoney(string error = "")
+        public ActionResult AddReceivedMoney(string error = "", int CurUserId = 0)
         {
- 
+                CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
+
             if (CurEmployee == null) return RedirectToAction("Log_in", "User");
             if (CurEmployee.IsAdmin) ViewBag.Admin = true;
+            ViewBag.CurUserId = CurEmployee.Id;
 
             ViewBag.User = CurEmployee.Surname + " " + CurEmployee.Name;
             ViewBag.Account = new SelectList(_DataManager.AccR.GetCollection(), "Id", "Type");
@@ -266,9 +288,11 @@ namespace ERP_Love_Gid.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult AddReceivedMoney()
+        public ActionResult AddReceivedMoney( int CurUserId = 0)
 
         {
+            CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
+
             Pay_min Adder = new Pay_min();
             Adder.Sum = Convert.ToInt32(Request.Form["Sum"]);
             Adder.Account = _DataManager.AccR.GetElem(Convert.ToInt32(Request.Form["Account"]));
@@ -278,18 +302,20 @@ namespace ERP_Love_Gid.Controllers
 
 
             _DataManager.Pay_minR.Add(Adder);
-            return RedirectToAction("MyFinanses");
+            return RedirectToAction("MyFinanses", new { CurUserId });
         }
         #endregion
 
         #region Изменение_контракта
         [HttpGet]
-        public ActionResult EditContract(int id = 0, bool IsAdmin=false, string error = "")
+        public ActionResult EditContract(int id = 0, bool IsAdmin=false, string error = "", int CurUserId = 0)
         {
-            
+
+                CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
 
             if (CurEmployee == null) return RedirectToAction("Log_in", "User");
             ViewBag.Error = error; if (CurEmployee.IsAdmin) ViewBag.Admin = true;
+            ViewBag.CurUserId = CurEmployee.Id;
 
             ViewBag.User = CurEmployee.Surname + " " + CurEmployee.Name;
             ViewBag.Cost = _DataManager.ConR.GetElem(id).Sum_only_contract;
@@ -315,10 +341,11 @@ namespace ERP_Love_Gid.Controllers
         }
 
         [HttpPost]
-        public ActionResult EditContract()
+        public ActionResult EditContract( int CurUserId = 0)
         {
             try
             {
+                    CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
 
                 DateTime pay1 = default(DateTime), pay2 = default(DateTime), pay3 = default(DateTime);
                 int cost = Convert.ToInt32(Request.Form["Cost"]);
@@ -336,17 +363,20 @@ namespace ERP_Love_Gid.Controllers
                 _DataManager.ConR.Edit(Convert.ToInt32(Request.Form["Id_Cont"]), cost, eventid, clientid, sign, dateevent, pay1, pay2, pay3, paysum1, paysum2, paysum3, comment, CurEmployee.Id);
             }
 
-            catch (Exception) { return RedirectToAction("EditContract", new { error = "Не все поля заполнены" }); }
+            catch (Exception) { return RedirectToAction("EditContract", new { error = "Не все поля заполнены" , CurUserId}); }
  
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { idUser= CurUserId });
         }
             #endregion
 
 
-            public ActionResult Exit(bool exitfromadmin= false)
+            public ActionResult Exit(bool exitfromadmin= false, int CurUserId = 0)
         {
-            try { 
-            if(exitfromadmin)
+            try
+            {
+                    CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
+
+                if (exitfromadmin)
             {
                 CurEmployee = null;
 
@@ -367,12 +397,15 @@ namespace ERP_Love_Gid.Controllers
             finally { lookfromAdmin = false; }
         }
         [HttpGet]
-        public ActionResult EditPaymentDetail(int id = 0, string error = "")
+        public ActionResult EditPaymentDetail(int id = 0, string error = "", int CurUserId = 0)
         {
+                CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
+
             if (CurEmployee == null) return RedirectToAction("Log_in", "User");
             ViewBag.Receipt = _DataManager.PayR.GetElem(id).Receipt;
             ViewBag.Comment = _DataManager.PayR.GetElem(id).Comment;
             if (CurEmployee.IsAdmin) ViewBag.Admin = true;
+            ViewBag.CurUserId = CurEmployee.Id;
 
             ViewBag.User = CurEmployee.Surname + " " + CurEmployee.Name;
             ViewBag.Events = new SelectList(_DataManager.EvR.GetCollection(), "Id", "Type", _DataManager.PayR.GetElem(id).Event.Id);
@@ -403,8 +436,10 @@ namespace ERP_Love_Gid.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult EditPaymentDetail(int id=0)
+        public ActionResult EditPaymentDetail(int id=0, int CurUserId = 0)
         {
+                CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
+
             Payments Adder = _DataManager.PayR.GetElem(id);
 
             Adder.Receipt = Convert.ToInt32(Request.Form["Receipt"]);
@@ -417,15 +452,18 @@ namespace ERP_Love_Gid.Controllers
             Adder.Date = new DateTime(Convert.ToInt32(Request.Form["calendarPay"].Split('-')[0]), Convert.ToInt32(Request.Form["calendarPay"].Split('-')[1]), Convert.ToInt32(Request.Form["calendarPay"].Split('-')[2]));
             Adder.DateForPayment =  Convert.ToInt32(Request.Form["DatePay"])>=DateTime.Now.Month? new DateTime(DateTime.Today.Year, Convert.ToInt32(Request.Form["DatePay"]), Adder.Date.Day) : new DateTime(DateTime.Today.Year, Convert.ToInt32(Request.Form["DatePay"]), Adder.Date.Day).AddYears(1);
             _DataManager.PayR.EditPaymentDetail(Adder);
-            return RedirectToAction("MyFinanses");
+            return RedirectToAction("MyFinanses", new { CurUserId });
         }
 
         [HttpGet]
-        public ActionResult EditPay_min(int id = 0, string error = "")
+        public ActionResult EditPay_min(int id = 0, string error = "", int CurUserId = 0)
         {
+                CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
+
             if (CurEmployee == null) return RedirectToAction("Log_in", "User");
             ViewBag.Sum = _DataManager.Pay_minR.GetElem(id).Sum;
             if (CurEmployee.IsAdmin) ViewBag.Admin = true;
+            ViewBag.CurUserId = CurEmployee.Id;
 
             ViewBag.Accounts = new SelectList(_DataManager.AccR.GetCollection(), "Id", "Type", _DataManager.Pay_minR.GetElem(id).Account.Id);
  
@@ -435,8 +473,10 @@ namespace ERP_Love_Gid.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult EditPay_min(int id = 0)
+        public ActionResult EditPay_min(int id = 0, int CurUserId = 0)
         {
+                CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
+
             Pay_min Adder = _DataManager.Pay_minR.GetElem(id);
             Adder.Sum = Convert.ToInt32(Request.Form["Sum"]);
             Adder.Account = _DataManager.AccR.GetElem(Convert.ToInt32(Request.Form["Account"]));
@@ -446,14 +486,16 @@ namespace ERP_Love_Gid.Controllers
 
 
             _DataManager.Pay_minR.Edit_PayMin(Adder);
-            return RedirectToAction("MyFinanses");
+            return RedirectToAction("MyFinanses", new { CurUserId });
         }
         [HttpGet]
-        public ActionResult AddMyJobPayment(string error = "")
+        public ActionResult AddMyJobPayment(string error = "", int CurUserId = 0)
         {
+                CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
 
             if (CurEmployee == null) return RedirectToAction("Log_in", "User");
             if (CurEmployee.IsAdmin) ViewBag.Admin = true;
+            ViewBag.CurUserId = CurEmployee.Id;
 
             ViewBag.User = CurEmployee.Surname + " " + CurEmployee.Name;
             ViewBag.Contract = new SelectList(_DataManager.ConR.GetCollection(), "Id", "Name");
@@ -464,9 +506,10 @@ namespace ERP_Love_Gid.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult AddMyJobPayment()
+        public ActionResult AddMyJobPayment( int CurUserId = 0)
 
         {
+                CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
 
 
             Payments Adder = new Payments();
@@ -480,19 +523,23 @@ namespace ERP_Love_Gid.Controllers
             Adder.Date = new DateTime(Convert.ToInt32(Request.Form["calendarPay"].Split('-')[0]), Convert.ToInt32(Request.Form["calendarPay"].Split('-')[1]), Convert.ToInt32(Request.Form["calendarPay"].Split('-')[2]));
             Adder.Account = _DataManager.AccR.GetCollection().Where(x => x.Type.Contains("указано")).FirstOrDefault();
                         _DataManager.PayR.Add(Adder);
-            return RedirectToAction("MyFinanses");
+            return RedirectToAction("MyFinanses", new { CurUserId });
         }
 
-        public ActionResult DeletePaymentDetail (int id)
+        public ActionResult DeletePaymentDetail (int id, int CurUserId = 0)
         {
             _DataManager.PayR.Delete(id);
-            return RedirectToAction("MyFinanses");
+            return RedirectToAction("MyFinanses", new { CurUserId });
 
         }
         [HttpGet]
-        public ActionResult EditPayFromPeer(int id = 0, string error = "")
+        public ActionResult EditPayFromPeer(int id = 0, string error = "", int CurUserId = 0)
         {
+                CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
+
             if (CurEmployee == null) return RedirectToAction("Log_in", "User");
+            ViewBag.CurUserId = CurEmployee.Id;
+
             ViewBag.Sum = _DataManager.PayR.GetElem(id).Receipt;
             ViewBag.User = CurEmployee.Surname + " " + CurEmployee.Name;
             ViewBag.Contract = new SelectList(_DataManager.ConR.GetCollection(), "Id", "Name",_DataManager.PayR.GetElem(id).Contract.Id);
@@ -505,8 +552,10 @@ namespace ERP_Love_Gid.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult EditPayFromPeer(int id = 0)
+        public ActionResult EditPayFromPeer(int id = 0, int CurUserId = 0)
         {
+                CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
+
             Payments Adder = _DataManager.PayR.GetElem(id);
 
             Adder.Receipt = Convert.ToInt32(Request.Form["Receipt"]);
@@ -519,10 +568,12 @@ namespace ERP_Love_Gid.Controllers
             Adder.Date = new DateTime(Convert.ToInt32(Request.Form["calendarPay"].Split('-')[0]), Convert.ToInt32(Request.Form["calendarPay"].Split('-')[1]), Convert.ToInt32(Request.Form["calendarPay"].Split('-')[2]));
 
             _DataManager.PayR.EditPaymentDetail(Adder);
-            return RedirectToAction("MyFinanses");
+            return RedirectToAction("MyFinanses", new { CurUserId });
         }
-        public ActionResult ChangeToAdmin()
+        public ActionResult ChangeToAdmin(int CurUserId = 0)
         {
+                CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
+
             return RedirectToAction("Index", "Admin", new { id = CurEmployee.Id });
         }
     }

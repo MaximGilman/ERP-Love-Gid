@@ -16,6 +16,7 @@
                 @using (Html.BeginForm("AddReceivedMoney", "Home", FormMethod.Post))
                 {
 
+                    <input hidden value="@ViewBag.CurUserId" name="CurUserId" />
 
                     <p>@Html.ActionLink("Обратно к списку", "MyFinanses")</p>
                     <table>
@@ -39,7 +40,7 @@
                         </tr>
 
 
-                       
+
                         <tr>
                             <td><p>Дата оплаты: </p></td>
                             <td>

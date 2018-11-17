@@ -15,6 +15,7 @@
 
                 @using (Html.BeginForm("AddMyJobPayment", "Home", FormMethod.Post))
                 {
+                    <input hidden value="@ViewBag.CurUserId" name="CurUserId" />
 
 
                     <p>@Html.ActionLink("Обратно к списку", "MyFinanses")</p>
@@ -65,7 +66,7 @@
                                     На дату:
                                 </p>
                             </td>
-                             <td>
+                            <td>
                                 <p>
                                     <input type="date" name="calendarPay" class="form-control" value=@ViewBag.Date>
                                 </p>

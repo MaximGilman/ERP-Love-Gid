@@ -16,6 +16,7 @@
                 @using (Html.BeginForm("EditPaymentDetail", "Home", FormMethod.Post))
                 {
 
+                    <input hidden value="@ViewBag.CurUserId" name="CurUserId" />
 
                     <p>@Html.ActionLink("Обратно к списку", "MyFinanses")</p>
                     <table>
@@ -77,13 +78,13 @@
                             <td><p> @Html.DropDownList("DatePay", (IEnumerable<SelectListItem>)ViewData["DatePays"], null, new { style = "width : 200px", @class = "form-control" }) @Html.ValidationMessage("DatePays")</p></td>
 
                         </tr>
-                   
+
 
                     </table>
                     <p></p>
                     <p><input type="submit" value="Сохранить" /></p>
 
-                    <P>@Html.ActionLink("Удалить платеж","DeletePaymentDetail",new { id = @ViewBag.Id })</P>
+                    <P>@Html.ActionLink("Удалить платеж", "DeletePaymentDetail", new { id = @ViewBag.Id ,CurUserId = Convert.ToInt32(@ViewBag.CurUserId) })</P>
                 }
 
 

@@ -15,7 +15,8 @@
 
                 @using (Html.BeginForm("EditContract", "Home", FormMethod.Post))
                 {
-                    <input type="hidden" value="@ViewBag.ID" name="Id_Cont"/>
+                    <input type="hidden" value="@ViewBag.ID" name="Id_Cont" />
+                    <input hidden value="@ViewBag.CurUserId" name="CurUserId" />
 
 
                     <p>@Html.ActionLink("Обратно к списку", "Index")</p>

@@ -16,6 +16,7 @@
                 @using (Html.BeginForm("AddPaymentDetail", "Home", FormMethod.Post))
                 {
 
+                    <input hidden value="@ViewBag.CurUserId" name="CurUserId" />
 
                     <p>@Html.ActionLink("Обратно к списку", "MyFinanses")</p>
                     <table>
@@ -72,7 +73,7 @@
                             </td>
                         </tr>
 
- 
+
                     </table>
                     <p></p>
                     <p><input type="submit" value="Сохранить" /></p>
