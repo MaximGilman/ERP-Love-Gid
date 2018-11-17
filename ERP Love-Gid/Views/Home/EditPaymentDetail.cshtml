@@ -17,6 +17,7 @@
                 {
 
                     <input hidden value="@ViewBag.CurUserId" name="CurUserId" />
+                    <input hidden value="@ViewBag.adminId" name="adminId" />
 
                     <p>@Html.ActionLink("Обратно к списку", "MyFinanses")</p>
                     <table>
@@ -84,7 +85,7 @@
                     <p></p>
                     <p><input type="submit" value="Сохранить" /></p>
 
-                    <P>@Html.ActionLink("Удалить платеж", "DeletePaymentDetail", new { id = @ViewBag.Id ,CurUserId = Convert.ToInt32(@ViewBag.CurUserId) })</P>
+                    <P>@Html.ActionLink("Удалить платеж", "DeletePaymentDetail", new { id = @ViewBag.Id, CurUserId = Convert.ToInt32(@ViewBag.CurUserId) })</P>
                 }
 
 

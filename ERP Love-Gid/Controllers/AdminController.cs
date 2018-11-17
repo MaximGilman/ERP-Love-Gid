@@ -14,7 +14,7 @@ namespace ERP_Love_Gid.Controllers
     public class AdminController : Controller
     {
         private DataManager _DataManager;
-        private static Employee CurEmployee;
+        private  Employee CurEmployee;
         public AdminController(DataManager _DM)
 
         {
@@ -26,6 +26,7 @@ namespace ERP_Love_Gid.Controllers
         {
             CurEmployee = id == 0 ? CurEmployee : _DataManager.EmR.GetElem(id);
 
+            ViewBag.CurUserId = id;
             ViewBag.User = CurEmployee.Surname + " " + CurEmployee.Name;
             ViewBag.Contracts = _DataManager.ConR.GetCollection();
             ViewBag.ID = CurEmployee.Id;
@@ -33,12 +34,15 @@ namespace ERP_Love_Gid.Controllers
         }
 
         [HttpGet]
-        public ActionResult CompanyFinanses()
+        public ActionResult CompanyFinanses(int CurUserId)
         {
+            CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
+            ViewBag.CurUserId = CurUserId;
 
             ViewBag.User = CurEmployee.Surname + " " + CurEmployee.Name;
             ViewBag.TotalPlan = _DataManager.ConR.GetCollection().Select(x => x.Received).Sum(); //!!!
 
+ 
             //  ViewBag.Years = new SelectList(_DataManager.PayR.GetCollection(), "Id", "FIO");
             var tmplist = _DataManager.EmR.GetCollection();
             int[] minsalary = new int[tmplist.Count()];
@@ -92,35 +96,45 @@ namespace ERP_Love_Gid.Controllers
             return View();
         }
         [HttpGet]
-        public ActionResult Employees(string error = "")
+        public ActionResult Employees(string error = "", int CurUserId=0)
         {
+            CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
+
             ViewBag.User = CurEmployee.Surname + " " + CurEmployee.Name;
             ViewBag.ID = CurEmployee.Id;
             ViewBag.Employees = _DataManager.EmR.GetCollection();
-
+            ViewBag.CurUserId = CurUserId;
             return View();
         }
 
         [HttpPost]
-        public ActionResult Employees()
+        public ActionResult Employees(int CurUserId=0)
         {
              
              
              
 
-            return RedirectToAction("AddEmployee");
+            return RedirectToAction("AddEmployee", new { CurUserId });
         }
         [HttpGet]
-        public ActionResult ShowEmployee(int id = 0)
+        public ActionResult ShowEmployee(int id = 0, int CurUserId = 0)
         {
+            CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
+
+            ViewBag.CurUserId = id;
+            //CurEmployee = id == 0 ? CurEmployee : _DataManager.EmR.GetElem(id);
+
             if (id != CurEmployee.Id)
                 return RedirectToAction("Index", "Home", new { idUser = id, isadmin = true, adminId = CurEmployee.Id });
-            else return RedirectToAction("EMployees");
+            else return RedirectToAction("Employees", new {CurUserId });
         }
         [HttpGet]
-        public ActionResult ChangeUser(int id = 0)
+        public ActionResult ChangeUser(int id = 0, int CurUserId = 0)
 
         {
+            CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
+            ViewBag.CurUserId = CurUserId;
+
             ViewBag.Id = _DataManager.EmR.GetElem(id).Id;
             ViewBag.Name = _DataManager.EmR.GetElem(id).Name;
             ViewBag.Sname = _DataManager.EmR.GetElem(id).Surname;
@@ -129,15 +143,17 @@ namespace ERP_Love_Gid.Controllers
             ViewBag.Login = _DataManager.EmR.GetElem(id).Login;
             ViewBag.Password = _DataManager.EmR.GetElem(id).Password;
             ViewBag.IsAdmin = _DataManager.EmR.GetElem(id).IsAdmin;
+            ViewBag.CurUserId = id;
 
 
             return View();
         }
         [HttpPost]
-        public ActionResult ChangeUser()
+        public ActionResult ChangeUser(int CurUserId = 0)
 
         {
-
+            CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
+            ViewBag.CurUserId = CurUserId;
             Employee tmp = _DataManager.EmR.GetElem(Convert.ToInt32(Request.Form["IdValue"]));
 
 
@@ -150,21 +166,25 @@ namespace ERP_Love_Gid.Controllers
             var a = Request.Form["IsAdmin"];
             tmp.IsAdmin = Request.Form["IsAdmin"].Contains("true") ? true : false;
             _DataManager.EmR.Edit(tmp);
-            return RedirectToAction("Employees");
+            return RedirectToAction("Employees", new { CurUserId });
         }
-        public ActionResult ChangeToUser()
+        public ActionResult ChangeToUser(int CurUserId)
 
         {
-
-            return RedirectToAction("Index", "Home", new { idUser = CurEmployee.Id });
+            CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
+            ViewBag.CurUserId = CurUserId;
+ 
+            return RedirectToAction("Index", "Home", new { idUser = CurEmployee.Id,CurUserId });
         }
-        public ActionResult Exit()
+        public ActionResult Exit(int CurUserId =0)
         {
-            return RedirectToAction("Exit", "Home", new { exitfromadmin = true });
+            return RedirectToAction("Exit", "Home", new { exitfromadmin = true, CurUserId });
         }
         [HttpGet]
-        public ActionResult Events()
+        public ActionResult Events(int CurUserId = 0)
         {
+            CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
+            ViewBag.CurUserId = CurUserId;
             ViewBag.Events = _DataManager.EvR.GetCollection();
             ViewBag.Types = new SelectList(_DataManager.SalR.GetCollectionTypes(), "Id", "Type");
             return View();
@@ -172,8 +192,10 @@ namespace ERP_Love_Gid.Controllers
         }
        
         [HttpPost]
-        public ActionResult Events(string error="")
+        public ActionResult Events(string error="", int CurUserId = 0)
         {
+            CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
+            ViewBag.CurUserId = CurUserId;
             var a = Request.Form["Types"]; //выводит по порядку
 
             int counter = 0;
@@ -184,12 +206,14 @@ namespace ERP_Love_Gid.Controllers
 
             }
             _DataManager.shop_cont.SaveChanges();
-            return RedirectToAction("Salary") ;
+            return RedirectToAction("Salary", new { CurUserId }) ;
 
         }
         [HttpGet]
-        public ActionResult Salary()
+        public ActionResult Salary(int CurUserId = 0)
         {
+            CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
+            ViewBag.CurUserId = CurUserId;
             ViewBag.Employees = _DataManager.EmR.GetCollection();
             ViewBag.Events = _DataManager.EvR.GetCollection();
             ViewBag.Types = _DataManager.EvR.GetCollection().Select(x => x.Percent);
@@ -197,9 +221,10 @@ namespace ERP_Love_Gid.Controllers
 
         }
         [HttpPost]
-        public ActionResult Salary(string error = "")
+        public ActionResult Salary(string error = "", int CurUserId = 0)
         {
-
+            CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
+            ViewBag.CurUserId = CurUserId;
             var a = Request.Form["SalaryValue"].Split(','); //по порядку вывода // фореачем до events.count();
             int index = 0;
             List<Salary> adder = new List<Salary>();
@@ -220,22 +245,25 @@ namespace ERP_Love_Gid.Controllers
 
             }
             _DataManager.SalR.Add(adder);
-            return RedirectToAction("CompanyFinanses");
+            return RedirectToAction("CompanyFinanses", new { CurUserId });
 
         }
         [HttpGet]
-        public ActionResult AddEmployee(int id = 0)
+        public ActionResult AddEmployee(int id = 0, int CurUserId = 0)
 
         {
-             
 
+            CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
+            ViewBag.CurUserId = CurUserId;
 
             return View();
         }
         [HttpPost]
-        public ActionResult AddEmployee()
+        public ActionResult AddEmployee(int CurUserId = 0)
 
         {
+            CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
+            ViewBag.CurUserId = CurUserId;
 
             Employee tmp = new Employee();
 
@@ -249,7 +277,7 @@ namespace ERP_Love_Gid.Controllers
             var a = Request.Form["IsAdmin"];
             tmp.IsAdmin = Request.Form["IsAdmin"].Contains("true") ? true : false;
             _DataManager.EmR.Add(tmp);
-            return RedirectToAction("Employees");
+            return RedirectToAction("Employees", new { CurUserId });
         }
         
     }

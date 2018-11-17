@@ -16,6 +16,7 @@
                 @using (Html.BeginForm("AddMyJobPayment", "Home", FormMethod.Post))
                 {
                     <input hidden value="@ViewBag.CurUserId" name="CurUserId" />
+                    <input hidden value="@ViewBag.adminId" name="adminId" />
 
 
                     <p>@Html.ActionLink("Обратно к списку", "MyFinanses")</p>

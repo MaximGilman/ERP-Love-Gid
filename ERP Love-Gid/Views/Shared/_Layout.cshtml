@@ -16,20 +16,22 @@
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
-                <input hidden value="@ViewBag.CurUserId" name="CurUserId" />
+                <input hidden value="@ViewBag.CurUserId" name="CurUserId" />          
+                <input hidden value="@ViewBag.adminId" name="adminId" />
 
+                
                 @if (ViewBag.DateMonth1 != null)
                 {
                     <span>
-                        @Html.DropDownList("DateMonth", (IEnumerable<SelectListItem>)ViewData["DateMonth1"], null, new { id = "Months", style = "width : 200px; background:#5682a3", @class = "navbar-brand", onchange = "onMyDropDownChange()", CurUserId=@ViewBag.CurUserId });@Html.ValidationMessage("DatePays");
+                        @Html.DropDownList("DateMonth", (IEnumerable<SelectListItem>)ViewData["DateMonth1"], null, new { id = "Months", style = "width : 200px; background:#5682a3", @class = "navbar-brand", onchange = "onMyDropDownChange()", CurUserId = @ViewBag.CurUserId , adminId = @ViewBag.adminId }) @Html.ValidationMessage("DatePays")
                     </span>
                 }
-                @Html.ActionLink("Мои договоры", "Index", "Home", new { area = "", idUser =Convert.ToInt32(ViewBag.CurUserId)  }, new { @class = "navbar-brand" })
-                @Html.ActionLink("Мои Финансы", "MyFinanses", "Home", new { area = "" , CurUserId = Convert.ToInt32(ViewBag.CurUserId) }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Мои договоры", "Index", "Home", new { area = "", idUser = Convert.ToInt32(ViewBag.CurUserId) , adminId = Convert.ToInt32(ViewBag.adminId) }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Мои Финансы", "MyFinanses", "Home", new { area = "", CurUserId = Convert.ToInt32(ViewBag.CurUserId), adminId = Convert.ToInt32(ViewBag.adminId) }, new { @class = "navbar-brand" })
 
 
                 @if (ViewBag.Admin == true)
-                {@Html.ActionLink("Режим Администратора", "ChangeToAdmin", "Home", new { area = "" }, new { @class = "navbar-brand" })}
+                {@Html.ActionLink("Режим Администратора", "ChangeToAdmin", "Home", new { area = "", CurUserId = Convert.ToInt32(ViewBag.CurUserId), adminId = Convert.ToInt32(ViewBag.adminId) }, new { @class = "navbar-brand" })}
 
                 @Html.ActionLink("Выйти", "Exit", "Home", new { @class = "navbar-brand" })
                 <text class="navbar-brand"><strong>@ViewBag.User</strong> </text>
@@ -59,7 +61,6 @@
 <script>
     function onMyDropDownChange() { 
 
-        window.location.href = '@(Url.Action(ViewContext.RouteData.Values["action"].ToString(), ViewContext.RouteData.Values["controller"].ToString()))?numberofMonth=' + $("#Months").get(0).selectedIndex +"&CurUserId="+@ViewBag.CurUserId;
-    }
+        window.location.href = '@(Url.Action(ViewContext.RouteData.Values["action"].ToString(), ViewContext.RouteData.Values["controller"].ToString()))?numberofMonth=' + $("#Months").get(0).selectedIndex + "&CurUserId=" +@ViewBag.CurUserId+"&adminId=" + @ViewBag.adminId;      }
  
 </script>

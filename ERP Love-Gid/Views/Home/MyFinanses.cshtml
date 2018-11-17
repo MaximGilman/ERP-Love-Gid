@@ -10,6 +10,7 @@
 @using (Html.BeginForm("MyFinanses", "Home", FormMethod.Post))
 {
     <input hidden value="@ViewBag.CurUserId" name="CurUserId" />
+    <input hidden value="@ViewBag.adminId" name="adminId" />
 
     <table>
         <tr>
@@ -25,7 +26,7 @@
         @foreach (Payments cw in (IEnumerable<Payments>)ViewBag.Payments)
         {
 
-            <tr onclick="window.location.href = '@Url.Action("EditPaymentDetail", "Home", new { id = cw.Id , CurUserId = Convert.ToInt32(@ViewBag.CurUserId)})'">
+            <tr onclick="window.location.href = '@Url.Action("EditPaymentDetail", "Home", new { id = cw.Id , CurUserId = Convert.ToInt32(@ViewBag.CurUserId), adminId = Convert.ToInt32(@ViewBag.adminId)})'">
                 <td>@cw.Receipt</td>
                 @if (@cw.Account != null)
                 {
@@ -70,7 +71,7 @@
         {
             if (@cw.Finished)
             {
-                <tr class="KeyForPay" onclick="window.location.href = '@Url.Action("EditPay_min", "Home", new { id = cw.Id,CurUserId = Convert.ToInt32(@ViewBag.CurUserId) })'">
+                <tr class="KeyForPay" onclick="window.location.href = '@Url.Action("EditPay_min", "Home", new { id = cw.Id,CurUserId = Convert.ToInt32(@ViewBag.CurUserId), adminId = Convert.ToInt32(@ViewBag.adminId) })'">
                     <td> <b>@cw.Sum</b></td>
                     <td><b>@cw.Account.Type</b></td>
                     <td><b>@cw.Date.Day.@cw.Date.Month.@cw.Date.Year</b></td>
@@ -79,7 +80,7 @@
                 </tr>}
             else
             {
-                <tr class="KeyForPay" onclick="window.location.href = '@Url.Action("EditPay_min", "Home", new { id = cw.Id ,CurUserId = Convert.ToInt32(@ViewBag.CurUserId)})'">
+                <tr class="KeyForPay" onclick="window.location.href = '@Url.Action("EditPay_min", "Home", new { id = cw.Id ,CurUserId = Convert.ToInt32(@ViewBag.CurUserId), adminId = Convert.ToInt32(@ViewBag.adminId)})'">
 
                     <td> <b>@cw.Sum</b></td>
                     <td><b>@cw.Account.Type</b></td>
@@ -109,7 +110,7 @@
 
             @foreach (Contract cw in (IEnumerable<Contract>)ViewBag.Informer)
             {
-                if (cw.Payment1Date.Value.Month == DateTime.Today.Month && cw.Payment1Date.Value.Year == DateTime.Today.Year)
+                if (cw.Payment1Date != null && cw.Payment1Date.Value.Month == DateTime.Today.Month && cw.Payment1Date.Value.Year == DateTime.Today.Year)
                 {
                     <tr>
                         <td class="Informer"> <b>@cw.Payment1Sum</b></td>
@@ -120,7 +121,7 @@
                         <td><b>@cw.Status</b></td>
                     </tr>}
                 else
-                     if (cw.Payment2Date.Value.Month == DateTime.Today.Month && cw.Payment2Date.Value.Year == DateTime.Today.Year)
+                     if (cw.Payment2Date != null && cw.Payment2Date.Value.Month == DateTime.Today.Month && cw.Payment2Date.Value.Year == DateTime.Today.Year)
                 {
                     <tr>
                         <td class="Informer"> <b>@cw.Payment2Sum</b></td>
@@ -130,7 +131,7 @@
                         <td><b>@cw.Status</b></td>
                     </tr>}
                 else
-                     if (cw.Payment3Date.Value.Month == DateTime.Today.Month && cw.Payment3Date.Value.Year == DateTime.Today.Year)
+                     if (cw.Payment3Date != null && cw.Payment3Date.Value.Month == DateTime.Today.Month && cw.Payment3Date.Value.Year == DateTime.Today.Year)
                 {
                     <tr>
                         <td class="Informer"> <b>@cw.Payment3Sum</b></td>
@@ -163,7 +164,7 @@
         {
             if (@cw.StatusForPeers == true)
             {
-                <tr onclick="window.location.href = '@Url.Action("EditPayFromPeer", "Home", new { id = cw.Id,CurUserId = Convert.ToInt32(@ViewBag.CurUserId) })'">
+                <tr onclick="window.location.href = '@Url.Action("EditPayFromPeer", "Home", new { id = cw.Id,CurUserId = Convert.ToInt32(@ViewBag.CurUserId), adminId = Convert.ToInt32(@ViewBag.adminId) })'">
                     <td><p>@cw.Sum</p></td>
                     <td><p>@cw.Employee.Name.First()@cw.Employee.Surname.First()</p></td>
 
@@ -176,7 +177,7 @@
                 </tr>}
             else
             {
-                <tr onclick="window.location.href = '@Url.Action("EditPayFromPeer", "Home", new { id = cw.Id ,CurUserId = Convert.ToInt32(@ViewBag.CurUserId)})'">
+                <tr onclick="window.location.href = '@Url.Action("EditPayFromPeer", "Home", new { id = cw.Id ,CurUserId = Convert.ToInt32(@ViewBag.CurUserId), adminId = Convert.ToInt32(@ViewBag.adminId)})'">
 
                     <td> <p>@cw.Receipt</p></td>
                     <td><p>@cw.Employee.Name.First() @cw.Employee.Surname.First()</p></td>

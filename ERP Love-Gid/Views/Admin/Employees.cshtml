@@ -7,9 +7,10 @@
 
 @using (Html.BeginForm("Employees", "Admin", FormMethod.Post))
 {
+    <input hidden value="@ViewBag.CurUserId" name="CurUserId" />
 
 
-    <p>@Html.ActionLink("Обратно к списку", "Index", new { id = ViewBag.ID })</p>
+    <p>@Html.ActionLink("Обратно к списку", "Index", new { id = ViewBag.ID , CurUserId = Convert.ToInt32(ViewBag.CurUserId) })</p>
     <table>
 
         <tr>
@@ -21,29 +22,29 @@
             <td><b>Права</b></td>
             <td><b>Действие</b></td>
 
- 
+
         </tr>
         @foreach (Employee cw in (IEnumerable<Employee>)ViewData["Employees"])
         {
 
-        <tr onclick="window.location.href = '@Url.Action("ShowEmployee", "Admin", new { id = cw.Id })'">
+            <tr onclick="window.location.href = '@Url.Action("ShowEmployee", "Admin", new { id = cw.Id, CurUserId = Convert.ToInt32(ViewBag.CurUserId) })'">
 
-            <td>@cw.Name @cw.Surname @cw.Patronymic</td>
+                <td>@cw.Name @cw.Surname @cw.Patronymic</td>
 
-            <td>@cw.Login</td>
-            <td>@cw.Password</td>
-            <td>@cw.ContractSet.Where(x => x.Date_of_event.Value.Date.Month == DateTime.Now.Month && x.Date_of_event.Value.Date.Year == DateTime.Now.Year).Count()</td>
+                <td>@cw.Login</td>
+                <td>@cw.Password</td>
+                <td>@cw.ContractSet.Where(x => x.Date_of_event.Value.Date.Month == DateTime.Now.Month && x.Date_of_event.Value.Date.Year == DateTime.Now.Year).Count()</td>
 
-            @if (cw.IsAdmin)
-            {
-                <td>Админ</td>}
-            else
-            {
-                <td>Пользователь</td>}
+                @if (cw.IsAdmin)
+                {
+                    <td>Админ</td>}
+                else
+                {
+                    <td>Пользователь</td>}
 
-                <td>@Html.ActionLink("Изменить", "ChangeUser", new { id = cw.Id })</td>
+                <td>@Html.ActionLink("Изменить", "ChangeUser", new { id = cw.Id, CurUserId = Convert.ToInt32(ViewBag.CurUserId) })</td>
 
-        </tr>
+            </tr>
         }
     </table>
     <p><input type="submit" value="Добавить нового сотрудника" /></p>

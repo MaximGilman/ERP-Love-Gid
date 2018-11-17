@@ -7,14 +7,15 @@
 
 @using (Html.BeginForm("ChangeUser", "Admin", FormMethod.Post))
 {
+    <input hidden value="@ViewBag.CurUserId" name="CurUserId" />
 
 
-    <p>@Html.ActionLink("Обратно к списку", "Employees")</p>
+    <p>@Html.ActionLink("Обратно к списку", "Employees" ,new { CurUserId = Convert.ToInt32(ViewBag.CurUserId) })</p>
     <input hidden value=@ViewBag.Id name="IdValue" />
     <table>
 
-       
-     
+
+
 
         <tr>
             <td>
@@ -38,24 +39,24 @@
         </tr>
         <tr>
             <td><p>Логин: </p></td>
-            
-               
+
+
             <td><p> @Html.TextBox("Login", null, new { @class = "form-control" })</p></td>
 
 
         </tr>
         <tr>
             <td><p>Пароль: </p></td>
-            <td><p> @Html.TextBox("Password", null, new { @class = "form-control"})</p></td>
+            <td><p> @Html.TextBox("Password", null, new { @class = "form-control" })</p></td>
 
         </tr>
         <tr>
 
             <td><p>Права админа: </p>
-             
-            <td><p> @Html.CheckBox("IsAdmin", new { @class = "form-control"})</p></td>
-         </tr>
-        
+
+            <td><p> @Html.CheckBox("IsAdmin", new { @class = "form-control" })</p></td>
+        </tr>
+
     </table>
     <p></p>
     <p><input type="submit" value="Сохранить" /></p>

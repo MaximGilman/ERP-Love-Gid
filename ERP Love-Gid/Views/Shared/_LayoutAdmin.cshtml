@@ -15,15 +15,16 @@
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
+                <input hidden value="@ViewBag.CurUserId" name="CurUserId" />
 
-                @Html.ActionLink("Все договоры", "Index", "Admin", new { area = "", id = ViewBag.ID }, new { @class = "navbar-brand" })
-                @Html.ActionLink("Финансы компании", "CompanyFinanses", "Admin", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Все договоры", "Index", "Admin", new { area = "", id = ViewBag.ID, CurUserId = Convert.ToInt32(ViewBag.CurUserId) }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Финансы компании", "CompanyFinanses", "Admin", new { area = "", CurUserId = Convert.ToInt32(ViewBag.CurUserId) }, new { @class = "navbar-brand" })
 
-                @Html.ActionLink("Сотрудники", "Employees", "Admin", new { area = "" }, new { @class = "navbar-brand" })
-                @Html.ActionLink("Зарплаты", "Salary", "Admin", new { area = "" }, new { @class = "navbar-brand" })
-                @Html.ActionLink("Типы работ", "Events", "Admin", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Сотрудники", "Employees", "Admin", new { area = "", CurUserId = Convert.ToInt32(ViewBag.CurUserId) }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Зарплаты", "Salary", "Admin", new { area = "", CurUserId = Convert.ToInt32(ViewBag.CurUserId) }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Типы работ", "Events", "Admin", new { area = "", CurUserId = Convert.ToInt32(ViewBag.CurUserId) }, new { @class = "navbar-brand" })
 
-                @Html.ActionLink("Режим сотрудника", "ChangeToUser", "Admin", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Режим сотрудника", "ChangeToUser", "Admin", new { area = "", CurUserId = Convert.ToInt32(ViewBag.CurUserId) }, new { @class = "navbar-brand" })
 
 
                 @Html.ActionLink("Выйти", "Exit", "Admin", new { @class = "navbar-brand" })
