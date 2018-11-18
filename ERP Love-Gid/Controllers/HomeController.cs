@@ -69,7 +69,7 @@ namespace ERP_Love_Gid.Controllers
             ViewBag.User = CurEmployee.Surname + " " + CurEmployee.Name;
             if (CurEmployee.IsAdmin) ViewBag.Admin = true;
             if (isadmin) { lookfromAdmin = true; AdminEmployee = _DataManager.EmR.GetElem(adminId); ViewBag.User = AdminEmployee.Surname + " " + AdminEmployee.Name; }
-            if (lookfromAdmin) ViewBag.User = AdminEmployee.Surname + " " + AdminEmployee.Name;
+            if (lookfromAdmin) { ViewBag.EmplNameForAdmin = "просматривает работника " + CurEmployee.Name; ViewBag.User = AdminEmployee.Surname + " " + AdminEmployee.Name; }
             if (numberofMonth != -1) { currmonth = numberofMonth + 1; ViewData["Contracts"] = _DataManager.ConR.GetCollection(CurEmployee.Id).Where(x => x.Date_of_event.Value.Month == (currmonth)); }
             else { currmonth = DateTime.Now.Month; ViewData["Contracts"] = _DataManager.ConR.GetCollection(CurEmployee.Id).Where(x => x.Date_of_event.Value.Month == (currmonth)); }
             ViewBag.DateMonth1 = new SelectList(MothsForChoose, "Value", "Text", currmonth);
@@ -102,7 +102,7 @@ namespace ERP_Love_Gid.Controllers
 
             if (_DataManager.EvR != null)
                 ViewData["Events"] = new SelectList(_DataManager.EvR.GetCollection(), "Id", "Type");
-            if (lookfromAdmin) ViewBag.User = AdminEmployee.Surname + " " + AdminEmployee.Name;
+            if (lookfromAdmin) { ViewBag.EmplNameForAdmin = "просматривает работника " + CurEmployee.Name; ViewBag.User = AdminEmployee.Surname + " " + AdminEmployee.Name; }
 
             return View();
         }
@@ -184,7 +184,7 @@ namespace ERP_Love_Gid.Controllers
 
             AdminEmployee = _DataManager.EmR.GetElem(adminId);
 
-            if (lookfromAdmin) ViewBag.User = AdminEmployee.Surname + " " + AdminEmployee.Name;
+            if (lookfromAdmin) { ViewBag.EmplNameForAdmin = "просматривает работника " + CurEmployee.Name; ViewBag.User = AdminEmployee.Surname + " " + AdminEmployee.Name; }
 
             int sum = 0;
             foreach (Payments cw in (IEnumerable<Payments>)ViewBag.MySalary)
@@ -244,9 +244,9 @@ namespace ERP_Love_Gid.Controllers
             ViewBag.Contracts = new SelectList(_DataManager.ConR.GetCollection(), "Id", "Name");
             ViewBag.Employees = new SelectList(_DataManager.EmR.GetCollection(), "Id", "FIO");
             if (CurEmployee.IsAdmin) ViewBag.Admin = true;
-            if (lookfromAdmin) ViewBag.User = AdminEmployee.Surname + " " + AdminEmployee.Name;
+            if (lookfromAdmin) { ViewBag.User = AdminEmployee.Surname + " " + AdminEmployee.Name; ViewBag.EmplNameForAdmin = "просматривает работника " + CurEmployee.Name; }
 
-            return View();
+                return View();
         }
         [HttpPost]
         public ActionResult AddPaymentDetail(int CurUserId = 0, int adminId = 0)
@@ -292,7 +292,7 @@ namespace ERP_Love_Gid.Controllers
             ViewBag.DateOfSign = String.Join("-", ((DateTime.Now).ToShortDateString()).Split('.').Reverse()); ViewBag.DateMonth1 = MothsForChoose;
             AdminEmployee = _DataManager.EmR.GetElem(adminId);
 
-            if (lookfromAdmin) ViewBag.User = AdminEmployee.Surname + " " + AdminEmployee.Name;
+            if (lookfromAdmin) { ViewBag.EmplNameForAdmin = "просматривает работника " + CurEmployee.Name; ViewBag.User = AdminEmployee.Surname + " " + AdminEmployee.Name; }
 
             return View();
         }
@@ -347,7 +347,7 @@ namespace ERP_Love_Gid.Controllers
             if (IsAdmin) ViewBag.IsAdmin = true;
             AdminEmployee = _DataManager.EmR.GetElem(adminId);
 
-            if (lookfromAdmin) ViewBag.User = AdminEmployee.Surname + " " + AdminEmployee.Name;
+            if (lookfromAdmin) { ViewBag.EmplNameForAdmin = "просматривает работника " + CurEmployee.Name; ViewBag.User = AdminEmployee.Surname + " " + AdminEmployee.Name; }
 
             return View();
         }
@@ -383,7 +383,7 @@ namespace ERP_Love_Gid.Controllers
 
 
         public ActionResult Exit(bool exitfromadmin = false, int CurUserId = 0, int adminId = 0)
-        {
+            {
             try
             {
                 CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
@@ -397,7 +397,7 @@ namespace ERP_Love_Gid.Controllers
                     return RedirectToAction("Log_in", "User");
                 }
                 else
-            if (lookfromAdmin) { int id = AdminEmployee.Id; AdminEmployee = null; return RedirectToAction("Index", "Admin", new { id = id }); }
+            if (lookfromAdmin) { return RedirectToAction("Index", "Admin", new { id=adminId });   }
                 else
                 {
                     CurEmployee = null;
@@ -451,8 +451,10 @@ namespace ERP_Love_Gid.Controllers
             //},"Value", "Text", DateTime.Now.Month);
             AdminEmployee = _DataManager.EmR.GetElem(adminId);
 
-            ViewBag.Id = id; if (lookfromAdmin) ViewBag.User = AdminEmployee.Surname + " " + AdminEmployee.Name;
-
+            ViewBag.Id = id; if (lookfromAdmin)
+            {
+                ViewBag.EmplNameForAdmin = "просматривает работника " + CurEmployee.Name; ViewBag.User = AdminEmployee.Surname + " " + AdminEmployee.Name;
+            }
             return View();
         }
         [HttpPost]
@@ -490,7 +492,7 @@ namespace ERP_Love_Gid.Controllers
             AdminEmployee = _DataManager.EmR.GetElem(adminId);
 
             ViewBag.Date = String.Join("-", (((DateTime)_DataManager.Pay_minR.GetElem(id).Date).ToShortDateString()).Split('.').Reverse());
-            if (lookfromAdmin) ViewBag.User = AdminEmployee.Surname + " " + AdminEmployee.Name;
+            if (lookfromAdmin) { ViewBag.EmplNameForAdmin = "просматривает работника " + CurEmployee.Name; ViewBag.User = AdminEmployee.Surname + " " + AdminEmployee.Name; }
 
             return View();
         }
@@ -525,7 +527,8 @@ namespace ERP_Love_Gid.Controllers
             ViewBag.Contract = new SelectList(_DataManager.ConR.GetCollection(), "Id", "Name");
             ViewBag.Event = new SelectList(_DataManager.EvR.GetCollection(), "Id", "Type");
             ViewBag.Employees = new SelectList(_DataManager.EmR.GetCollection(CurEmployee.Id), "Id", "FIO");
-            ViewBag.Date = String.Join("-", ((DateTime.Now).ToShortDateString()).Split('.').Reverse()); if (lookfromAdmin) ViewBag.User = AdminEmployee.Surname + " " + AdminEmployee.Name;
+            ViewBag.Date = String.Join("-", ((DateTime.Now).ToShortDateString()).Split('.').Reverse());
+            if (lookfromAdmin) { ViewBag.EmplNameForAdmin = "просматривает работника " + CurEmployee.Name; ViewBag.User = AdminEmployee.Surname + " " + AdminEmployee.Name; }
 
             return View();
         }
@@ -586,9 +589,12 @@ namespace ERP_Love_Gid.Controllers
             ViewBag.Comment = _DataManager.PayR.GetElem(id).Comment;
             AdminEmployee = _DataManager.EmR.GetElem(adminId);
 
-            if (CurEmployee.IsAdmin) ViewBag.Admin = true; if (lookfromAdmin) ViewBag.User = AdminEmployee.Surname + " " + AdminEmployee.Name;
+            if (CurEmployee.IsAdmin) ViewBag.Admin = true; if (lookfromAdmin)
+            {
+                ViewBag.User = AdminEmployee.Surname + " " + AdminEmployee.Name; ViewBag.EmplNameForAdmin = "просматривает работника " + CurEmployee.Name;
+            }
 
-            return View();
+                return View();
         }
         [HttpPost]
         public ActionResult EditPayFromPeer(int id = 0, int CurUserId = 0, int adminId = 0)
@@ -601,7 +607,7 @@ namespace ERP_Love_Gid.Controllers
             Adder.Account = _DataManager.AccR.GetElem(Convert.ToInt32(Request.Form["Account"]));
             Adder.Contract = _DataManager.ConR.GetElem(Convert.ToInt32(Request.Form["Contract"]));
             Adder.Event = _DataManager.EvR.GetElem(Convert.ToInt32(Request.Form["Event"]));
-            Adder.EmployeeTo = _DataManager.EmR.GetElem(Convert.ToInt32(Request.Form["Employee"]));
+            Adder.Employee = _DataManager.EmR.GetElem(Convert.ToInt32(Request.Form["Employee"]));
             Adder.EmployeeTo = _DataManager.EmR.GetElem(CurEmployee.Id);
             Adder.Comment = Request.Form["Comment"];
             Adder.Date = new DateTime(Convert.ToInt32(Request.Form["calendarPay"].Split('-')[0]), Convert.ToInt32(Request.Form["calendarPay"].Split('-')[1]), Convert.ToInt32(Request.Form["calendarPay"].Split('-')[2]));

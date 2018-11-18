@@ -17,18 +17,23 @@
             <tr>
                 <td><b> @cwEm.Name @cwEm.Surname</b></td>
                 <td> <b>Тип оплаты</b></td>
-                <td> <b>Тек. значение:</b> </td>
-                <td><b>Изменить значение</b></td>
+                 <td><b>В ЗП Сотруднику</b></td>
+                <td><b>Ольга</b></td>
+                <td><b>Сергей</b></td>
 
             </tr>
             foreach (Event cwEv in (IEnumerable<Event>)ViewData["Events"])
             {
-                <tr>
+                <tr onclick="window.location.href = '@Url.Action("EditSalaryItem", "Admin", new { Emid=cwEm.Id, Evid=cwEv.Id, CurUserId = Convert.ToInt32(@ViewBag.CurUserId), adminId = Convert.ToInt32(@ViewBag.adminId)})'">
+
                     <td> @cwEv.Type</td>
-                    <td> @cwEv.Percent</td>
+                    <td>
+                        @((ViewBag.Types as IEnumerable<Salary>).Where(x => x.Employee.Id == cwEm.Id && x.Event.Id == cwEv.Id).Select(y => y.PercentOfSalary).FirstOrDefault())
+                    </td>
                     <td>  @cwEm.Salary.Where(y => y.Employee.Id == cwEm.Id && y.Event.Id == cwEv.Id).Select(x => x.Value).FirstOrDefault()
 
-                    <td> @Html.TextBox("SalaryValue", null, new { @class = "form-control", type = "number", @min = "0" })</td>
+                    <td> @Html.TextBox("SalaryValueOlga", null, new { @class = "form-control", type = "number", @min = "0" })</td>
+                    <td> @Html.TextBox("SalaryValueSergey", null, new { @class = "form-control", type = "number", @min = "0" })</td>
 
                 </tr>
 
@@ -38,5 +43,5 @@
 
     </table>
     <p></p>
-    <p><input type="submit" value="Сохранить" /></p>
+   // <p><input type="submit" value="Сохранить" /></p>
 }

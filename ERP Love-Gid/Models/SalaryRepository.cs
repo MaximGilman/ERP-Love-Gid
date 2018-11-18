@@ -26,6 +26,11 @@ namespace ERP_Love_Gid.Models
             cont.SalarySet.Add(f);
             cont.SaveChanges();
         }
+        public Salary GetElem(int id)
+        {
+
+            return cont.SalarySet.Find(id);
+        }
         public IEnumerable<Salary> GetCollection()
         {
 
@@ -41,5 +46,15 @@ namespace ERP_Love_Gid.Models
         {
             return cont.SalaryTypesSet.Find(id);
         }
+
+        internal void Edit(Salary salaryItem)
+        {
+            Salary tmp = GetElem(salaryItem.Id);
+
+            tmp = salaryItem;
+            cont.SaveChanges();
+
+        }
+         
     }
 }

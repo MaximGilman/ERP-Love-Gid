@@ -17,8 +17,7 @@
             <td> <b>ФИО</b></td>
             <td><b>Логин</b></td>
             <td><b>Пароль</b></td>
-            <td><b> Контрактов в этом месяце</b></td>
-
+ 
             <td><b>Права</b></td>
             <td><b>Действие</b></td>
 
@@ -33,8 +32,7 @@
 
                 <td>@cw.Login</td>
                 <td>@cw.Password</td>
-                <td>@cw.ContractSet.Where(x => x.Date_of_event.Value.Date.Month == DateTime.Now.Month && x.Date_of_event.Value.Date.Year == DateTime.Now.Year).Count()</td>
-
+ 
                 @if (cw.IsAdmin)
                 {
                     <td>Админ</td>}

@@ -143,7 +143,6 @@ namespace ERP_Love_Gid.Controllers
             ViewBag.Login = _DataManager.EmR.GetElem(id).Login;
             ViewBag.Password = _DataManager.EmR.GetElem(id).Password;
             ViewBag.IsAdmin = _DataManager.EmR.GetElem(id).IsAdmin;
-            ViewBag.CurUserId = id;
 
 
             return View();
@@ -216,8 +215,9 @@ namespace ERP_Love_Gid.Controllers
             ViewBag.CurUserId = CurUserId;
             ViewBag.Employees = _DataManager.EmR.GetCollection();
             ViewBag.Events = _DataManager.EvR.GetCollection();
-            ViewBag.Types = _DataManager.EvR.GetCollection().Select(x => x.Percent);
-            return View();
+            // ViewBag.Types = _DataManager.EvR.GetCollection().Select(x => x.Percent);
+            ViewBag.Types = _DataManager.SalR.GetCollection();
+             return View();
 
         }
         [HttpPost]
@@ -247,6 +247,42 @@ namespace ERP_Love_Gid.Controllers
             _DataManager.SalR.Add(adder);
             return RedirectToAction("CompanyFinanses", new { CurUserId });
 
+        }
+        
+             [HttpGet]
+        public ActionResult EditSalaryItem(int Emid=0, int Evid=0, int CurUserId=0, int adminId=0)
+        {
+            CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
+            ViewBag.CurUserId = CurEmployee.Id;
+            ViewBag.EmployeeId = _DataManager.EmR.GetElem(Emid).Id;
+            ViewBag.EventId = _DataManager.EvR.GetElem(Evid).Id;
+
+            ViewBag.Employee = _DataManager.EmR.GetElem(Emid);
+            ViewBag.Event = _DataManager.EvR.GetElem(Evid);
+            var text = (ViewBag.Employee as Employee).Salary.Where(x => x.Event.Id == (ViewBag.Event as Event).Id).Select(y => y.PercentOfSalary).FirstOrDefault();
+            var selectedIndex = _DataManager.SalR.GetCollectionTypes().Where(x => x.Type == text).FirstOrDefault().Id;
+            ViewBag.Types = new SelectList(_DataManager.SalR.GetCollectionTypes(), "Id", "Type", _DataManager.SalR.GetCollectionTypes().Last().Id);
+            ViewBag.Salary = (ViewBag.Employee as Employee).Salary.Where(x => x.Event.Id == (ViewBag.Event as Event).Id).Select(y => y.Value).FirstOrDefault();
+          /*  ViewBag.Salary = (ViewBag.Employee as Employee).Salary.Where(x => x.Event.Id == (ViewBag.Event as Event).Id).Select(y => y.ValueOlga).FirstOrDefault();
+            ViewBag.Salary = (ViewBag.Employee as Employee).Salary.Where(x => x.Event.Id == (ViewBag.Event as Event).Id).Select(y => y.ValueSergey).FirstOrDefault();
+
+    */
+
+            return View();
+        }
+        [HttpPost]
+        public ActionResult EditSalaryItem( int CurUserId = 0, int EventId=0, int EmployeeId=0)
+        {
+          
+
+
+            var salaryItem = _DataManager.SalR.GetCollection().Where(x => x.Event.Id == EventId&&x.Employee.Id==EmployeeId).FirstOrDefault();
+
+            salaryItem.PercentOfSalary = _DataManager.SalR.GetCollectionTypes().Select(x=>x.Type).ToArray<string>()[Convert.ToInt32(Request.Form["Types"])-1];
+            salaryItem.Value =Convert.ToInt32( Request.Form["Salary"]);
+
+            _DataManager.SalR.Edit(salaryItem);
+            return RedirectToAction("Salary", new { CurUserId});
         }
         [HttpGet]
         public ActionResult AddEmployee(int id = 0, int CurUserId = 0)

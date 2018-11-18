@@ -1,0 +1,68 @@
+﻿
+@{
+    ViewBag.Title = "Изменение зарплаты сотрудника"; Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+
+@using (Html.BeginForm("EditSalaryItem", "Admin", FormMethod.Post))
+{
+    <input hidden value="@ViewBag.CurUserId" name="CurUserId" />
+    <input hidden value="@ViewBag.EmployeeId" name="EmployeeId" />
+    <input hidden value="@ViewBag.EventId" name="EventId" />
+
+
+    <table>
+
+
+
+
+        <tr>
+            <td>
+                <p>
+                    Сотрудник:
+                </p>
+            </td>
+
+            <td><p>  @Html.Label("Employee", (ViewBag.Employee as Employee).Name + " " + (ViewBag.Employee as Employee).Surname, new { @class = "form-control" })</p></td>
+        </tr>
+        <tr>
+            <td><p> Деятельность:</p></td>
+
+            <td><p>  @Html.Label("Event", (ViewBag.Event as Event).Type, new { @class = "form-control" })</p></td>
+        </tr>
+
+
+        <tr>
+            <td><p>Тип оплаты: </p></td>
+            <td>
+                <p>
+                    @Html.DropDownList("Types", (IEnumerable<SelectListItem>)ViewData["Types"], null, new { style = "width : 200px", @class = "form-control" }) @Html.ValidationMessage("Types")
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td><p>В Зп: </p></td>
+
+
+            <td><p> @Html.TextBox("Salary", null, new { @class = "form-control" })</p></td>
+
+
+        </tr>
+        <tr>
+            <td><p>Ольге: </p></td>
+            <td><p> @Html.TextBox("SalaryOlga", null, new { @class = "form-control" })</p></td>
+
+        </tr>
+        <tr>
+
+            <td><p>Сергею: </p>
+
+            <td><p> @Html.TextBox("SalarySergey", null, new { @class = "form-control" })</p></td>
+        </tr>
+
+    </table>
+    <p></p>
+    <p><input type="submit" value="Сохранить" /></p>
+}
+
