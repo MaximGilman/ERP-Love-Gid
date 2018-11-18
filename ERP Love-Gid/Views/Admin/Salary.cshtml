@@ -24,18 +24,19 @@
             </tr>
             foreach (Event cwEv in (IEnumerable<Event>)ViewData["Events"])
             {
-                <tr onclick="window.location.href = '@Url.Action("EditSalaryItem", "Admin", new { Emid=cwEm.Id, Evid=cwEv.Id, CurUserId = Convert.ToInt32(@ViewBag.CurUserId), adminId = Convert.ToInt32(@ViewBag.adminId)})'">
+            <tr onclick="window.location.href = '@Url.Action("EditSalaryItem", "Admin", new { Emid=cwEm.Id, Evid=cwEv.Id, CurUserId = Convert.ToInt32(@ViewBag.CurUserId), adminId = Convert.ToInt32(@ViewBag.adminId)})'">
 
-                    <td> @cwEv.Type</td>
-                    <td>
-                        @((ViewBag.Types as IEnumerable<Salary>).Where(x => x.Employee.Id == cwEm.Id && x.Event.Id == cwEv.Id).Select(y => y.PercentOfSalary).FirstOrDefault())
-                    </td>
-                    <td>  @cwEm.Salary.Where(y => y.Employee.Id == cwEm.Id && y.Event.Id == cwEv.Id).Select(x => x.Value).FirstOrDefault()
+                <td> @cwEv.Type</td>
+                <td>
+                    @((ViewBag.Types as IEnumerable<Salary>).Where(x => x.Employee.Id == cwEm.Id && x.Event.Id == cwEv.Id).Select(y => y.PercentOfSalary).FirstOrDefault())
+                </td>
+                <td>  @cwEm.Salary.Where(y => y.Employee.Id == cwEm.Id && y.Event.Id == cwEv.Id).Select(x => x.Value).FirstOrDefault()
+                <td>  @cwEm.Salary.Where(y => y.Employee.Id == cwEm.Id && y.Event.Id == cwEv.Id).Select(x => x.ValueOlga).FirstOrDefault()
+                <td>  @cwEm.Salary.Where(y => y.Employee.Id == cwEm.Id && y.Event.Id == cwEv.Id).Select(x => x.ValueSergey).FirstOrDefault()
 
-                    <td> @Html.TextBox("SalaryValueOlga", null, new { @class = "form-control", type = "number", @min = "0" })</td>
-                    <td> @Html.TextBox("SalaryValueSergey", null, new { @class = "form-control", type = "number", @min = "0" })</td>
+             
 
-                </tr>
+            </tr>
 
             }
             <tr><td></td></tr>}

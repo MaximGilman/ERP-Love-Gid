@@ -17,6 +17,8 @@ namespace ERP_Love_Gid
         public int Id { get; set; }
         public string PercentOfSalary { get; set; }
         public int Value { get; set; }
+        public Nullable<int> ValueOlga { get; set; }
+        public Nullable<int> ValueSergey { get; set; }
     
         public virtual Employee Employee { get; set; }
         public virtual Event Event { get; set; }

@@ -16,9 +16,15 @@
         <div class="container">
             <div class="navbar-header">
                 <input hidden value="@ViewBag.CurUserId" name="CurUserId" />
+                @if (ViewBag.DateMonth1 != null)
+                { 
+                    <span>
+                        @Html.DropDownList("DateMonth", (IEnumerable<SelectListItem>)ViewData["DateMonth1"], null, new { id = "Months", style = "width : 200px; background:#5682a3", @class = "navbar-brand", onchange = "onMyDropDownChange()", CurUserId = @ViewBag.CurUserId, adminId = @ViewBag.adminId }) @Html.ValidationMessage("DatePays")
+                    </span>
+                }
                 @Html.ActionLink("Финансы компании", "CompanyFinanses", "Admin", new { area = "", CurUserId = Convert.ToInt32(ViewBag.CurUserId) }, new { @class = "navbar-brand" })
 
-                @Html.ActionLink("Все договоры", "Index", "Admin", new { area = "",   id = Convert.ToInt32(ViewBag.CurUserId) }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Все договоры", "Index", "Admin", new { area = "", id = Convert.ToInt32(ViewBag.CurUserId) }, new { @class = "navbar-brand" })
 
                 @Html.ActionLink("Сотрудники", "Employees", "Admin", new { area = "", CurUserId = Convert.ToInt32(ViewBag.CurUserId) }, new { @class = "navbar-brand" })
                 @Html.ActionLink("Зарплаты", "Salary", "Admin", new { area = "", CurUserId = Convert.ToInt32(ViewBag.CurUserId) }, new { @class = "navbar-brand" })
@@ -51,3 +57,9 @@
     @RenderSection("scripts", required: false)
 </body>
 </html>
+<script>
+    function onMyDropDownChange() {
+
+        window.location.href = '@(Url.Action(ViewContext.RouteData.Values["action"].ToString(), ViewContext.RouteData.Values["controller"].ToString()))?numberofMonth=' + $("#Months").get(0).selectedIndex + "&CurUserId=" +@ViewBag.CurUserId+ "&id=" +@ViewBag.CurUserId;      }
+
+</script>

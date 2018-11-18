@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 10/28/2018 08:52:29
+-- Date Created: 11/18/2018 23:16:16
 -- Generated from EDMX file: C:\Users\ГильманМаксимМихайло\Desktop\Бекап флешки\ERP Love-Gid\ERP Love-Gid\ERPModel.edmx
 -- --------------------------------------------------
 
@@ -212,6 +212,8 @@ CREATE TABLE [dbo].[SalarySet] (
     [Id] int IDENTITY(1,1) NOT NULL,
     [PercentOfSalary] nvarchar(max)  NOT NULL,
     [Value] int  NOT NULL,
+    [ValueOlga] int  NULL,
+    [ValueSergey] int  NULL,
     [Employee_Id] int  NOT NULL,
     [Event_Id] int  NOT NULL
 );

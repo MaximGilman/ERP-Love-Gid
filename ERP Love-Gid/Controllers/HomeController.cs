@@ -51,7 +51,7 @@ namespace ERP_Love_Gid.Controllers
         /// <returns></returns>
         [HttpGet]
         public ActionResult Index(int idUser = 0, string sort = "", bool isadmin = false, int adminId = 0, int numberofMonth = -1, int CurUserId = -1)
-        {
+            {
             if (CurUserId == -1)
                 CurEmployee = idUser == 0 ? CurEmployee : _DataManager.EmR.GetElem(idUser);
 

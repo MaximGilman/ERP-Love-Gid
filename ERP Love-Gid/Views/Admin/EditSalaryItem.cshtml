@@ -37,6 +37,7 @@
             <td><p>Тип оплаты: </p></td>
             <td>
                 <p>
+
                     @Html.DropDownList("Types", (IEnumerable<SelectListItem>)ViewData["Types"], null, new { style = "width : 200px", @class = "form-control" }) @Html.ValidationMessage("Types")
                 </p>
             </td>

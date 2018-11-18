@@ -189,6 +189,8 @@
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="PercentOfSalary" Type="nvarchar(max)" Nullable="false" />
     <Property Name="Value" Type="int" Nullable="false" />
+    <Property Name="ValueOlga" Type="int" Nullable="true" />
+    <Property Name="ValueSergey" Type="int" Nullable="true" />
     <Property Name="Employee_Id" Type="int" Nullable="false" />
     <Property Name="Event_Id" Type="int" Nullable="false" />
   </EntityType>
@@ -632,6 +634,8 @@
           <NavigationProperty Name="Event" Relationship="ERPModel.EventSalary" FromRole="Salary" ToRole="Event" />
           <Property Name="PercentOfSalary" Type="String" Nullable="false" />
           <Property Name="Value" Type="Int32" Nullable="false" />
+          <Property Name="ValueOlga" Type="Int32" Nullable="true" />
+          <Property Name="ValueSergey" Type="Int32" Nullable="true" />
         </EntityType>
         <Association Name="EmployeeSalary">
           <End Type="ERPModel.Employee" Role="Employee" Multiplicity="1" />
@@ -764,6 +768,8 @@
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="PercentOfSalary" ColumnName="PercentOfSalary" />
           <ScalarProperty Name="Value" ColumnName="Value" />
+          <ScalarProperty Name="ValueOlga" ColumnName="ValueOlga" />
+          <ScalarProperty Name="ValueSergey" ColumnName="ValueSergey" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

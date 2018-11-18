@@ -15,6 +15,22 @@ namespace ERP_Love_Gid.Controllers
     {
         private DataManager _DataManager;
         private  Employee CurEmployee;
+        int currmonth = DateTime.Now.Month;
+        dynamic MothsForChoose = new List<SelectListItem>
+            {
+                new SelectListItem{Text = "Январь", Value = "1"},
+                new SelectListItem{Text = "Февраль", Value = "2"},
+                new SelectListItem{Text = "Март", Value = "3"},
+                new SelectListItem{Text = "Апрель", Value = "4"},
+                new SelectListItem{Text = "Май", Value = "5"},
+                new SelectListItem{Text = "Июнь", Value = "6"},
+                new SelectListItem{Text = "Июль", Value = "7"},
+                new SelectListItem{Text = "Август", Value = "8"},
+                new SelectListItem{Text = "Сентябрь", Value = "9"},
+                new SelectListItem{Text = "Октябрь", Value = "10"},
+                new SelectListItem{Text = "Ноябрь", Value = "11"},
+                new SelectListItem{Text = "Декабрь", Value = "12"}
+            };
         public AdminController(DataManager _DM)
 
         {
@@ -22,7 +38,7 @@ namespace ERP_Love_Gid.Controllers
             _DataManager = _DM;
         }
         [HttpGet]
-        public ActionResult Index(int id = 0)
+        public ActionResult Index(int numberofMonth = -1, int id = 0)
         {
             CurEmployee = id == 0 ? CurEmployee : _DataManager.EmR.GetElem(id);
 
@@ -30,11 +46,14 @@ namespace ERP_Love_Gid.Controllers
             ViewBag.User = CurEmployee.Surname + " " + CurEmployee.Name;
             ViewBag.Contracts = _DataManager.ConR.GetCollection();
             ViewBag.ID = CurEmployee.Id;
+            if (numberofMonth != -1) { currmonth = numberofMonth + 1; }
+            else { currmonth = DateTime.Now.Month;  }
+            ViewBag.DateMonth1 = new SelectList(MothsForChoose, "Value", "Text", currmonth);
             return View();
         }
 
         [HttpGet]
-        public ActionResult CompanyFinanses(int CurUserId)
+        public ActionResult CompanyFinanses(int numberofMonth = -1, int CurUserId=0)
         {
             CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
             ViewBag.CurUserId = CurUserId;
@@ -42,7 +61,9 @@ namespace ERP_Love_Gid.Controllers
             ViewBag.User = CurEmployee.Surname + " " + CurEmployee.Name;
             ViewBag.TotalPlan = _DataManager.ConR.GetCollection().Select(x => x.Received).Sum(); //!!!
 
- 
+            if (numberofMonth != -1) { currmonth = numberofMonth + 1;   }
+            else { currmonth = DateTime.Now.Month;   }
+            ViewBag.DateMonth1 = new SelectList(MothsForChoose, "Value", "Text", currmonth);
             //  ViewBag.Years = new SelectList(_DataManager.PayR.GetCollection(), "Id", "FIO");
             var tmplist = _DataManager.EmR.GetCollection();
             int[] minsalary = new int[tmplist.Count()];
@@ -96,7 +117,7 @@ namespace ERP_Love_Gid.Controllers
             return View();
         }
         [HttpGet]
-        public ActionResult Employees(string error = "", int CurUserId=0)
+        public ActionResult Employees(string error = "", int numberofMonth = -1, int CurUserId=0)
         {
             CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
 
@@ -104,6 +125,9 @@ namespace ERP_Love_Gid.Controllers
             ViewBag.ID = CurEmployee.Id;
             ViewBag.Employees = _DataManager.EmR.GetCollection();
             ViewBag.CurUserId = CurUserId;
+            if (numberofMonth != -1) { currmonth = numberofMonth + 1;   }
+            else { currmonth = DateTime.Now.Month;   }
+            ViewBag.DateMonth1 = new SelectList(MothsForChoose, "Value", "Text", currmonth);
             return View();
         }
 
@@ -117,19 +141,21 @@ namespace ERP_Love_Gid.Controllers
             return RedirectToAction("AddEmployee", new { CurUserId });
         }
         [HttpGet]
-        public ActionResult ShowEmployee(int id = 0, int CurUserId = 0)
+        public ActionResult ShowEmployee(int numberofMonth = -1, int id = 0, int CurUserId = 0)
         {
             CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
 
             ViewBag.CurUserId = id;
             //CurEmployee = id == 0 ? CurEmployee : _DataManager.EmR.GetElem(id);
-
+            if (numberofMonth != -1) { currmonth = numberofMonth + 1;   }
+            else { currmonth = DateTime.Now.Month;   }
+            ViewBag.DateMonth1 = new SelectList(MothsForChoose, "Value", "Text", currmonth);
             if (id != CurEmployee.Id)
                 return RedirectToAction("Index", "Home", new { idUser = id, isadmin = true, adminId = CurEmployee.Id });
             else return RedirectToAction("Employees", new {CurUserId });
         }
         [HttpGet]
-        public ActionResult ChangeUser(int id = 0, int CurUserId = 0)
+        public ActionResult ChangeUser(int numberofMonth = -1, int id = 0, int CurUserId = 0)
 
         {
             CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
@@ -143,7 +169,9 @@ namespace ERP_Love_Gid.Controllers
             ViewBag.Login = _DataManager.EmR.GetElem(id).Login;
             ViewBag.Password = _DataManager.EmR.GetElem(id).Password;
             ViewBag.IsAdmin = _DataManager.EmR.GetElem(id).IsAdmin;
-
+            if (numberofMonth != -1) { currmonth = numberofMonth + 1;   }
+            else { currmonth = DateTime.Now.Month;   }
+            ViewBag.DateMonth1 = new SelectList(MothsForChoose, "Value", "Text", currmonth);
 
             return View();
         }
@@ -180,11 +208,14 @@ namespace ERP_Love_Gid.Controllers
             return RedirectToAction("Exit", "Home", new { exitfromadmin = true, CurUserId });
         }
         [HttpGet]
-        public ActionResult Events(int CurUserId = 0)
+        public ActionResult Events(int numberofMonth = -1, int CurUserId = 0)
         {
             CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
             ViewBag.CurUserId = CurUserId;
             ViewBag.Events = _DataManager.EvR.GetCollection();
+            if (numberofMonth != -1) { currmonth = numberofMonth + 1;   }
+            else { currmonth = DateTime.Now.Month;   }
+            ViewBag.DateMonth1 = new SelectList(MothsForChoose, "Value", "Text", currmonth);
             ViewBag.Types = new SelectList(_DataManager.SalR.GetCollectionTypes(), "Id", "Type");
             return View();
 
@@ -209,12 +240,15 @@ namespace ERP_Love_Gid.Controllers
 
         }
         [HttpGet]
-        public ActionResult Salary(int CurUserId = 0)
+        public ActionResult Salary(int numberofMonth = -1, int CurUserId = 0)
         {
             CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
             ViewBag.CurUserId = CurUserId;
             ViewBag.Employees = _DataManager.EmR.GetCollection();
             ViewBag.Events = _DataManager.EvR.GetCollection();
+            if (numberofMonth != -1) { currmonth = numberofMonth + 1;   }
+            else { currmonth = DateTime.Now.Month;   }
+            ViewBag.DateMonth1 = new SelectList(MothsForChoose, "Value", "Text", currmonth);
             // ViewBag.Types = _DataManager.EvR.GetCollection().Select(x => x.Percent);
             ViewBag.Types = _DataManager.SalR.GetCollection();
              return View();
@@ -250,23 +284,34 @@ namespace ERP_Love_Gid.Controllers
         }
         
              [HttpGet]
-        public ActionResult EditSalaryItem(int Emid=0, int Evid=0, int CurUserId=0, int adminId=0)
+        public ActionResult EditSalaryItem(int numberofMonth = -1, int Emid=0, int Evid=0, int CurUserId=0, int adminId=0)
         {
             CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
             ViewBag.CurUserId = CurEmployee.Id;
             ViewBag.EmployeeId = _DataManager.EmR.GetElem(Emid).Id;
             ViewBag.EventId = _DataManager.EvR.GetElem(Evid).Id;
 
+            if (numberofMonth != -1) { currmonth = numberofMonth + 1;   }
+            else { currmonth = DateTime.Now.Month;   }
+            ViewBag.DateMonth1 = new SelectList(MothsForChoose, "Value", "Text", currmonth);
             ViewBag.Employee = _DataManager.EmR.GetElem(Emid);
             ViewBag.Event = _DataManager.EvR.GetElem(Evid);
-            var text = (ViewBag.Employee as Employee).Salary.Where(x => x.Event.Id == (ViewBag.Event as Event).Id).Select(y => y.PercentOfSalary).FirstOrDefault();
-            var selectedIndex = _DataManager.SalR.GetCollectionTypes().Where(x => x.Type == text).FirstOrDefault().Id;
-            ViewBag.Types = new SelectList(_DataManager.SalR.GetCollectionTypes(), "Id", "Type", _DataManager.SalR.GetCollectionTypes().Last().Id);
-            ViewBag.Salary = (ViewBag.Employee as Employee).Salary.Where(x => x.Event.Id == (ViewBag.Event as Event).Id).Select(y => y.Value).FirstOrDefault();
-          /*  ViewBag.Salary = (ViewBag.Employee as Employee).Salary.Where(x => x.Event.Id == (ViewBag.Event as Event).Id).Select(y => y.ValueOlga).FirstOrDefault();
-            ViewBag.Salary = (ViewBag.Employee as Employee).Salary.Where(x => x.Event.Id == (ViewBag.Event as Event).Id).Select(y => y.ValueSergey).FirstOrDefault();
+            /* var text = (ViewBag.Employee as Employee).Salary.Where(x => x.Event.Id == (ViewBag.Event as Event).Id).Select(y => y.PercentOfSalary).FirstOrDefault();
+             var selectedIndex = _DataManager.SalR.GetCollectionTypes().Where(x => x.Type == text).FirstOrDefault().Id;
+             ViewBag.SelectedIndex = selectedIndex;
+             var tyre = _DataManager.SalR.GetCollectionTypes().ToList();
 
-    */
+           var bb = new SelectList(tyre, "Id", "Type", tyre[2]);
+
+
+             bb.ElementAt(2).Selected = true;
+             ViewBag.Types = bb;*/
+            ViewBag.Types = new SelectList(_DataManager.SalR.GetCollectionTypes(), "Id", "Type");
+            ViewBag.Salary = (ViewBag.Employee as Employee).Salary.Where(x => x.Event.Id == (ViewBag.Event as Event).Id).Select(y => y.Value).FirstOrDefault();
+             ViewBag.SalaryOlga = (ViewBag.Employee as Employee).Salary.Where(x => x.Event.Id == (ViewBag.Event as Event).Id).Select(y => y.ValueOlga).FirstOrDefault();
+              ViewBag.SalarySergey = (ViewBag.Employee as Employee).Salary.Where(x => x.Event.Id == (ViewBag.Event as Event).Id).Select(y => y.ValueSergey).FirstOrDefault();
+
+      
 
             return View();
         }
@@ -276,22 +321,40 @@ namespace ERP_Love_Gid.Controllers
           
 
 
-            var salaryItem = _DataManager.SalR.GetCollection().Where(x => x.Event.Id == EventId&&x.Employee.Id==EmployeeId).FirstOrDefault();
+            var salaryItem = _DataManager.SalR.GetCollection().Where(x => x.Event.Id == EventId&&x.Employee.Id==EmployeeId).FirstOrDefault()?? new Salary();
 
             salaryItem.PercentOfSalary = _DataManager.SalR.GetCollectionTypes().Select(x=>x.Type).ToArray<string>()[Convert.ToInt32(Request.Form["Types"])-1];
-            salaryItem.Value =Convert.ToInt32( Request.Form["Salary"]);
+            try { salaryItem.Value = Convert.ToInt32(Request.Form["Salary"]); }
+            catch { salaryItem.Value = 0; }
+            try
+            {
+                salaryItem.ValueOlga = Convert.ToInt32(Request.Form["SalaryOlga"]);
+            }
+            catch { salaryItem.ValueOlga = 0; }
+            try { 
+            salaryItem.ValueSergey = Convert.ToInt32(Request.Form["SalarySergey"]);
+            }
+            catch { salaryItem.ValueSergey = 0; }
 
-            _DataManager.SalR.Edit(salaryItem);
+
+            if (_DataManager.SalR.GetCollection().Contains(salaryItem)) { _DataManager.SalR.Edit(salaryItem); }
+            else {
+                salaryItem.Employee = _DataManager.EmR.GetElem(EmployeeId);
+                salaryItem.Event = _DataManager.EvR.GetElem(EventId);
+                _DataManager.SalR.Add(salaryItem);
+            }
             return RedirectToAction("Salary", new { CurUserId});
         }
         [HttpGet]
-        public ActionResult AddEmployee(int id = 0, int CurUserId = 0)
+        public ActionResult AddEmployee(int numberofMonth = -1, int id = 0, int CurUserId = 0)
 
         {
 
             CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
             ViewBag.CurUserId = CurUserId;
-
+            if (numberofMonth != -1) { currmonth = numberofMonth + 1;   }
+            else { currmonth = DateTime.Now.Month;   }
+            ViewBag.DateMonth1 = new SelectList(MothsForChoose, "Value", "Text", currmonth);
             return View();
         }
         [HttpPost]
