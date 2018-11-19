@@ -24,6 +24,7 @@ namespace ERP_Love_Gid
         public Nullable<bool> StatusForPeers { get; set; }
         public Nullable<bool> StatusForSalary { get; set; }
         public Nullable<System.DateTime> DateForPayment { get; set; }
+        public bool Secured { get; set; }
     
         public virtual Account Account { get; set; }
         public virtual Contract Contract { get; set; }

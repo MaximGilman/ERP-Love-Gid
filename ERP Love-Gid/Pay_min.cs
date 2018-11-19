@@ -24,6 +24,7 @@ namespace ERP_Love_Gid
         public int Sum { get; set; }
         public System.DateTime Date { get; set; }
         public bool Finished { get; set; }
+        public bool Secured { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Payments> Payments { get; set; }
