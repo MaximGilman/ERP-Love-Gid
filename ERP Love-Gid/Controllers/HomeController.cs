@@ -619,7 +619,7 @@ namespace ERP_Love_Gid.Controllers
         {
             CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
 
-            return RedirectToAction("Index", "Admin", new { id = CurEmployee.Id });
+            return RedirectToAction("CompanyFinanses", "Admin", new { CurUserId });
         }
     }
 

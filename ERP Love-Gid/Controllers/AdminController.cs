@@ -16,6 +16,7 @@ namespace ERP_Love_Gid.Controllers
         private DataManager _DataManager;
         private  Employee CurEmployee;
         int currmonth = DateTime.Now.Month;
+        int currYear = DateTime.Now.Year;
         dynamic MothsForChoose = new List<SelectListItem>
             {
                 new SelectListItem{Text = "Январь", Value = "1"},
@@ -41,13 +42,13 @@ namespace ERP_Love_Gid.Controllers
         public ActionResult Index(int numberofMonth = -1, int id = 0)
         {
             CurEmployee = id == 0 ? CurEmployee : _DataManager.EmR.GetElem(id);
-
+            if (numberofMonth != -1) { currmonth = numberofMonth + 1;  }
+            else { currmonth = DateTime.Now.Month; }
             ViewBag.CurUserId = id;
             ViewBag.User = CurEmployee.Surname + " " + CurEmployee.Name;
-            ViewBag.Contracts = _DataManager.ConR.GetCollection();
+            ViewBag.Contracts = (IEnumerable<Contract>) _DataManager.ConR.GetCollection().Where(x=>x.Date_of_event.Value.Month== currmonth && x.Date_of_event.Value.Year==DateTime.Now.Year);
             ViewBag.ID = CurEmployee.Id;
-            if (numberofMonth != -1) { currmonth = numberofMonth + 1; }
-            else { currmonth = DateTime.Now.Month;  }
+            
             ViewBag.DateMonth1 = new SelectList(MothsForChoose, "Value", "Text", currmonth);
             return View();
         }
@@ -57,12 +58,12 @@ namespace ERP_Love_Gid.Controllers
         {
             CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
             ViewBag.CurUserId = CurUserId;
-
+            if (numberofMonth != -1) { currmonth = numberofMonth + 1; }
+            else { currmonth = DateTime.Now.Month; }
             ViewBag.User = CurEmployee.Surname + " " + CurEmployee.Name;
-            ViewBag.TotalPlan = _DataManager.ConR.GetCollection().Select(x => x.Received).Sum(); //!!!
+            ViewBag.TotalPlan =  _DataManager.ConR.GetCollection().Where(y=>y.Date_of_event.Value.Year==DateTime.Now.Year&&y.Date_of_event.Value.Month==currmonth).Select(x => x.Received).Sum(); //!!!
 
-            if (numberofMonth != -1) { currmonth = numberofMonth + 1;   }
-            else { currmonth = DateTime.Now.Month;   }
+          
             ViewBag.DateMonth1 = new SelectList(MothsForChoose, "Value", "Text", currmonth);
             //  ViewBag.Years = new SelectList(_DataManager.PayR.GetCollection(), "Id", "FIO");
             var tmplist = _DataManager.EmR.GetCollection();
