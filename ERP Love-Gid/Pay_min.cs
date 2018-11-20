@@ -17,6 +17,7 @@ namespace ERP_Love_Gid
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Pay_min()
         {
+            this.Secured = false;
             this.Payments = new HashSet<Payments>();
         }
     

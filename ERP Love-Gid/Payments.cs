@@ -14,6 +14,12 @@ namespace ERP_Love_Gid
     
     public partial class Payments
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Payments()
+        {
+            this.Secured = false;
+        }
+    
         public int Id { get; set; }
         public int Receipt { get; set; }
         public string Comment { get; set; }

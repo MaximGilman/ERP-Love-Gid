@@ -151,7 +151,7 @@
     <Property Name="StatusForPeers" Type="bit" Nullable="true" />
     <Property Name="StatusForSalary" Type="bit" Nullable="true" />
     <Property Name="DateForPayment" Type="datetime" Nullable="true" />
-    <Property Name="Secured" Type="bit" Nullable="false" />
+    <Property Name="Secured" Type="bit" Nullable="false" DefaultValue="false" />
     <Property Name="Account_Id" Type="int" Nullable="true" />
     <Property Name="Contract_Id" Type="int" Nullable="true" />
     <Property Name="Pay_min_Id" Type="int" Nullable="true" />
@@ -180,7 +180,7 @@
     <Property Name="Sum" Type="int" Nullable="false" />
     <Property Name="Date" Type="datetime" Nullable="false" />
     <Property Name="Finished" Type="bit" Nullable="false" />
-    <Property Name="Secured" Type="bit" Nullable="false" />
+    <Property Name="Secured" Type="bit" Nullable="false" DefaultValue="false" />
     <Property Name="Account_Id" Type="int" Nullable="false" />
     <Property Name="Employee_Id" Type="int" Nullable="false" />
   </EntityType>
@@ -553,7 +553,7 @@
           <NavigationProperty Name="EmployeeTo" Relationship="ERPModel.PaymentsEmployee1" FromRole="Payments" ToRole="Employee" />
           <Property Name="StatusForSalary" Type="Boolean" Nullable="true" />
           <Property Name="DateForPayment" Type="DateTime" Nullable="true" />
-          <Property Name="Secured" Type="Boolean" Nullable="false" />
+          <Property Name="Secured" Type="Boolean" Nullable="false" DefaultValue="False" />
         </EntityType>
         <EntityType Name="PaymentToPeers">
           <Key>
@@ -607,7 +607,7 @@
           <NavigationProperty Name="Account" Relationship="ERPModel.Pay_minAccount" FromRole="Pay_min" ToRole="Account" />
           <Property Name="Finished" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Employee" Relationship="ERPModel.EmployeePay_min" FromRole="Pay_min" ToRole="Employee" />
-          <Property Name="Secured" Type="Boolean" Nullable="false" />
+          <Property Name="Secured" Type="Boolean" Nullable="false" DefaultValue="False" />
         </EntityType>
         <Association Name="Pay_minPayments">
           <End Type="ERPModel.Pay_min" Role="Pay_min" Multiplicity="0..1" />

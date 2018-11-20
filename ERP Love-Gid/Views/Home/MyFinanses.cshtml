@@ -3,7 +3,7 @@
     ViewBag.Title = "Мои финансы";
 }
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 <h1>Мои финансы</h1>
 <h3>1.Детализация платежей</h3>
 <p>@ViewBag.Error</p>
@@ -197,7 +197,7 @@
 
     <h3>Моя ЗП</h3>
 
-    <table class="NumericTable">
+    <table class="NumericTable" id="NumTab">
         <tr>
             <td> <b>Сумма</b></td>
             <td><b>В ЗП</b></td>
@@ -215,75 +215,117 @@
             {
                 if (@cw.StatusForSalary == true && cw.Employee.Id == cw.EmployeeTo.Id)
                 {
-                    <tr>
+                    if (cw.Employee.Salary.Where(x => x.Event.Id == cw.Event.Id).Select(y => y.PercentOfSalary).First().Contains("%"))
+                    {
+                        //процент
+                        <tr class="row1">
 
-                        <td> <p>@cw.Receipt</p></td>
-                        <td><p>@cw.Event.Salary.Select(x => cw.Receipt - x.Value).FirstOrDefault()</p></td>
+                            <td> <p>@cw.Receipt</p></td>
+                            <td><p class="Salary">@cw.Event.Salary.Select(x => cw.Receipt * x.Value / 100).FirstOrDefault()</p></td>
 
-                        <td><p>@cw.Contract.Name</p></td>
-                        <td><p>@cw.Event.Type</p></td>
+                            <td><p>@cw.Contract.Name</p></td>
+                            <td><p>@cw.Event.Type</p></td>
 
-                        <td><p>@cw.Comment</p></td>
-                        <td><p>✔</p></td>
+                            <td><p>@cw.Comment</p></td>
+                            <td><p class="CheckMySalary">✔</p></td>
 
-                    </tr>}
+                        </tr>}
+                    else if (cw.Employee.Salary.Where(x => x.Event.Id == cw.Event.Id).Select(y => y.PercentOfSalary).First().Contains("значение"))
+                    {
+                        //число
+                        <tr class="row1">
+
+                            <td> <p>@cw.Receipt</p></td>
+                            <td><p class="Salary">@cw.Event.Salary.Select(x => x.Value).FirstOrDefault()</p></td>
+
+                            <td><p>@cw.Contract.Name</p></td>
+                            <td><p>@cw.Event.Type</p></td>
+
+                            <td><p>@cw.Comment</p></td>
+                            <td><p class="CheckMySalary">✔</p></td>
+
+                        </tr>}
+                }
                 else
                  if (@cw.Employee.Id != cw.EmployeeTo.Id)
                 {
-                    <tr>
+                    <tr class="row1">
 
                         <td> <p>@cw.Receipt</p></td>
-                        <td> <p>@cw.Receipt</p></td>
+                        <td> <p class="Salary">@cw.Receipt</p></td>
                         <td><p>@cw.Contract.Name</p></td>
                         <td><p>@cw.Event.Type</p></td>
 
                         <td><p>@cw.Comment</p></td>
-                        <td><p>Не оплачено</p></td>
+                        <td><p class="CheckMySalary">Не оплачено</p></td>
 
                     </tr>}
 
                 else
                 {
-                    <tr>
+                    if (cw.Employee.Salary.Where(x => x.Event.Id == cw.Event.Id).Select(y => y.PercentOfSalary).First().Contains("%"))
+                    {
+                        //процент
+                        <tr class="row1">
 
-                        <td> <p>@cw.Receipt</p></td>
-                        <td><p>@cw.Event.Salary.Select(x => cw.Receipt - x.Value).FirstOrDefault()</p></td>
+                            <td> <p>@cw.Receipt</p></td>
+                            <td><p class="Salary">@cw.Event.Salary.Select(x => cw.Receipt * x.Value / 100).FirstOrDefault()</p></td>
 
-                        <td><p>@cw.Contract.Name</p></td>
-                        <td><p>@cw.Event.Type</p></td>
+                            <td><p>@cw.Contract.Name</p></td>
+                            <td><p>@cw.Event.Type</p></td>
 
-                        <td><p>@cw.Comment</p></td>
-                        <td><p class="CheckMySalary">Не сходится счет или сумма</p></td>
+                            <td><p>@cw.Comment</p></td>
+                            <td><p class="CheckMySalary">✔</p></td>
 
-                    </tr>}
+                        </tr>}
+                    else if (cw.Employee.Salary.Where(x => x.Event.Id == cw.Event.Id).Select(y => y.PercentOfSalary).First().Contains("значение"))
+                    {
+                        //число
+                        <tr class="row1">
+
+                            <td> <p>@cw.Receipt</p></td>
+                            <td><p class="Salary">@cw.Event.Salary.Select(x => cw.Receipt - x.Value).FirstOrDefault()</p></td>
+
+                            <td><p>@cw.Contract.Name</p></td>
+                            <td><p>@cw.Event.Type</p></td>
+
+                            <td><p>@cw.Comment</p></td>
+                            <td><p class="CheckMySalary">Не сходится счет или сумма</p></td>
+
+                        </tr>}
+                }
 
             }
         }
 
     </table>
-    <p> <b> План @ViewBag.TotalSumMinusSal @*@ViewBag.SalarySum*@    Факт   @ViewBag.TotalFactSumMinusSal@*@ViewBag.FactSalarySum*@ </b></p>
+    <p> <b> План <span id="res"> @ViewBag.TotalSumMinusSal</span> @*@ViewBag.SalarySum*@    Факт  <span id="factRes"> @ViewBag.TotalFactSumMinusSal@*@ViewBag.FactSalarySum*@</span> </b></p>
 
 }
 
 <script>
-    var b = 0;
-    $('.Informer').each(function () {
-        b += parseFloat($(this).text());
-    });
+    $(function () {
+        var sum = 0;
+        $('#NumTab .row1').each(function () {
+            sum += parseInt($((".Salary"), this).text());
 
+         });
+         $('#res').html(sum);
+        });
+       
 
+    
+    
 
-    $('#info').text(b);
 </script>
 
 <script>
-    var b = 0;
-    $('.Salary').each(function () {
-        b += parseFloat($(this).text());
+    $(function () {
+        var sum = 0;
+        //alert($('.CheckMySalary:contains(✔)', this).parent().parent().find('td .Salary'))
+        $('.CheckMySalary:contains(✔)').parent().parent().find('td .Salary').each(function (i, e) { sum+=parseInt($(e).text());});
+         
+        $('#factRes').html(sum);
     });
-
-
-
-    $('#salarySum').text(b);
 </script>
 
