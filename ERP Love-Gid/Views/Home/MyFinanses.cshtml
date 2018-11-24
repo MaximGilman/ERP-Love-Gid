@@ -164,31 +164,31 @@
         {
             if (@cw.StatusForPeers == true)
             {
-        <tr onclick="window.location.href = '@Url.Action("EditPayFromPeer", "Home", new { id = cw.Id,CurUserId = Convert.ToInt32(@ViewBag.CurUserId), adminId = Convert.ToInt32(@ViewBag.adminId) })'">
-            <td><p>@cw.Receipt</p></td>
-            <td><p>@cw.Employee.Name.First()@cw.Employee.Surname.First()</p></td>
+                <tr onclick="window.location.href = '@Url.Action("EditPayFromPeer", "Home", new { id = cw.Id,CurUserId = Convert.ToInt32(@ViewBag.CurUserId), adminId = Convert.ToInt32(@ViewBag.adminId) })'">
+                    <td><p>@cw.Receipt</p></td>
+                    <td><p>@cw.Employee.Name.First()@cw.Employee.Surname.First()</p></td>
 
-            <td><p>@(cw.Contract == null ? "Не указано" : cw.Contract.Name)</p></td>
-            <td><p>@cw.Event.Type</p></td>
+                    <td><p>@(cw.Contract == null ? "Не указано" : cw.Contract.Name)</p></td>
+                    <td><p>@cw.Event.Type</p></td>
 
-            <td><p>@cw.Comment</p></td>
-            <td><p>✔</p></td>
+                    <td><p>@cw.Comment</p></td>
+                    <td><p>✔</p></td>
 
-        </tr>}
+                </tr>}
             else
             {
-        <tr onclick="window.location.href = '@Url.Action("EditPayFromPeer", "Home", new { id = cw.Id ,CurUserId = Convert.ToInt32(@ViewBag.CurUserId), adminId = Convert.ToInt32(@ViewBag.adminId)})'">
+                <tr onclick="window.location.href = '@Url.Action("EditPayFromPeer", "Home", new { id = cw.Id ,CurUserId = Convert.ToInt32(@ViewBag.CurUserId), adminId = Convert.ToInt32(@ViewBag.adminId)})'">
 
-            <td> <p>@cw.Receipt</p></td>
-            <td><p>@cw.Employee.Name.First() @cw.Employee.Surname.First()</p></td>
+                    <td> <p>@cw.Receipt</p></td>
+                    <td><p>@cw.Employee.Name.First() @cw.Employee.Surname.First()</p></td>
 
-            <td><p>@(cw.Contract == null ? "Не указано" : cw.Contract.Name)</p></td>
-            <td><p>@cw.Event.Type</p></td>
+                    <td><p>@(cw.Contract == null ? "Не указано" : cw.Contract.Name)</p></td>
+                    <td><p>@cw.Event.Type</p></td>
 
-            <td><p>@cw.Comment</p></td>
-            <td><p>Не оплачено</p></td>
+                    <td><p>@cw.Comment</p></td>
+                    <td><p>Не оплачено</p></td>
 
-        </tr>}
+                </tr>}
         }
 
     </table>
@@ -218,48 +218,64 @@
                     if (cw.Employee.Salary.Where(x => x.Event.Id == cw.Event.Id).Select(y => y.PercentOfSalary).First().Contains("%"))
                     {
                         //процент
-        <tr class="row1">
+                        <tr class="row1">
 
-            <td> <p>@cw.Receipt</p></td>
-            <td><p class="Salary">@cw.Event.Salary.Select(x => cw.Receipt * x.Value / 100).FirstOrDefault()</p></td>
+                            <td> <p>@cw.Receipt</p></td>
+                            <td><p class="Salary">@cw.Event.Salary.Select(x => cw.Receipt * x.Value / 100).FirstOrDefault()</p></td>
 
-            <td><p>@(cw.Contract == null ? "Не указано" : cw.Contract.Name)</p></td>
-            <td><p>@cw.Event.Type</p></td>
+                            <td><p>@(cw.Contract == null ? "Не указано" : cw.Contract.Name)</p></td>
+                            <td><p>@cw.Event.Type</p></td>
 
-            <td><p>@cw.Comment</p></td>
-            <td><p class="CheckMySalary">✔</p></td>
+                            <td><p>@cw.Comment</p></td>
+                            <td><p class="CheckMySalary">✔</p></td>
 
-        </tr>}
+                        </tr>}
                     else if (cw.Employee.Salary.Where(x => x.Event.Id == cw.Event.Id).Select(y => y.PercentOfSalary).First().Contains("значение"))
                     {
                         //число
-        <tr class="row1">
+                        <tr class="row1">
 
-            <td> <p>@cw.Receipt</p></td>
-            <td><p class="Salary">@cw.Event.Salary.Select(x => x.Value).FirstOrDefault()</p></td>
+                            <td> <p>@cw.Receipt</p></td>
+                            <td><p class="Salary">@cw.Event.Salary.Select(x => x.Value).FirstOrDefault()</p></td>
 
-            <td><p>@(cw.Contract == null ? "Не указано" : cw.Contract.Name)</p></td>
-            <td><p>@cw.Event.Type</p></td>
+                            <td><p>@(cw.Contract == null ? "Не указано" : cw.Contract.Name)</p></td>
+                            <td><p>@cw.Event.Type</p></td>
 
-            <td><p>@cw.Comment</p></td>
-            <td><p class="CheckMySalary">✔</p></td>
+                            <td><p>@cw.Comment</p></td>
+                            <td><p class="CheckMySalary">✔</p></td>
 
-        </tr>}
+                        </tr>}
+                    else if (cw.Employee.Salary.Where(x => x.Event.Id == cw.Event.Id).Select(y => y.PercentOfSalary).First().Contains("Указывается"))
+                    {
+                        //число
+                        <tr class="row1">
+
+                            <td> <p>@(cw.Receipt+cw.SumToOptyonallyUsing)</p></td>
+                            <td><p class="Salary">@cw.Receipt</p></td>
+
+                            <td><p>@(cw.Contract == null ? "Не указано" : cw.Contract.Name)</p></td>
+                            <td><p>@cw.Event.Type</p></td>
+
+                            <td><p>@cw.Comment</p></td>
+                            <td><p class="CheckMySalary">✔</p></td>
+
+                        </tr>}
                 }
                 else
                  if (@cw.Employee.Id != cw.EmployeeTo.Id)
                 {
-        <tr class="row1">
+                    <tr class="row1">
 
-            <td> <p>@cw.Receipt</p></td>
-            <td> <p class="Salary">@cw.Receipt</p></td>
-            <td><p>@(cw.Contract == null ? "Не указано" : cw.Contract.Name)</p></td>
-            <td><p>@cw.Event.Type</p></td>
+                        <td> <p>@cw.Receipt</p></td>
+                        <td> <p class="Salary">@cw.Receipt</p></td>
+                        <td><p>@(cw.Contract == null ? "Не указано" : cw.Contract.Name)</p></td>
+                        <td><p>@cw.Event.Type</p></td>
 
-            <td><p>@cw.Comment</p></td>
-            <td><p class="CheckMySalary">Не оплачено</p></td>
+                        <td><p>@cw.Comment</p></td>
+                        <td><p class="CheckMySalary">Не оплачено</p></td>
 
-        </tr>}
+                    </tr>
+                }
 
                 else
                 {
@@ -271,7 +287,7 @@
                             <td> <p>@cw.Receipt</p></td>
                             <td><p class="Salary">@cw.Event.Salary.Select(x => cw.Receipt * x.Value / 100).FirstOrDefault()</p></td>
 
-                            <td><p>@(cw.Contract==null?"Не указано" : cw.Contract.Name)</p></td>
+                            <td><p>@(cw.Contract == null ? "Не указано" : cw.Contract.Name)</p></td>
                             <td><p>@cw.Event.Type</p></td>
 
                             <td><p>@cw.Comment</p></td>
@@ -293,6 +309,21 @@
                             <td><p class="CheckMySalary">Не сходится счет или сумма</p></td>
 
                         </tr>}
+                    else if (cw.Employee.Salary.Where(x => x.Event.Id == cw.Event.Id).Select(y => y.PercentOfSalary).First().Contains("Указывается"))
+                    {
+                        //число
+                        <tr class="row1">
+
+                            <td> <p>@(cw.Receipt+cw.SumToOptyonallyUsing)</p></td>
+                            <td><p class="Salary">@cw.Receipt</p></td>
+
+                            <td><p>@(cw.Contract == null ? "Не указано" : cw.Contract.Name)</p></td>
+                            <td><p>@cw.Event.Type</p></td>
+
+                            <td><p>@cw.Comment</p></td>
+                            <td><p class="CheckMySalary">Не сходится счет или сумма</p></td>
+
+                        </tr>}
                 }
 
             }
@@ -305,35 +336,35 @@
 }
 
 @*<script>
-    $(function () {
-        var sum = 0;
-        $('#NumTab .row1').each(function () {
-            sum += parseInt($((".Salary"), this).text());
+        $(function () {
+            var sum = 0;
+            $('#NumTab .row1').each(function () {
+                sum += parseInt($((".Salary"), this).text());
+
+            });
+            $('#res').html(sum); $('#ResSal').text(sum);
 
         });
-        $('#res').html(sum); $('#ResSal').text(sum);
 
+
+
+
+
+    </script>
+
+    <script>
+        $(function () {
+            var sum = 0;
+            //alert($('.CheckMySalary:contains(✔)', this).parent().parent().find('td .Salary'))
+            $('.CheckMySalary:contains(✔)').parent().parent().find('td .Salary').each(function (i, e) { sum += parseInt($(e).text()); });
+
+            $('#factRes').html(sum); $('#ResSalFact').text(sum);
+        });
+    </script>
+    <script>
+        $(function() {
+            var sal = $('#ResSal').text();
+            var salFact = $('#ResSalFact').text();
+            $.get('@Url.Action("GetData","Admin")', { sal, salFact, CurUserId:@ViewBag.CurUserId}); //
     });
-
-
-
-
-
-</script>
-
-<script>
-    $(function () {
-        var sum = 0;
-        //alert($('.CheckMySalary:contains(✔)', this).parent().parent().find('td .Salary'))
-        $('.CheckMySalary:contains(✔)').parent().parent().find('td .Salary').each(function (i, e) { sum += parseInt($(e).text()); });
-
-        $('#factRes').html(sum); $('#ResSalFact').text(sum);
-    });
-</script>
-<script>
-    $(function() {
-        var sal = $('#ResSal').text();
-        var salFact = $('#ResSalFact').text();
-        $.get('@Url.Action("GetData","Admin")', { sal, salFact, CurUserId:@ViewBag.CurUserId}); // 
-});
-</script>*@
+    </script>*@

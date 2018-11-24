@@ -102,7 +102,17 @@ namespace ERP_Love_Gid.Controllers
 
 
                     }
+                    else if (cw.Employee.Salary.Where(x => x.Event.Id == cw.Event.Id).Select(y => y.PercentOfSalary).First().Contains("Указывается"))
+                    {
+                        sum += cw.Receipt;
+                        total_sum += cw.SumToOptyonallyUsing.Value ;
+                        if (cw.StatusForSalary == false)
+                        {
+                            FactSum += cw.Receipt;
 
+                        }
+                        else total_sum_fact += cw.SumToOptyonallyUsing.Value;
+                    }
                     //другие обработчики
                     else sum += 0;
 
@@ -118,7 +128,7 @@ namespace ERP_Love_Gid.Controllers
                 SalPerMon.Employee = c;
                 SalPerMon.DateMonth = (short)currmonth;
                 SalPerMon.DateYear = DateTime.Now.Year;
-                SalPerMon.IncomeToCompany = total_sum - sum; ;
+                SalPerMon.IncomeToCompany = total_sum - sum; 
 
                 SalPerMon.IncomeToCompanyFact = total_sum_fact;
 

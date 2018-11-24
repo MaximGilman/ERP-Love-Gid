@@ -125,13 +125,15 @@ namespace ERP_Love_Gid.Controllers
                         salary.Employee = empl;
                         salary.PercentOfSalary = "%";
                         salary.Value = 100;
-                        salary.Value = 0;
+                        salary.ValueOlga = 0;
                         salary.ValueSergey = 0;
-                        _DataManager.SalR.Add(salary);
+                        salaries.Add(salary);
 
                     }
 
                 }
+                foreach (var salary in salaries)
+                    _DataManager.SalR.Add(salary);
             }
 
         }

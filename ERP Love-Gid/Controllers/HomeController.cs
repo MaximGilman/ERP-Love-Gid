@@ -186,13 +186,14 @@ namespace ERP_Love_Gid.Controllers
 
             if (lookfromAdmin) { ViewBag.EmplNameForAdmin = "просматривает работника " + CurEmployee.Name; ViewBag.User = AdminEmployee.Surname + " " + AdminEmployee.Name; }
 
-            int sum = 0;
-            int FactSum = 0;
+            int sum = 0; //в зп план
+            int FactSum = 0; //в зп факт
             int total_sum = 0;
             int total_sum_fact = 0;
             foreach (Payments cw in (IEnumerable<Payments>)ViewBag.MySalary)
             {
                 total_sum += cw.Receipt;
+                total_sum += cw.SumToOptyonallyUsing==null? 0: cw.SumToOptyonallyUsing.Value;
                 if (cw.Employee.Id != cw.EmployeeTo.Id)
                 { sum += cw.Receipt;
                      FactSum += cw.Receipt;
@@ -213,6 +214,17 @@ namespace ERP_Love_Gid.Controllers
                       
                     }
                     else total_sum_fact += cw.Event.Salary.Select(x => cw.Receipt - x.Value).FirstOrDefault();
+                }
+                else if (cw.Employee.Salary.Where(x => x.Event.Id == cw.Event.Id).Select(y => y.PercentOfSalary).First().Contains("Указывается"))
+                {
+                    sum +=  cw.Receipt;
+                    total_sum += cw.SumToOptyonallyUsing.Value + cw.Receipt;
+                    if (cw.StatusForSalary == false)
+                    {
+                        FactSum += cw.Receipt;
+
+                    }
+                    else total_sum_fact += cw.SumToOptyonallyUsing.Value;
                 }
 
                 //другие обработчики
