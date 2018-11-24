@@ -16,6 +16,7 @@
     <EntitySet Name="Pay_minSet" EntityType="ERPModel.Store.Pay_minSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="SalarySet" EntityType="ERPModel.Store.SalarySet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="SalaryTypesSet" EntityType="ERPModel.Store.SalaryTypesSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="SalaryPerMonthSet" EntityType="ERPModel.Store.SalaryPerMonthSet" store:Type="Tables" Schema="dbo" />
     <AssociationSet Name="FK_ClientContract" Association="ERPModel.Store.FK_ClientContract">
       <End Role="Client" EntitySet="ClientSet" />
       <End Role="Contract" EntitySet="ContractSet" />
@@ -75,6 +76,10 @@
     <AssociationSet Name="PaymentsEmployee1" Association="ERPModel.Store.PaymentsEmployee1">
       <End Role="Payments" EntitySet="PaymentsSet" />
       <End Role="Employee" EntitySet="EmployeeSet" />
+    </AssociationSet>
+    <AssociationSet Name="EmployeeSalaryPerMonth" Association="ERPModel.Store.EmployeeSalaryPerMonth">
+      <End Role="Employee" EntitySet="EmployeeSet" />
+      <End Role="SalaryPerMonth" EntitySet="SalaryPerMonthSet" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="AccountSet">
@@ -202,6 +207,18 @@
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Type" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SalaryPerMonthSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CurMonthSal" Type="int" Nullable="true" DefaultValue="0" />
+    <Property Name="CurMonthSalFact" Type="int" Nullable="true" DefaultValue="0" />
+    <Property Name="DateMonth" Type="smallint" Nullable="true" />
+    <Property Name="DateYear" Type="int" Nullable="true" />
+    <Property Name="IncomeToCompany" Type="int" Nullable="false" />
+    <Property Name="Employee_Id" Type="int" Nullable="false" />
   </EntityType>
   <Association Name="FK_ClientContract">
     <End Role="Client" Type="ERPModel.Store.ClientSet" Multiplicity="1" />
@@ -383,6 +400,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="EmployeeSalaryPerMonth">
+    <End Role="Employee" Type="ERPModel.Store.EmployeeSet" Multiplicity="1" />
+    <End Role="SalaryPerMonth" Type="ERPModel.Store.SalaryPerMonthSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Employee">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="SalaryPerMonth">
+        <PropertyRef Name="Employee_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -458,6 +487,11 @@
             <End Role="Employee" EntitySet="EmployeeSet" />
           </AssociationSet>
           <EntitySet Name="SalaryTypesSet" EntityType="ERPModel.SalaryTypes" />
+          <EntitySet Name="SalaryPerMonthSet" EntityType="ERPModel.SalaryPerMonth" />
+          <AssociationSet Name="EmployeeSalaryPerMonth" Association="ERPModel.EmployeeSalaryPerMonth">
+            <End Role="Employee" EntitySet="EmployeeSet" />
+            <End Role="SalaryPerMonth" EntitySet="SalaryPerMonthSet" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Account">
           <Key>
@@ -520,7 +554,8 @@
           <Property Name="Patronymic" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Salary" Relationship="ERPModel.EmployeeSalary" FromRole="Employee" ToRole="Salary" />
           <NavigationProperty Name="PaymentsFrom" Relationship="ERPModel.PaymentsEmployee1" FromRole="Employee" ToRole="Payments" />
-        </EntityType>
+          <NavigationProperty Name="SalaryPerMonth" Relationship="ERPModel.EmployeeSalaryPerMonth" FromRole="Employee" ToRole="SalaryPerMonth" />
+          </EntityType>
         <EntityType Name="Event">
           <Key>
             <PropertyRef Name="Id" />
@@ -640,7 +675,7 @@
           <Property Name="Value" Type="Int32" Nullable="false" />
           <Property Name="ValueOlga" Type="Int32" Nullable="true" />
           <Property Name="ValueSergey" Type="Int32" Nullable="true" />
-        </EntityType>
+          </EntityType>
         <Association Name="EmployeeSalary">
           <End Type="ERPModel.Employee" Role="Employee" Multiplicity="1" />
           <End Type="ERPModel.Salary" Role="Salary" Multiplicity="*" />
@@ -660,6 +695,22 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Type" Type="String" Nullable="false" />
         </EntityType>
+        <EntityType Name="SalaryPerMonth">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CurMonthSal" Type="Int32" Nullable="true" DefaultValue="0" />
+          <Property Name="CurMonthSalFact" Type="Int32" Nullable="true" DefaultValue="0" />
+          <Property Name="DateMonth" Type="Int16" Nullable="true" />
+          <Property Name="DateYear" Type="Int32" Nullable="true" />
+          <NavigationProperty Name="Employee" Relationship="ERPModel.EmployeeSalaryPerMonth" FromRole="SalaryPerMonth" ToRole="Employee" />
+          <Property Name="IncomeToCompany" Type="Int32" Nullable="false" />
+        </EntityType>
+        <Association Name="EmployeeSalaryPerMonth">
+          <End Type="ERPModel.Employee" Role="Employee" Multiplicity="1" />
+          <End Type="ERPModel.SalaryPerMonth" Role="SalaryPerMonth" Multiplicity="*" />
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -787,6 +838,18 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="SalaryPerMonthSet">
+      <EntityTypeMapping TypeName="IsTypeOf(ERPModel.SalaryPerMonth)">
+        <MappingFragment StoreEntitySet="SalaryPerMonthSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="CurMonthSal" ColumnName="CurMonthSal" />
+          <ScalarProperty Name="CurMonthSalFact" ColumnName="CurMonthSalFact" />
+          <ScalarProperty Name="DateMonth" ColumnName="DateMonth" />
+          <ScalarProperty Name="DateYear" ColumnName="DateYear" />
+          <ScalarProperty Name="IncomeToCompany" ColumnName="IncomeToCompany" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <AssociationSetMapping Name="FK_ClientContract" TypeName="ERPModel.FK_ClientContract" StoreEntitySet="ContractSet">
       <EndProperty Name="Client">
         <ScalarProperty Name="Id" ColumnName="ClientSet_Id" />
@@ -911,6 +974,14 @@
       </EndProperty>
       <Condition ColumnName="EmployeeTo_Id" IsNull="false" />
     </AssociationSetMapping>
+    <AssociationSetMapping Name="EmployeeSalaryPerMonth" TypeName="ERPModel.EmployeeSalaryPerMonth" StoreEntitySet="SalaryPerMonthSet">
+      <EndProperty Name="Employee">
+        <ScalarProperty Name="Id" ColumnName="Employee_Id" />
+      </EndProperty>
+      <EndProperty Name="SalaryPerMonth">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
   </EntityContainerMapping>
 </Mapping></edmx:Mappings>
   </edmx:Runtime>
@@ -931,7 +1002,7 @@
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="e76c284d5ec04aec81370172203fcc71" Name="Diagram1" ZoomLevel="60">
+      <Diagram DiagramId="e76c284d5ec04aec81370172203fcc71" Name="Diagram1" ZoomLevel="67">
         <EntityTypeShape EntityType="ERPModel.Account" Width="1.5" PointX="12" PointY="9.75" IsExpanded="true" />
         <EntityTypeShape EntityType="ERPModel.Client" Width="1.5" PointX="0.75" PointY="6.125" IsExpanded="true" />
         <EntityTypeShape EntityType="ERPModel.Contract" Width="1.5" PointX="3" PointY="4.5" IsExpanded="true" />
@@ -957,6 +1028,8 @@
         <AssociationConnector Association="ERPModel.EventSalary" />
         <AssociationConnector Association="ERPModel.PaymentsEmployee1" />
         <EntityTypeShape EntityType="ERPModel.SalaryTypes" Width="1.5" PointX="2.5" PointY="1" />
+        <EntityTypeShape EntityType="ERPModel.SalaryPerMonth" Width="1.5" PointX="11.5" PointY="0.75" />
+        <AssociationConnector Association="ERPModel.EmployeeSalaryPerMonth" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

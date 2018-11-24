@@ -17,7 +17,8 @@ namespace ERP_Love_Gid.Models
         public PaymentToPeersRepository PayToPR;
         public Pay_minRepository Pay_minR;
         public SalaryRepository SalR;
-
+        public SalaryPerMonthRepository SpmR;
+        public SalaryTypeRepository STR;
         public DataManager()
         {
             shop_cont = new ERPModelContainer();
@@ -28,6 +29,8 @@ namespace ERP_Love_Gid.Models
             EmR = new EmployeeRepository(shop_cont);
 
             EvR = new EventRepository(shop_cont);
+            SpmR = new SalaryPerMonthRepository(shop_cont);
+            STR = new SalaryTypeRepository(shop_cont);
 
             PayR = new PaymentsRepository(shop_cont);
             SalR = new SalaryRepository(shop_cont);

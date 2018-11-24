@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 11/20/2018 08:32:16
+-- Date Created: 11/24/2018 11:44:55
 -- Generated from EDMX file: C:\Users\ГильманМаксимМихайло\Desktop\Бекап флешки\ERP Love-Gid\ERP Love-Gid\ERPModel.edmx
 -- --------------------------------------------------
 
@@ -62,6 +62,9 @@ GO
 IF OBJECT_ID(N'[dbo].[FK_PaymentsEmployee1]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[PaymentsSet] DROP CONSTRAINT [FK_PaymentsEmployee1];
 GO
+IF OBJECT_ID(N'[dbo].[FK_EmployeeSalaryPerMonth]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[SalaryPerMonthSet] DROP CONSTRAINT [FK_EmployeeSalaryPerMonth];
+GO
 
 -- --------------------------------------------------
 -- Dropping existing tables
@@ -96,6 +99,9 @@ IF OBJECT_ID(N'[dbo].[SalarySet]', 'U') IS NOT NULL
 GO
 IF OBJECT_ID(N'[dbo].[SalaryTypesSet]', 'U') IS NOT NULL
     DROP TABLE [dbo].[SalaryTypesSet];
+GO
+IF OBJECT_ID(N'[dbo].[SalaryPerMonthSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[SalaryPerMonthSet];
 GO
 
 -- --------------------------------------------------
@@ -228,6 +234,18 @@ CREATE TABLE [dbo].[SalaryTypesSet] (
 );
 GO
 
+-- Creating table 'SalaryPerMonthSet'
+CREATE TABLE [dbo].[SalaryPerMonthSet] (
+    [Id] int IDENTITY(1,1) NOT NULL,
+    [CurMonthSal] int  NULL,
+    [CurMonthSalFact] int  NULL,
+    [DateMonth] smallint  NULL,
+    [DateYear] int  NULL,
+    [IncomeToCompany] int  NOT NULL,
+    [Employee_Id] int  NOT NULL
+);
+GO
+
 -- --------------------------------------------------
 -- Creating all PRIMARY KEY constraints
 -- --------------------------------------------------
@@ -289,6 +307,12 @@ GO
 -- Creating primary key on [Id] in table 'SalaryTypesSet'
 ALTER TABLE [dbo].[SalaryTypesSet]
 ADD CONSTRAINT [PK_SalaryTypesSet]
+    PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
+-- Creating primary key on [Id] in table 'SalaryPerMonthSet'
+ALTER TABLE [dbo].[SalaryPerMonthSet]
+ADD CONSTRAINT [PK_SalaryPerMonthSet]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
@@ -519,6 +543,21 @@ GO
 CREATE INDEX [IX_FK_PaymentsEmployee1]
 ON [dbo].[PaymentsSet]
     ([EmployeeTo_Id]);
+GO
+
+-- Creating foreign key on [Employee_Id] in table 'SalaryPerMonthSet'
+ALTER TABLE [dbo].[SalaryPerMonthSet]
+ADD CONSTRAINT [FK_EmployeeSalaryPerMonth]
+    FOREIGN KEY ([Employee_Id])
+    REFERENCES [dbo].[EmployeeSet]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_EmployeeSalaryPerMonth'
+CREATE INDEX [IX_FK_EmployeeSalaryPerMonth]
+ON [dbo].[SalaryPerMonthSet]
+    ([Employee_Id]);
 GO
 
 -- --------------------------------------------------

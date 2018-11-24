@@ -275,7 +275,7 @@
                             <td><p>@cw.Event.Type</p></td>
 
                             <td><p>@cw.Comment</p></td>
-                            <td><p class="CheckMySalary">✔</p></td>
+                            <td><p class="CheckMySalary">Не сходится счет или сумма</p></td>
 
                         </tr>}
                     else if (cw.Employee.Salary.Where(x => x.Event.Id == cw.Event.Id).Select(y => y.PercentOfSalary).First().Contains("значение"))
@@ -284,7 +284,7 @@
                         <tr class="row1">
 
                             <td> <p>@cw.Receipt</p></td>
-                            <td><p class="Salary">@cw.Event.Salary.Select(x => cw.Receipt - x.Value).FirstOrDefault()</p></td>
+                            <td><p class="Salary">@cw.Event.Salary.Select(x => x.Value).FirstOrDefault()</p></td>
 
                             <td><p>@cw.Contract.Name</p></td>
                             <td><p>@cw.Event.Type</p></td>
@@ -300,22 +300,24 @@
 
     </table>
     <p> <b> План <span id="res"> @ViewBag.TotalSumMinusSal</span> @*@ViewBag.SalarySum*@    Факт  <span id="factRes"> @ViewBag.TotalFactSumMinusSal@*@ViewBag.FactSalarySum*@</span> </b></p>
-
+    <input type="hidden" name="ResSal" id="ResSal" />
+    <input type="hidden" name="ResSalFact" id="ResSalFact" />
 }
 
-<script>
+@*<script>
     $(function () {
         var sum = 0;
         $('#NumTab .row1').each(function () {
             sum += parseInt($((".Salary"), this).text());
 
-         });
-         $('#res').html(sum);
         });
-       
+        $('#res').html(sum); $('#ResSal').text(sum);
 
-    
-    
+    });
+
+
+
+
 
 </script>
 
@@ -323,9 +325,15 @@
     $(function () {
         var sum = 0;
         //alert($('.CheckMySalary:contains(✔)', this).parent().parent().find('td .Salary'))
-        $('.CheckMySalary:contains(✔)').parent().parent().find('td .Salary').each(function (i, e) { sum+=parseInt($(e).text());});
-         
-        $('#factRes').html(sum);
+        $('.CheckMySalary:contains(✔)').parent().parent().find('td .Salary').each(function (i, e) { sum += parseInt($(e).text()); });
+
+        $('#factRes').html(sum); $('#ResSalFact').text(sum);
     });
 </script>
-
+<script>
+    $(function() {
+        var sal = $('#ResSal').text();
+        var salFact = $('#ResSalFact').text();
+        $.get('@Url.Action("GetData","Admin")', { sal, salFact, CurUserId:@ViewBag.CurUserId}); // 
+});
+</script>*@

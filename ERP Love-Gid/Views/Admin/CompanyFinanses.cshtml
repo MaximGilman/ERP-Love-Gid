@@ -35,7 +35,7 @@
             {
 
 
-                <td>@cw.Scale </td>
+                <td>@cw.SalaryPerMonth.Where(x=> x.DateMonth==Convert.ToInt32(ViewBag.CurMonth) && x.DateYear == Convert.ToInt32(ViewBag.CurYear) &&x.Employee.Id == cw.Id).Select(y => y.CurMonthSal.Value).FirstOrDefault() </td>
 
 
             }
@@ -43,22 +43,22 @@
         </tr>
         <tr>
             <td><b>ЗП факт</b></td>
-            @foreach (int cw in (int[])ViewData["SalaryFact"])
+            @foreach (Employee cw in (IEnumerable<Employee>)ViewData["Employees"])
             {
 
 
-                <td>@cw</td>
+                <td>@cw.SalaryPerMonth.Where(x => x.DateMonth == Convert.ToInt32(ViewBag.CurMonth) && x.DateYear == Convert.ToInt32(ViewBag.CurYear) && x.Employee.Id == cw.Id).Select(y => y.CurMonthSalFact.Value).FirstOrDefault() </td>
 
             }
 
         </tr>
         <tr>
             <td><b>Принес в компанию</b></td>
-            @foreach (int cw in (int[])ViewData["EmployeesSalaryFact"])
+            @foreach (Employee cw in (IEnumerable<Employee>)ViewData["Employees"])
             {
 
 
-                <td>@cw </td>
+                <td>@cw.SalaryPerMonth.Where(x => x.DateMonth == Convert.ToInt32(ViewBag.CurMonth) && x.DateYear == Convert.ToInt32(ViewBag.CurYear) && x.Employee.Id == cw.Id).Select(y => y.IncomeToCompany).FirstOrDefault() </td>
 
 
             }

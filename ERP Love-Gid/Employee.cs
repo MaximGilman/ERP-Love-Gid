@@ -22,6 +22,7 @@ namespace ERP_Love_Gid
             this.Payments = new HashSet<Payments>();
             this.Salary = new HashSet<Salary>();
             this.PaymentsFrom = new HashSet<Payments>();
+            this.SalaryPerMonth = new HashSet<SalaryPerMonth>();
         }
     
         public int Id { get; set; }
@@ -44,5 +45,7 @@ namespace ERP_Love_Gid
         public virtual ICollection<Salary> Salary { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Payments> PaymentsFrom { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SalaryPerMonth> SalaryPerMonth { get; set; }
     }
 }

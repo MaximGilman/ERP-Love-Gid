@@ -67,41 +67,75 @@ namespace ERP_Love_Gid.Controllers
             ViewBag.DateMonth1 = new SelectList(MothsForChoose, "Value", "Text", currmonth);
             //  ViewBag.Years = new SelectList(_DataManager.PayR.GetCollection(), "Id", "FIO");
             var tmplist = _DataManager.EmR.GetCollection();
-            int[] minsalary = new int[tmplist.Count()];
-            int[] sal = new int[tmplist.Count()];
+            //int[] minsalary = new int[tmplist.Count()];
+            //int[] sal = new int[tmplist.Count()];
 
- 
-            int counter = 0;
+
+            //int counter = 0;
+            List<SalaryPerMonth> salaryPerMonths = new List<SalaryPerMonth>();
 
             foreach (Employee c in tmplist)
             {
-                ViewBag.MySalary = _DataManager.PayR.GetCollection().Where(x => x.EmployeeTo.Id == c.Id);
-                int sum = 0;
+                ViewBag.MySalary = _DataManager.PayR.GetCollection().Where(x => x.EmployeeTo.Id == c.Id && x.Date.Month == currmonth);
+                int sum = 0; int FactSum = 0;
                 foreach (Payments cw in (IEnumerable<Payments>)ViewBag.MySalary)
                 {
-                    if (@cw.Employee.Id != cw.EmployeeTo.Id)
-                    { sum += cw.Receipt; }
-                    else sum += cw.Event.Salary.Select(x => cw.Receipt - x.Value).FirstOrDefault();
-                    ViewBag.TotalSumMinusSal = sum;
+
+                    if (cw.Employee.Id != cw.EmployeeTo.Id)
+                    {
+                        sum += cw.Receipt;
+                        FactSum += cw.Receipt;
+                    }
+                    else if (cw.Employee.Salary.Where(x => x.Event.Id == cw.Event.Id).Select(y => y.PercentOfSalary).First().Contains("%"))
+                    {
+                        sum += cw.Event.Salary.Select(x => cw.Receipt * x.Value / 100).FirstOrDefault();
+                        if (cw.StatusForSalary == false) FactSum += cw.Event.Salary.Select(x => cw.Receipt * x.Value / 100).FirstOrDefault();
+                    }
+                    else if (cw.Employee.Salary.Where(x => x.Event.Id == cw.Event.Id).Select(y => y.PercentOfSalary).First().Contains("значение"))
+                    {
+                        sum += cw.Event.Salary.Select(x => cw.Receipt * x.Value / 100).FirstOrDefault();
+                        if (cw.StatusForSalary == false) FactSum += cw.Event.Salary.Select(x => x.Value).FirstOrDefault();
+
+                    }
+
+                    //другие обработчики
+                    else sum += 0;
+
+
+
+
                 }
+
+
+                var SalPerMon = new SalaryPerMonth();
+                SalPerMon.CurMonthSal = sum;
+                SalPerMon.CurMonthSalFact = sum - FactSum;
+                SalPerMon.Employee = c;
+                SalPerMon.DateMonth = (short)currmonth;
+                SalPerMon.DateYear = DateTime.Now.Year;
+                SalPerMon.IncomeToCompany = FactSum;
+
+
+
+                salaryPerMonths.Add(SalPerMon);
+
                 c.Scale = sum; //туть
                 //    _DataManager.PayR.GetCollection().Where(x => x.EmployeeTo.Id == c.Id).Select(x => x.Receipt).Sum();
                 //minsalary[counter] = _DataManager.PayR.GetCollection().Where(x => x.EmployeeTo.Id == c.Id && x.StatusForSalary != true).Select(y => y.Receipt).Sum();
                 //counter++;
             }
-
-            ViewBag.Employees = tmplist;
-
-
-            foreach (Employee c in _DataManager.EmR.GetCollection())
+            foreach (SalaryPerMonth salaryPerMon in salaryPerMonths)
             {
-                minsalary[counter] = c.Scale - (-1) * (_DataManager.PayR.GetCollection().Where(x => x.EmployeeTo.Id == c.Id).Select(x => x.Receipt).Sum() - _DataManager.PayR.GetCollection().Where(x => x.EmployeeTo.Id == c.Id).Select(x => x.Receipt).Sum() -
-               _DataManager.PayR.GetCollection().Where(x => x.EmployeeTo.Id == c.Id && x.StatusForSalary != true).Select(y => y.Receipt).Sum());
-               sal[counter] = (_DataManager.PayR.GetCollection().Where(x => x.EmployeeTo.Id == c.Id).Select(x => x.Receipt).Sum() -
-               _DataManager.PayR.GetCollection().Where(x => x.EmployeeTo.Id == c.Id && x.StatusForSalary != true).Select(y => y.Receipt).Sum())- minsalary[counter];
-                counter++;
+                if (_DataManager.SpmR.Contains(salaryPerMon)) { _DataManager.SpmR.Edit(salaryPerMon); }
+                else
+                    _DataManager.SpmR.Add(salaryPerMon);
             }
-            ViewBag.SalaryFact = minsalary;
+            ViewBag.CurMonth = currmonth;
+            ViewBag.CurYear = DateTime.Now.Year;
+            ViewBag.Employees = tmplist;
+            ViewBag.SalaryPerMonth = _DataManager.SpmR.GetCollection();
+ 
+          
             //    ViewBag.EmployeesSalary =
             //      _DataManager.PayR.GetCollection().Where(x => x.EmployeeTo.Id == /*CurEmployee.Id*/ && x.StatusForSalary != true).Select(y => y.Receipt);
             ViewBag.ID = CurEmployee.Id;
@@ -111,7 +145,7 @@ namespace ERP_Love_Gid.Controllers
             //    sal[i] = sal[i] - minsalary[i];
             //}
 
-            ViewBag.EmployeesSalaryFact = sal;
+            //ViewBag.EmployeesSalaryFact = sal;
             ViewBag.Id = CurEmployee.Id;
             ViewBag.ToCompany = _DataManager.SalR.GetCollection().Where(x => x.Employee.Id == CurEmployee.Id).Select(y => y.Value).Sum();
 
@@ -379,7 +413,16 @@ namespace ERP_Love_Gid.Controllers
             _DataManager.EmR.Add(tmp);
             return RedirectToAction("Employees", new { CurUserId });
         }
-        
+       /* [HttpGet]
+        public void GetData(string salFact, string sal, int CurUserId)
+        {
+            if (currmonth == DateTime.Now.Month) { 
+            Employee employee = _DataManager.EmR.GetElem(CurUserId);
+            employee.CurMonthSal = sal == "" ? 0 : Convert.ToInt32(sal);
+            employee.CurMonthSalFact = salFact == "" ? 0 : Convert.ToInt32(salFact);
+            _DataManager.shop_cont.SaveChanges();
+        }
+        }*/
     }
     
 }

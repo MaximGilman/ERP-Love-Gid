@@ -198,6 +198,8 @@
     <Compile Include="Models\PaymentsRepository.cs" />
     <Compile Include="Models\PaymentToPeersRepository.cs" />
     <Compile Include="Models\Pay_minRepository.cs" />
+    <Compile Include="Models\SalaryTypeRepository.cs" />
+    <Compile Include="Models\SalaryPerMonthRepository.cs" />
     <Compile Include="Models\SalaryRepository.cs" />
     <Compile Include="Parials.cs" />
     <Compile Include="Partials.cs" />
@@ -212,6 +214,9 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Salary.cs">
+      <DependentUpon>ERPModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SalaryPerMonth.cs">
       <DependentUpon>ERPModel.tt</DependentUpon>
     </Compile>
     <Compile Include="SalaryTypes.cs">
