@@ -188,22 +188,31 @@ namespace ERP_Love_Gid.Controllers
 
             int sum = 0;
             int FactSum = 0;
+            int total_sum = 0;
+            int total_sum_fact = 0;
             foreach (Payments cw in (IEnumerable<Payments>)ViewBag.MySalary)
             {
-              
+                total_sum += cw.Receipt;
                 if (cw.Employee.Id != cw.EmployeeTo.Id)
                 { sum += cw.Receipt;
                      FactSum += cw.Receipt;
                 }
                 else if (cw.Employee.Salary.Where(x => x.Event.Id == cw.Event.Id).Select(y => y.PercentOfSalary).First().Contains("%"))
                 { sum += cw.Event.Salary.Select(x => cw.Receipt * x.Value / 100).FirstOrDefault();
-                    if (cw.StatusForSalary == false) FactSum += cw.Event.Salary.Select(x => cw.Receipt * x.Value / 100).FirstOrDefault();
+                    if (cw.StatusForSalary == false) { FactSum += cw.Event.Salary.Select(x => cw.Receipt * x.Value / 100).FirstOrDefault();
+                      
+                    }
+                    else total_sum_fact += cw.Event.Salary.Select(x => cw.Receipt - (cw.Receipt * x.Value / 100)).FirstOrDefault();
                 }
                 else if (cw.Employee.Salary.Where(x => x.Event.Id == cw.Event.Id).Select(y => y.PercentOfSalary).First().Contains("значение"))
                 {
                     sum += cw.Event.Salary.Select(x => cw.Receipt * x.Value / 100).FirstOrDefault();
-                    if (cw.StatusForSalary == false) FactSum += cw.Event.Salary.Select(x => x.Value).FirstOrDefault();
-
+                    if (cw.StatusForSalary == false)
+                    {
+                        FactSum += cw.Event.Salary.Select(x => x.Value).FirstOrDefault();
+                      
+                    }
+                    else total_sum_fact += cw.Event.Salary.Select(x => cw.Receipt - x.Value).FirstOrDefault();
                 }
 
                 //другие обработчики
@@ -227,8 +236,8 @@ namespace ERP_Love_Gid.Controllers
             SalPerMon.Employee = CurEmployee;
             SalPerMon.DateMonth = (short)currmonth ;
             SalPerMon.DateYear = DateTime.Now.Year;
-            SalPerMon.IncomeToCompany = FactSum;
-
+            SalPerMon.IncomeToCompany = total_sum-sum;
+            SalPerMon.IncomeToCompanyFact = total_sum_fact;
             if (_DataManager.SpmR.Contains(SalPerMon)) { _DataManager.SpmR.Edit(SalPerMon); }
             else 
             _DataManager.SpmR.Add(SalPerMon);
@@ -285,7 +294,10 @@ namespace ERP_Love_Gid.Controllers
             CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
 
             Payments Adder = new Payments();
+        
 
+            Adder.SumToOptyonallyUsing = Int32.TryParse(Request.Form["SumToOptyonallyUsing"], out int a)? a:0;
+          
             Adder.Receipt = Convert.ToInt32(Request.Form["Receipt"]);
             Adder.Account = _DataManager.AccR.GetElem(Convert.ToInt32(Request.Form["Account"]));
             Adder.Contract = _DataManager.ConR.GetElem(Convert.ToInt32(Request.Form["Contract"]));
@@ -451,6 +463,7 @@ namespace ERP_Love_Gid.Controllers
 
             if (CurEmployee == null) return RedirectToAction("Log_in", "User");
             ViewBag.Receipt = _DataManager.PayR.GetElem(id).Receipt;
+            ViewBag.SumToOptyonallyUsing = _DataManager.PayR.GetElem(id).SumToOptyonallyUsing;
             ViewBag.Comment = _DataManager.PayR.GetElem(id).Comment;
             if (CurEmployee.IsAdmin) ViewBag.Admin = true;
             ViewBag.CurUserId = CurEmployee.Id;
@@ -496,6 +509,7 @@ namespace ERP_Love_Gid.Controllers
             CurEmployee = CurUserId == 0 ? CurEmployee : _DataManager.EmR.GetElem(CurUserId);
 
             Payments Adder = _DataManager.PayR.GetElem(id);
+            Adder.SumToOptyonallyUsing = Int32.TryParse(Request.Form["SumToOptyonallyUsing"], out int a) ? a : 0;
 
             Adder.Receipt = Convert.ToInt32(Request.Form["Receipt"]);
             Adder.Account = _DataManager.AccR.GetElem(Convert.ToInt32(Request.Form["Account"]));
@@ -615,7 +629,9 @@ namespace ERP_Love_Gid.Controllers
             ViewBag.Id = id;
             ViewBag.Sum = _DataManager.PayR.GetElem(id).Receipt;
             ViewBag.User = CurEmployee.Surname + " " + CurEmployee.Name;
-            ViewBag.Contract = new SelectList(_DataManager.ConR.GetCollection(), "Id", "Name", _DataManager.PayR.GetElem(id).Contract.Id);
+            int SelectedId = _DataManager.PayR.GetElem(id).Contract == null ? 0 : _DataManager.PayR.GetElem(id).Contract.Id;
+
+            ViewBag.Contract = new SelectList(_DataManager.ConR.GetCollection(), "Id", "Name", SelectedId);
             ViewBag.Event = new SelectList(_DataManager.EvR.GetCollection(), "Id", "Type", _DataManager.PayR.GetElem(id).Event.Id);
             ViewBag.Employees = new SelectList(_DataManager.EmR.GetCollection(CurEmployee.Id), "Id", "FIO", _DataManager.PayR.GetElem(id).Employee.Id);
             ViewBag.Date = String.Join("-", ((_DataManager.PayR.GetElem(id).Date).ToShortDateString()).Split('.').Reverse());

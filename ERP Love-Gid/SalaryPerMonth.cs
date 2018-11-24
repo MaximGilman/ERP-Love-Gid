@@ -27,6 +27,7 @@ namespace ERP_Love_Gid
         public Nullable<short> DateMonth { get; set; }
         public Nullable<int> DateYear { get; set; }
         public int IncomeToCompany { get; set; }
+        public int IncomeToCompanyFact { get; set; }
     
         public virtual Employee Employee { get; set; }
     }

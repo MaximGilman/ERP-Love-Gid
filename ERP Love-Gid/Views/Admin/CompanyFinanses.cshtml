@@ -2,67 +2,139 @@
 @{
     ViewBag.Title = "Финансы компании"; Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 <h2>Финансы компании</h2>
 
+
+<input hidden value="@ViewBag.CurUserId" name="CurUserId" />
+
+@*<p> @Html.DropDownList("Year", (IEnumerable<SelectListItem>)ViewData["Years"], null, new { style = "width : 200px", @class = "form-control" }) @Html.ValidationMessage("Years")</p>*@
+<table>
+    <tr>
+        <td> <b>Работник</b></td>
+
+        @foreach (Employee cw in (IEnumerable<Employee>)ViewData["Employees"])
+        {
+
+
+            <td>@cw.Name @cw.Surname.First()</td>
+
+
+        }
+
+
+
+
+
+
+
+    <tr>
+        <td> <b>Зп План </b></td>
+        @foreach (Employee cw in (IEnumerable<Employee>)ViewData["Employees"])
+        {
+
+
+            <td>@cw.SalaryPerMonth.Where(x => x.DateMonth == Convert.ToInt32(ViewBag.CurMonth) && x.DateYear == Convert.ToInt32(ViewBag.CurYear) && x.Employee.Id == cw.Id).Select(y => y.CurMonthSal.Value).FirstOrDefault() </td>
+
+
+        }
+
+    </tr>
+    <tr>
+        <td><b>ЗП факт</b></td>
+        @foreach (Employee cw in (IEnumerable<Employee>)ViewData["Employees"])
+        {
+
+
+            <td>@cw.SalaryPerMonth.Where(x => x.DateMonth == Convert.ToInt32(ViewBag.CurMonth) && x.DateYear == Convert.ToInt32(ViewBag.CurYear) && x.Employee.Id == cw.Id).Select(y => y.CurMonthSalFact.Value).FirstOrDefault() </td>
+
+        }
+
+    </tr>
+    <tr>
+        <td><b>Принесет в компанию</b></td>
+        @foreach (Employee cw in (IEnumerable<Employee>)ViewData["Employees"])
+        {
+
+
+            <td>@cw.SalaryPerMonth.Where(x => x.DateMonth == Convert.ToInt32(ViewBag.CurMonth) && x.DateYear == Convert.ToInt32(ViewBag.CurYear) && x.Employee.Id == cw.Id).Select(y => y.IncomeToCompany).FirstOrDefault() </td>
+
+
+        }
+    </tr>
+    <tr>
+        <td><b>Принес фактически</b></td>
+        @foreach (Employee cw in (IEnumerable<Employee>)ViewData["Employees"])
+        {
+
+
+            <td>@cw.SalaryPerMonth.Where(x => x.DateMonth == Convert.ToInt32(ViewBag.CurMonth) && x.DateYear == Convert.ToInt32(ViewBag.CurYear) && x.Employee.Id == cw.Id).Select(y => y.IncomeToCompanyFact).FirstOrDefault() </td>
+
+
+        }
+    </tr>
+
+</table>
+
+
+
+<table>
+    <tr>
+        <td><b>Планируется в этом месяце:</b></td>
+        <td><b>@ViewBag.Sum</b></td>
+
+
+    </tr>
+    <tr>
+        <td><b>Получено в этом месяце:</b></td>
+        <td><b id="SumFact">@ViewBag.SumFact</b></td>
+
+
+    </tr>
+    <tr>
+        <td>
+            <b>Расходы</b>
+        </td>
+        <td id="CostFact">
+            @Html.TextBox("Cost", null, new { @class = "form-control", type = "number", @min = "0" })
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <b>Итог</b>
+
+        </td>
+        <td><b id="Result"> </b></td>
+    </tr>
+
+
+
+
+</table>
+<p><input type="submit" value="Подсчитать итог" class="form-control" id="btn" /></p>
+
+<hr />
 @using (Html.BeginForm("CompanyFinanses", "Admin", FormMethod.Post))
 {
-    <input hidden value="@ViewBag.CurUserId" name="CurUserId" />
+    <p>
+        <input type="submit" value="  Закрыть месяц" class="form-control" onclick="Sum" />
 
-    @*<p> @Html.DropDownList("Year", (IEnumerable<SelectListItem>)ViewData["Years"], null, new { style = "width : 200px", @class = "form-control" }) @Html.ValidationMessage("Years")</p>*@
-    <table>
-        <tr>
-            <td> <b>Работник</b></td>
-
-            @foreach (Employee cw in (IEnumerable<Employee>)ViewData["Employees"])
-            {
+    </p>
+}
 
 
-                <td>@cw.Name @cw.Surname.First()</td>
+<script>
+    $('#btn').on('click', function () {
+        var a = parseInt($('#SumFact').text());
 
+        var b = parseInt($('#Cost').val());
 
-            }
+        if (isNaN(b)) b = 0;
+        var c = a - b;
 
+        $('#Result').text(c);
 
+    });
 
-
-
-
-
-        <tr>
-            <td> <b>Зп План </b></td>
-            @foreach (Employee cw in (IEnumerable<Employee>)ViewData["Employees"])
-            {
-
-
-                <td>@cw.SalaryPerMonth.Where(x=> x.DateMonth==Convert.ToInt32(ViewBag.CurMonth) && x.DateYear == Convert.ToInt32(ViewBag.CurYear) &&x.Employee.Id == cw.Id).Select(y => y.CurMonthSal.Value).FirstOrDefault() </td>
-
-
-            }
-
-        </tr>
-        <tr>
-            <td><b>ЗП факт</b></td>
-            @foreach (Employee cw in (IEnumerable<Employee>)ViewData["Employees"])
-            {
-
-
-                <td>@cw.SalaryPerMonth.Where(x => x.DateMonth == Convert.ToInt32(ViewBag.CurMonth) && x.DateYear == Convert.ToInt32(ViewBag.CurYear) && x.Employee.Id == cw.Id).Select(y => y.CurMonthSalFact.Value).FirstOrDefault() </td>
-
-            }
-
-        </tr>
-        <tr>
-            <td><b>Принес в компанию</b></td>
-            @foreach (Employee cw in (IEnumerable<Employee>)ViewData["Employees"])
-            {
-
-
-                <td>@cw.SalaryPerMonth.Where(x => x.DateMonth == Convert.ToInt32(ViewBag.CurMonth) && x.DateYear == Convert.ToInt32(ViewBag.CurYear) && x.Employee.Id == cw.Id).Select(y => y.IncomeToCompany).FirstOrDefault() </td>
-
-
-            }
-        </tr>
-
-    </table>}
-
+</script>

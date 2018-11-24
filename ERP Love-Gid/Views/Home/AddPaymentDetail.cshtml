@@ -2,7 +2,8 @@
 @{
     ViewBag.Title = "Добавление операции";
 }
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 <h2>Добавление операции</h2>
 
 <div class="container">
@@ -45,11 +46,17 @@
                             <td><p>Проект (Договор): </p></td>
                             <td><p> @Html.DropDownList("Contract", (IEnumerable<SelectListItem>)ViewData["Contracts"], null, new { style = "width : 200px", @class = "form-control" }) @Html.ValidationMessage("Contracts")</p></td>
                         </tr>
+
+
                         <tr>
                             <td><p>Тип работы: </p></td>
                             <td><p> @Html.DropDownList("Event", (IEnumerable<SelectListItem>)ViewData["Events"], null, new { style = "width : 200px", @class = "form-control" }) @Html.ValidationMessage("Events")</p></td>
 
 
+                        </tr>
+                        <tr id="hideMe">
+                            <td><p>В компанию:</p></td>
+                            <td><p> @Html.TextBox("SumToOptyonallyUsing", null, new { @class = "form-control", type = "number", @min = "0" })</p></td>
                         </tr>
                         <tr>
                             <td><p>Для кого оплата: </p></td>
@@ -94,3 +101,25 @@
 
 </div>
 
+<script>
+    $(function () {
+        var type = ($('#Event option:selected').text());
+
+        if (type == "Договор Прочее") { $("#hideMe").show(); }
+        else {
+
+            $("#hideMe").hide();
+        }
+    });
+</script>
+<script>
+    $('#Event').on('change', function () {
+  
+        var type = ($('#Event option:selected').text()); 
+      
+        if (type == "Договор Прочее") {  $("#hideMe").show(); }
+        else {
+             
+            $("#hideMe").hide(); }
+    });
+</script>

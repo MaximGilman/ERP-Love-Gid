@@ -45,7 +45,7 @@ namespace ERP_Love_Gid.Models
             tmp.CurMonthSalFact = salPerMon.CurMonthSalFact;
             tmp.Employee = salPerMon.Employee;
             tmp.IncomeToCompany = salPerMon.IncomeToCompany;
-            
+            tmp.IncomeToCompanyFact = salPerMon.IncomeToCompanyFact;
             cont.SaveChanges();
         }
 
@@ -53,6 +53,16 @@ namespace ERP_Love_Gid.Models
         {
 
             return cont.SalaryPerMonthSet;
+        }
+
+        internal int GetSum(int currmonth, int currYear)
+        {
+            return GetCollection().Where(x => x.DateMonth == currmonth && x.DateYear == currYear).Select(el => el.IncomeToCompany).Sum();
+        }
+
+        internal int  GetFactSum(int currmonth, int currYear)
+        {
+      return      GetCollection().Where(x => x.DateMonth == currmonth && x.DateYear == currYear).Select(el => el.IncomeToCompanyFact).Sum();
         }
     }
 }

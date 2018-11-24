@@ -150,7 +150,7 @@
     <Property Name="Receipt" Type="int" Nullable="false" />
     <Property Name="Comment" Type="nvarchar(max)" Nullable="true" />
     <Property Name="Date" Type="datetime" Nullable="false" />
-    <Property Name="Sum" Type="int" Nullable="false" />
+    <Property Name="SumToOptyonallyUsing" Type="int" Nullable="true" />
     <Property Name="EmployeeId" Type="int" Nullable="false" />
     <Property Name="ContractId" Type="int" Nullable="false" />
     <Property Name="StatusForPeers" Type="bit" Nullable="true" />
@@ -218,6 +218,7 @@
     <Property Name="DateMonth" Type="smallint" Nullable="true" />
     <Property Name="DateYear" Type="int" Nullable="true" />
     <Property Name="IncomeToCompany" Type="int" Nullable="false" />
+    <Property Name="IncomeToCompanyFact" Type="int" Nullable="false" />
     <Property Name="Employee_Id" Type="int" Nullable="false" />
   </EntityType>
   <Association Name="FK_ClientContract">
@@ -576,7 +577,7 @@
           <Property Name="Receipt" Type="Int32" Nullable="false" />
           <Property Name="Comment" Type="String" Nullable="true" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Date" Nullable="false" Precision="3" Type="DateTime" />
-          <Property Name="Sum" Type="Int32" Nullable="false" />
+          <Property Name="SumToOptyonallyUsing" Type="Int32" Nullable="true" />
           <NavigationProperty Name="Account" Relationship="ERPModel.AccountPayments" FromRole="Payments" ToRole="Account" />
           <NavigationProperty Name="Contract" Relationship="ERPModel.ContractPayments" FromRole="Payments" ToRole="Contract" />
           <Property Name="EmployeeId" Type="Int32" Nullable="false" />
@@ -706,6 +707,7 @@
           <Property Name="DateYear" Type="Int32" Nullable="true" />
           <NavigationProperty Name="Employee" Relationship="ERPModel.EmployeeSalaryPerMonth" FromRole="SalaryPerMonth" ToRole="Employee" />
           <Property Name="IncomeToCompany" Type="Int32" Nullable="false" />
+          <Property Name="IncomeToCompanyFact" Type="Int32" Nullable="false" />
         </EntityType>
         <Association Name="EmployeeSalaryPerMonth">
           <End Type="ERPModel.Employee" Role="Employee" Multiplicity="1" />
@@ -786,7 +788,7 @@
           <ScalarProperty Name="Receipt" ColumnName="Receipt" />
           <ScalarProperty Name="Comment" ColumnName="Comment" />
           <ScalarProperty Name="Date" ColumnName="Date" />
-          <ScalarProperty Name="Sum" ColumnName="Sum" />
+          <ScalarProperty Name="SumToOptyonallyUsing" ColumnName="SumToOptyonallyUsing" />
           <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
           <ScalarProperty Name="ContractId" ColumnName="ContractId" />
           <ScalarProperty Name="StatusForPeers" ColumnName="StatusForPeers" />
@@ -847,6 +849,7 @@
           <ScalarProperty Name="DateMonth" ColumnName="DateMonth" />
           <ScalarProperty Name="DateYear" ColumnName="DateYear" />
           <ScalarProperty Name="IncomeToCompany" ColumnName="IncomeToCompany" />
+          <ScalarProperty Name="IncomeToCompanyFact" ColumnName="IncomeToCompanyFact" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -1028,7 +1031,7 @@
         <AssociationConnector Association="ERPModel.EventSalary" />
         <AssociationConnector Association="ERPModel.PaymentsEmployee1" />
         <EntityTypeShape EntityType="ERPModel.SalaryTypes" Width="1.5" PointX="2.5" PointY="1" />
-        <EntityTypeShape EntityType="ERPModel.SalaryPerMonth" Width="1.5" PointX="11.5" PointY="0.75" />
+        <EntityTypeShape EntityType="ERPModel.SalaryPerMonth" Width="2.875" PointX="9.75" PointY="1.375" />
         <AssociationConnector Association="ERPModel.EmployeeSalaryPerMonth" />
       </Diagram>
     </edmx:Diagrams>

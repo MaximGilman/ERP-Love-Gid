@@ -24,7 +24,7 @@ namespace ERP_Love_Gid
         public int Receipt { get; set; }
         public string Comment { get; set; }
         public System.DateTime Date { get; set; }
-        public int Sum { get; set; }
+        public Nullable<int> SumToOptyonallyUsing { get; set; }
         public int EmployeeId { get; set; }
         public int ContractId { get; set; }
         public Nullable<bool> StatusForPeers { get; set; }

@@ -77,9 +77,10 @@ namespace ERP_Love_Gid.Controllers
             foreach (Employee c in tmplist)
             {
                 ViewBag.MySalary = _DataManager.PayR.GetCollection().Where(x => x.EmployeeTo.Id == c.Id && x.Date.Month == currmonth);
-                int sum = 0; int FactSum = 0;
+                int sum = 0; int FactSum = 0; int total_sum = 0; int total_sum_fact = 0;
                 foreach (Payments cw in (IEnumerable<Payments>)ViewBag.MySalary)
                 {
+                    total_sum += cw.Receipt;
 
                     if (cw.Employee.Id != cw.EmployeeTo.Id)
                     {
@@ -90,11 +91,15 @@ namespace ERP_Love_Gid.Controllers
                     {
                         sum += cw.Event.Salary.Select(x => cw.Receipt * x.Value / 100).FirstOrDefault();
                         if (cw.StatusForSalary == false) FactSum += cw.Event.Salary.Select(x => cw.Receipt * x.Value / 100).FirstOrDefault();
+                        else total_sum_fact += cw.Event.Salary.Select(x => cw.Receipt - (cw.Receipt * x.Value / 100)).FirstOrDefault();
+
                     }
                     else if (cw.Employee.Salary.Where(x => x.Event.Id == cw.Event.Id).Select(y => y.PercentOfSalary).First().Contains("значение"))
                     {
                         sum += cw.Event.Salary.Select(x => cw.Receipt * x.Value / 100).FirstOrDefault();
                         if (cw.StatusForSalary == false) FactSum += cw.Event.Salary.Select(x => x.Value).FirstOrDefault();
+                        else total_sum_fact += cw.Event.Salary.Select(x => cw.Receipt - x.Value).FirstOrDefault();
+
 
                     }
 
@@ -113,8 +118,9 @@ namespace ERP_Love_Gid.Controllers
                 SalPerMon.Employee = c;
                 SalPerMon.DateMonth = (short)currmonth;
                 SalPerMon.DateYear = DateTime.Now.Year;
-                SalPerMon.IncomeToCompany = FactSum;
+                SalPerMon.IncomeToCompany = total_sum - sum; ;
 
+                SalPerMon.IncomeToCompanyFact = total_sum_fact;
 
 
                 salaryPerMonths.Add(SalPerMon);
@@ -148,6 +154,12 @@ namespace ERP_Love_Gid.Controllers
             //ViewBag.EmployeesSalaryFact = sal;
             ViewBag.Id = CurEmployee.Id;
             ViewBag.ToCompany = _DataManager.SalR.GetCollection().Where(x => x.Employee.Id == CurEmployee.Id).Select(y => y.Value).Sum();
+
+
+
+
+            ViewBag.Sum= _DataManager.SpmR.GetSum(currmonth, currYear);
+            ViewBag.SumFact= _DataManager.SpmR.GetFactSum(currmonth, currYear);
 
             return View();
         }

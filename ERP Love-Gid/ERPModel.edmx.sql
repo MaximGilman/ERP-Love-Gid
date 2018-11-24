@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 11/24/2018 11:44:55
+-- Date Created: 11/24/2018 18:51:49
 -- Generated from EDMX file: C:\Users\ГильманМаксимМихайло\Desktop\Бекап флешки\ERP Love-Gid\ERP Love-Gid\ERPModel.edmx
 -- --------------------------------------------------
 
@@ -174,7 +174,7 @@ CREATE TABLE [dbo].[PaymentsSet] (
     [Receipt] int  NOT NULL,
     [Comment] nvarchar(max)  NULL,
     [Date] datetime  NOT NULL,
-    [Sum] int  NOT NULL,
+    [SumToOptyonallyUsing] int  NULL,
     [EmployeeId] int  NOT NULL,
     [ContractId] int  NOT NULL,
     [StatusForPeers] bit  NULL,
@@ -242,6 +242,7 @@ CREATE TABLE [dbo].[SalaryPerMonthSet] (
     [DateMonth] smallint  NULL,
     [DateYear] int  NULL,
     [IncomeToCompany] int  NOT NULL,
+    [IncomeToCompanyFact] int  NOT NULL,
     [Employee_Id] int  NOT NULL
 );
 GO

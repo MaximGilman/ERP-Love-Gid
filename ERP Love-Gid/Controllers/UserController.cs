@@ -47,7 +47,11 @@ namespace ERP_Love_Gid.Controllers
                 var tmpEv = new Event();
                 tmpEv.Type = "Администрирование";
                 _DataManager.EvR.Add(tmpEv);
-                 // и так далее
+                tmpEv.Type = "Договор Прочее";
+                _DataManager.EvR.Add(tmpEv);
+                tmpEv.Type = "Дизайн";
+                _DataManager.EvR.Add(tmpEv);
+                // и так далее
                 _DataManager.shop_cont.SaveChanges();
 
             }
@@ -56,7 +60,8 @@ namespace ERP_Love_Gid.Controllers
                 var tmpAc = new Account();
                 tmpAc.Type = "Рассчетный счет";
                 _DataManager.AccR.Add(tmpAc);
-
+                tmpAc.Type = "Сбербанк";
+                _DataManager.AccR.Add(tmpAc);
                 // и так далее
                 _DataManager.shop_cont.SaveChanges();
 
@@ -66,7 +71,12 @@ namespace ERP_Love_Gid.Controllers
                 var tmpSalT = new SalaryTypes();
                 tmpSalT.Type = "%";
                 _DataManager.STR.Add(tmpSalT);
-
+                tmpSalT.Type = "Оклад";
+                _DataManager.STR.Add(tmpSalT);
+                tmpSalT.Type = "Числовое значение";
+                _DataManager.STR.Add(tmpSalT);
+                tmpSalT.Type = "Указывается пользователем";
+                _DataManager.STR.Add(tmpSalT);
                 // и так далее
                 _DataManager.shop_cont.SaveChanges();
 
@@ -103,7 +113,26 @@ namespace ERP_Love_Gid.Controllers
                 _DataManager.shop_cont.SaveChanges();
 
             }
+                if (_DataManager.SalR.GetCollection().Count()==0)
+            {
+                List<Salary> salaries = new List<Salary>();
+                foreach(Employee empl in _DataManager.EmR.GetCollection())
+                {
+                    foreach (Event ev in _DataManager.EvR.GetCollection())
+                    {
+                        Salary salary = new Salary();
+                        salary.Event = ev;
+                        salary.Employee = empl;
+                        salary.PercentOfSalary = "%";
+                        salary.Value = 100;
+                        salary.Value = 0;
+                        salary.ValueSergey = 0;
+                        _DataManager.SalR.Add(salary);
 
+                    }
+
+                }
+            }
 
         }
         public ActionResult Exit()
